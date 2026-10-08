@@ -4,6 +4,8 @@
 
 How long before this milk turns? Hover any food: the tooltip shows its freshness and the exact time left before it goes stale and rots. Expand a stack in your inventory to see a thin freshness strip under each item.
 
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/05-tooltip-fridge.png[/img]
+
 [h2]Two original mods, one fork[/h2]
 
 This mod continues the work of two Workshop items. Thanks to their authors.
@@ -35,6 +37,8 @@ The time left is computed the way the game ages food:
 [/list]
 
 [img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/03-frozen.jpg[/img]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/06-tooltip-frozen.png[/img]
 
 [h2]What changed from the originals[/h2]
 

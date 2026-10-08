@@ -4,6 +4,8 @@
 
 Combien de temps avant que ce lait tourne ? Survolez un aliment : l'infobulle affiche sa fraîcheur et le temps exact avant qu'il soit périmé puis pourri. Dépliez une pile dans l'inventaire pour voir une fine bande de fraîcheur sous chaque objet.
 
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/05-tooltip-fridge.png[/img]
+
 [h2]Deux mods d'origine, un fork[/h2]
 
 Ce mod prolonge le travail de deux objets du Workshop. Merci à leurs auteurs.
@@ -35,6 +37,8 @@ Le temps restant est calculé comme le jeu fait vieillir la nourriture :
 [/list]
 
 [img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/03-frozen.jpg[/img]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/06-tooltip-frozen.png[/img]
 
 [h2]Ce qui change par rapport aux originaux[/h2]
 

@@ -4,6 +4,8 @@
 
 ¿Cuánto falta para que esta leche se eche a perder? Pasa el ratón sobre cualquier alimento: el tooltip muestra su frescura y el tiempo exacto hasta que se pone rancio y se pudre. Despliega una pila en el inventario para ver una fina barra de frescura bajo cada objeto.
 
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/05-tooltip-fridge.png[/img]
+
 [h2]Dos mods originales, un fork[/h2]
 
 Este mod continúa el trabajo de dos objetos del Workshop. Gracias a sus autores.
@@ -35,6 +37,8 @@ El tiempo restante se calcula igual que el juego envejece la comida:
 [/list]
 
 [img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/03-frozen.jpg[/img]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/06-tooltip-frozen.png[/img]
 
 [h2]Cambios respecto a los originales[/h2]
 

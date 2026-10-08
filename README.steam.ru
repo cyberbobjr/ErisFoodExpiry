@@ -4,6 +4,8 @@
 
 Сколько ещё простоит это молоко? Наведите курсор на любую еду: подсказка покажет свежесть и точное время, через которое еда залежится, а затем испортится. Разверните стопку в инвентаре — под каждым предметом появится тонкая полоса свежести.
 
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/05-tooltip-fridge.png[/img]
+
 [h2]Два исходных мода, один форк[/h2]
 
 Этот мод продолжает работу двух предметов Мастерской. Спасибо их авторам.
@@ -35,6 +37,8 @@
 [/list]
 
 [img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/03-frozen.jpg[/img]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/06-tooltip-frozen.png[/img]
 
 [h2]Отличия от оригиналов[/h2]
 

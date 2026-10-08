@@ -4,6 +4,8 @@
 
 Wie lange hält diese Milch noch? Fahre über ein Lebensmittel: Der Tooltip zeigt seine Frische und die genaue Zeit, bis es abgestanden und dann verdorben ist. Klappe einen Stapel im Inventar auf, um unter jedem Gegenstand einen dünnen Frischebalken zu sehen.
 
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/05-tooltip-fridge.png[/img]
+
 [h2]Zwei Originalmods, ein Fork[/h2]
 
 Dieser Mod führt die Arbeit zweier Workshop-Objekte fort. Danke an ihre Autoren.
@@ -35,6 +37,8 @@ Die Restzeit wird so berechnet, wie das Spiel Lebensmittel altern lässt:
 [/list]
 
 [img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/03-frozen.jpg[/img]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/06-tooltip-frozen.png[/img]
 
 [h2]Änderungen gegenüber den Originalen[/h2]
 
