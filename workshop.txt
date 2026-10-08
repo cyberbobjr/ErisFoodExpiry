@@ -1,4 +1,5 @@
 version=1
+id=3815719265
 title=Eris Food Expiry (TooltipLib fork)
 description=[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/01-food-expiry.jpg[/img]
 description=
