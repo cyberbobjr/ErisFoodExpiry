@@ -1,0 +1,75 @@
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/01-food-expiry.jpg[/img]
+
+[h1]Eris Food Expiry (fork TooltipLib)[/h1]
+
+[b]Fork não oficial · Build 42.21 · Um jogador e multijogador[/b]
+
+Quanto tempo falta até este leite azedar? Passe o rato sobre qualquer alimento: a dica mostra a frescura e o tempo exato até ficar insonso e depois podre. Expanda uma pilha no inventário para ver uma barra fina de frescura sob cada objeto.
+
+[h2]Dois mods originais, um fork[/h2]
+
+Este mod continua o trabalho de dois itens do Workshop. Obrigado aos seus autores.
+[list]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3392259028][B42] eris food expiry[/url]: adaptação para a Build 42 do mod de eris, com a opção Nutricionista.
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3629527156][B42.13] eris food expiry[/url]: atualização para 42.13 em modo de um jogador, tempos exatos sem o traço.
+[/list]
+Ambos usam o ID de mod [i]eris_food_expiry[/i]: este fork está marcado como incompatível com ele. Ative apenas um.
+
+[h2]O que vê[/h2]
+
+[list]
+[*]Barra de [b]Frescura[/b]: cheia quando o alimento é novo, vazia quando está podre.
+[*][b]Insonso em[/b] e [b]Podre em[/b]: tempo restante, primeiro as maiores unidades (anos, meses, semanas, dias, horas, minutos).
+[*]Comida congelada: «Congelado: não se estraga». Enlatados e comida seca: «Nunca se estraga».
+[*]Opção (Opções > Mods): exigir o traço Nutricionista para os tempos exatos. Uma embalagem legível mostra-os sempre, como a informação nutricional do jogo. Caso contrário, um estado aproximado: muito fresco, fresco, parece bom, começa a apodrecer, quase podre, podre.
+[/list]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/02-fridge.jpg[/img]
+
+[h2]Tempos que seguem o jogo[/h2]
+
+O tempo restante é calculado como o jogo envelhece a comida:
+[list]
+[*]opções sandbox [i]Deterioração de Comida[/i] e [i]Eficácia de Refrigeração[/i];
+[*]um frigorífico ou congelador abranda a deterioração enquanto tem energia: um gerador, ou a rede até ao dia do corte, depois a comida volta a estragar-se à velocidade normal;
+[*]a comida congelada não se estraga;
+[*]as idades de deterioração próprias de cada objeto (a comida cozinhada difere da crua).
+[/list]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/03-frozen.jpg[/img]
+
+[h2]O que muda em relação aos originais[/h2]
+
+[list]
+[*]Linhas da dica através do [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3694097672]TooltipLib[/url]: sem caixa desenhada sob a dica, sem dica a saltar, compatível com outros mods de dicas.
+[*]Frigorífico sem energia, comida congelada e cozinhada dão tempos corretos.
+[*]Unidades sempre por ordem: os originais podiam mostrar «5m 2d 1w» ou omitir os anos.
+[*]O estado «Podre» volta a aparecer; os textos da opção e as traduções carregam na 42.21 (JSON).
+[*]A barra do inventário já não se sobrepõe à linha de nutrição ou de cozedura.
+[/list]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/04-read-the-label.jpg[/img]
+
+[h2]Multijogador[/h2]
+
+Apenas visual: nada é enviado ao servidor nem guardado. Instale-o no servidor para que os clientes o descarreguem; cada jogador define a opção para si. Pode ser adicionado ou removido sem risco num mundo existente.
+
+[h2]Requisitos[/h2]
+
+[list]
+[*]Build 42.21 ou mais recente.
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3694097672]TooltipLib[/url].
+[/list]
+
+[h2]Idiomas[/h2]
+
+Inglês, francês, alemão, espanhol, italiano, polaco, português, português do Brasil, russo, chinês simplificado.
+
+[h2]Apoie o projeto[/h2]
+
+Gosta do mod? Um café ajuda a financiar novas funcionalidades e traduções.
+[url=https://ko-fi.com/Z8Z8QJV31][img]https://storage.ko-fi.com/cdn/kofi6.png?v=6[/img][/url]
+
+[h2]Créditos[/h2]
+
+Ideia e mod originais: eris. Adaptações para a Build 42: os autores dos dois itens acima. Fork de batman, código reescrito. Sem ligação aos autores originais.

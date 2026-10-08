@@ -1,0 +1,75 @@
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/01-food-expiry.jpg[/img]
+
+[h1]Eris Food Expiry（TooltipLib 分支）[/h1]
+
+[b]非官方分支 · Build 42.21 · 单人与多人[/b]
+
+这盒牛奶还能放多久？将鼠标悬停在任意食物上：提示框会显示新鲜度，以及变陈腐、变质前剩余的准确时间。在物品栏中展开一组物品，每个物品下方会出现一条细细的新鲜度条。
+
+[h2]两个原版模组，一个分支[/h2]
+
+本模组延续了两个创意工坊物品的工作。感谢它们的作者。
+[list]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3392259028][B42] eris food expiry[/url]：eris 模组的 Build 42 移植版，带“营养学家”选项。
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3629527156][B42.13] eris food expiry[/url]：适用于 42.13 单人模式的更新，无需特质即可显示准确时间。
+[/list]
+两者都使用模组 ID [i]eris_food_expiry[/i]：本分支已标记与其不兼容。请只启用其中一个。
+
+[h2]显示内容[/h2]
+
+[list]
+[*][b]新鲜度[/b]条：新食物为满格，变质后为空。
+[*][b]陈腐倒计时[/b]与[b]变质倒计时[/b]：剩余时间，从大单位开始显示（年、月、周、天、小时、分钟）。
+[*]冷冻食物：“冷冻：不会变质”。罐头和干货：“永不变质”。
+[*]选项（选项 > 模组）：只有拥有“营养学家”特质才显示准确时间。可读的包装始终显示，与游戏中的营养信息相同。否则显示大致状态：非常新鲜、新鲜、看起来还行、开始变质、快要变质、已变质。
+[/list]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/02-fridge.jpg[/img]
+
+[h2]与游戏一致的时间[/h2]
+
+剩余时间按游戏中食物变质的方式计算：
+[list]
+[*]沙盒选项[i]食物变质速度[/i]和[i]冷藏效率[/i]；
+[*]冰箱或冰柜在有电时减缓变质：发电机供电，或市电供应到停电那天，之后食物恢复正常变质速度；
+[*]冷冻食物不会变质；
+[*]每个物品自身的陈腐与变质时间（熟食与生食不同）。
+[/list]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/03-frozen.jpg[/img]
+
+[h2]与原版的区别[/h2]
+
+[list]
+[*]通过 [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3694097672]TooltipLib[/url] 添加提示行：不再在提示框下方另画方框，提示框不再跳动，可与其他提示框模组共存。
+[*]断电的冰箱、冷冻食物和熟食都能得到正确时间。
+[*]时间单位始终按顺序：原版可能显示“5m 2d 1w”或漏掉年份。
+[*]“已变质”状态重新显示；选项文本与翻译可在 42.21 中加载（JSON）。
+[*]物品栏中的新鲜度条不再与营养或烹饪行重叠。
+[/list]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/04-read-the-label.jpg[/img]
+
+[h2]多人游戏[/h2]
+
+仅用于显示：不向服务器发送任何内容，也不保存任何数据。安装在服务器上即可让客户端自动下载；每位玩家各自设置选项。可安全地添加到现有世界或从中移除。
+
+[h2]需求[/h2]
+
+[list]
+[*]Build 42.21 或更高版本。
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3694097672]TooltipLib[/url]。
+[/list]
+
+[h2]语言[/h2]
+
+英语、法语、德语、西班牙语、意大利语、波兰语、葡萄牙语、巴西葡萄牙语、俄语、简体中文。
+
+[h2]支持本项目[/h2]
+
+喜欢这个模组吗？一杯咖啡可以帮助资助新功能和翻译。
+[url=https://ko-fi.com/Z8Z8QJV31][img]https://storage.ko-fi.com/cdn/kofi6.png?v=6[/img][/url]
+
+[h2]致谢[/h2]
+
+原创意与原版模组：eris。Build 42 移植：上述两个物品的作者。分支作者 batman，代码已重写。与原作者无关。

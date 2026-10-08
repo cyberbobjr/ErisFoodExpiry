@@ -1,0 +1,75 @@
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/01-food-expiry.jpg[/img]
+
+[h1]Eris Food Expiry (fork TooltipLib)[/h1]
+
+[b]Fork non officiel · Build 42.21 · Solo et multijoueur[/b]
+
+Combien de temps avant que ce lait tourne ? Survolez un aliment : l'infobulle affiche sa fraîcheur et le temps exact avant qu'il soit périmé puis pourri. Dépliez une pile dans l'inventaire pour voir une fine bande de fraîcheur sous chaque objet.
+
+[h2]Deux mods d'origine, un fork[/h2]
+
+Ce mod prolonge le travail de deux objets du Workshop. Merci à leurs auteurs.
+[list]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3392259028][B42] eris food expiry[/url] : portage Build 42 du mod d'eris, avec l'option Nutritionniste.
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3629527156][B42.13] eris food expiry[/url] : mise à jour 42.13 pour le solo, durées exactes sans le trait.
+[/list]
+Les deux utilisent l'ID de mod [i]eris_food_expiry[/i] : ce fork est déclaré incompatible avec lui. N'en activez qu'un seul.
+
+[h2]Ce que vous voyez[/h2]
+
+[list]
+[*]Barre de [b]Fraîcheur[/b] : pleine quand l'aliment est neuf, vide quand il est pourri.
+[*][b]Périmé dans[/b] et [b]Pourri dans[/b] : temps restant, les plus grandes unités d'abord (années, mois, semaines, jours, heures, minutes).
+[*]Aliment congelé : « Congelé : ne s'abîme pas ». Conserves et aliments secs : « Ne se périme jamais ».
+[*]Option (Options > Mods) : exiger le trait Nutritionniste pour les durées exactes. Un emballage lisible les affiche toujours, comme les valeurs nutritionnelles vanilla. Sinon, un état approximatif : très frais, frais, semble correct, commence à pourrir, presque pourri, pourri.
+[/list]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/02-fridge.jpg[/img]
+
+[h2]Des durées qui suivent le jeu[/h2]
+
+Le temps restant est calculé comme le jeu fait vieillir la nourriture :
+[list]
+[*]options sandbox [i]Péremption de la nourriture[/i] et [i]Efficacité du réfrigérateur[/i] ;
+[*]un réfrigérateur ou un congélateur ralentit la péremption tant qu'il a du courant : un groupe électrogène, ou le réseau jusqu'au jour de la coupure, après quoi la nourriture s'abîme de nouveau à vitesse normale ;
+[*]un aliment congelé ne s'abîme pas ;
+[*]les âges de péremption propres à chaque objet (un plat cuisiné diffère de l'aliment cru).
+[/list]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/03-frozen.jpg[/img]
+
+[h2]Ce qui change par rapport aux originaux[/h2]
+
+[list]
+[*]Lignes d'infobulle via [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3694097672]TooltipLib[/url] : plus de cadre dessiné sous l'infobulle, plus d'infobulle qui saute, compatible avec les autres mods d'infobulle.
+[*]Réfrigérateur sans courant, aliment congelé et plat cuisiné donnent des durées justes.
+[*]Unités toujours dans l'ordre : les originaux pouvaient afficher « 5m 2d 1w » ou oublier les années.
+[*]L'état « Pourri » s'affiche de nouveau ; les textes de l'option et les traductions se chargent en 42.21 (JSON).
+[*]La bande de l'inventaire ne chevauche plus la ligne de nutrition ou de cuisson.
+[/list]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/04-read-the-label.jpg[/img]
+
+[h2]Multijoueur[/h2]
+
+Affichage seulement : rien n'est envoyé au serveur ni sauvegardé. Installez-le sur le serveur pour que les clients le téléchargent ; chaque joueur règle l'option pour lui-même. Ajout ou retrait sans risque sur un monde existant.
+
+[h2]Prérequis[/h2]
+
+[list]
+[*]Build 42.21 ou plus récent.
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3694097672]TooltipLib[/url].
+[/list]
+
+[h2]Langues[/h2]
+
+Anglais, français, allemand, espagnol, italien, polonais, portugais, portugais du Brésil, russe, chinois simplifié.
+
+[h2]Soutenir le projet[/h2]
+
+Le mod vous plaît ? Un café aide à financer de nouvelles fonctions et traductions.
+[url=https://ko-fi.com/Z8Z8QJV31][img]https://storage.ko-fi.com/cdn/kofi6.png?v=6[/img][/url]
+
+[h2]Crédits[/h2]
+
+Idée et mod d'origine : eris. Portages Build 42 : les auteurs des deux objets ci-dessus. Fork par batman, code réécrit. Sans lien avec les auteurs d'origine.

@@ -1,0 +1,75 @@
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/01-food-expiry.jpg[/img]
+
+[h1]Eris Food Expiry (TooltipLib-Fork)[/h1]
+
+[b]Inoffizieller Fork · Build 42.21 · Einzel- und Mehrspieler[/b]
+
+Wie lange hält diese Milch noch? Fahre über ein Lebensmittel: Der Tooltip zeigt seine Frische und die genaue Zeit, bis es abgestanden und dann verdorben ist. Klappe einen Stapel im Inventar auf, um unter jedem Gegenstand einen dünnen Frischebalken zu sehen.
+
+[h2]Zwei Originalmods, ein Fork[/h2]
+
+Dieser Mod führt die Arbeit zweier Workshop-Objekte fort. Danke an ihre Autoren.
+[list]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3392259028][B42] eris food expiry[/url]: Build-42-Portierung des Mods von eris, mit der Option Ernährungswissenschaftler.
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3629527156][B42.13] eris food expiry[/url]: Update für 42.13 im Einzelspieler, genaue Zeiten ohne die Eigenschaft.
+[/list]
+Beide nutzen die Mod-ID [i]eris_food_expiry[/i]: Dieser Fork ist als inkompatibel damit markiert. Aktiviere nur einen davon.
+
+[h2]Was du siehst[/h2]
+
+[list]
+[*][b]Frische[/b]-Balken: voll bei neuen Lebensmitteln, leer wenn sie verdorben sind.
+[*][b]Abgestanden in[/b] und [b]Verdorben in[/b]: verbleibende Zeit, größte Einheiten zuerst (Jahre, Monate, Wochen, Tage, Stunden, Minuten).
+[*]Gefrorenes: „Gefroren: verdirbt nicht“. Konserven und Trockenwaren: „Verdirbt nie“.
+[*]Option (Optionen > Mods): genaue Zeiten nur mit der Eigenschaft Ernährungswissenschaftler. Eine lesbare Verpackung zeigt sie immer, wie die Nährwerte im Spiel. Sonst ein ungefährer Zustand: sehr frisch, frisch, sieht okay aus, beginnt zu verderben, fast verdorben, verdorben.
+[/list]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/02-fridge.jpg[/img]
+
+[h2]Zeiten wie im Spiel[/h2]
+
+Die Restzeit wird so berechnet, wie das Spiel Lebensmittel altern lässt:
+[list]
+[*]Sandbox-Optionen [i]Lebensmittel verderben[/i] und [i]Kühlwirkung[/i];
+[*]ein Kühl- oder Gefrierschrank verlangsamt das Verderben, solange er Strom hat: per Generator oder aus dem Netz bis zum Tag des Stromausfalls, danach verdirbt das Essen wieder normal schnell;
+[*]Gefrorenes verdirbt nicht;
+[*]die eigenen Haltbarkeitswerte jedes Gegenstands (Gekochtes unterscheidet sich von Rohem).
+[/list]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/03-frozen.jpg[/img]
+
+[h2]Änderungen gegenüber den Originalen[/h2]
+
+[list]
+[*]Tooltip-Zeilen über [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3694097672]TooltipLib[/url]: kein Kasten unter dem Tooltip, kein springender Tooltip, verträglich mit anderen Tooltip-Mods.
+[*]Kühlschrank ohne Strom, Gefrorenes und Gekochtes ergeben korrekte Zeiten.
+[*]Einheiten immer in Reihenfolge: Die Originale konnten „5m 2d 1w“ anzeigen oder die Jahre weglassen.
+[*]Der Zustand „Verdorben“ erscheint wieder; Optionstexte und Übersetzungen laden in 42.21 (JSON).
+[*]Der Inventarbalken überdeckt die Nährwert- oder Kochzeile nicht mehr.
+[/list]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/04-read-the-label.jpg[/img]
+
+[h2]Mehrspieler[/h2]
+
+Nur Anzeige: Nichts wird an den Server gesendet oder gespeichert. Auf dem Server installieren, damit die Clients ihn herunterladen; jeder Spieler stellt die Option selbst ein. Kann gefahrlos zu einer bestehenden Welt hinzugefügt oder entfernt werden.
+
+[h2]Voraussetzungen[/h2]
+
+[list]
+[*]Build 42.21 oder neuer.
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3694097672]TooltipLib[/url].
+[/list]
+
+[h2]Sprachen[/h2]
+
+Englisch, Französisch, Deutsch, Spanisch, Italienisch, Polnisch, Portugiesisch, brasilianisches Portugiesisch, Russisch, vereinfachtes Chinesisch.
+
+[h2]Unterstütze das Projekt[/h2]
+
+Gefällt dir der Mod? Ein Kaffee hilft, neue Funktionen und Übersetzungen zu finanzieren.
+[url=https://ko-fi.com/Z8Z8QJV31][img]https://storage.ko-fi.com/cdn/kofi6.png?v=6[/img][/url]
+
+[h2]Credits[/h2]
+
+Ursprüngliche Idee und Mod: eris. Build-42-Portierungen: die Autoren der beiden Objekte oben. Fork von batman, Code neu geschrieben. Nicht mit den ursprünglichen Autoren verbunden.

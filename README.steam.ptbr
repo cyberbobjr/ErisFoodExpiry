@@ -1,0 +1,75 @@
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/01-food-expiry.jpg[/img]
+
+[h1]Eris Food Expiry (fork TooltipLib)[/h1]
+
+[b]Fork não oficial · Build 42.21 · Um jogador e multijogador[/b]
+
+Quanto tempo até esse leite azedar? Passe o mouse sobre qualquer alimento: a dica mostra o frescor e o tempo exato até ele ficar não fresco e depois podre. Expanda uma pilha no inventário para ver uma barra fina de frescor sob cada item.
+
+[h2]Dois mods originais, um fork[/h2]
+
+Este mod continua o trabalho de dois itens da Oficina. Obrigado aos autores.
+[list]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3392259028][B42] eris food expiry[/url]: adaptação para a Build 42 do mod de eris, com a opção Nutricionista.
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3629527156][B42.13] eris food expiry[/url]: atualização para 42.13 no modo um jogador, tempos exatos sem o traço.
+[/list]
+Os dois usam o ID de mod [i]eris_food_expiry[/i]: este fork está marcado como incompatível com ele. Ative só um.
+
+[h2]O que você vê[/h2]
+
+[list]
+[*]Barra de [b]Frescor[/b]: cheia quando o alimento é novo, vazia quando está podre.
+[*][b]Não fresco em[/b] e [b]Podre em[/b]: tempo restante, maiores unidades primeiro (anos, meses, semanas, dias, horas, minutos).
+[*]Comida congelada: "Congelado: não estraga". Enlatados e comida seca: "Nunca estraga".
+[*]Opção (Opções > Mods): exigir o traço Nutricionista para os tempos exatos. Uma embalagem legível sempre os mostra, como as informações nutricionais do jogo. Caso contrário, um estado aproximado: muito fresco, fresco, parece bom, começando a apodrecer, quase podre, podre.
+[/list]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/02-fridge.jpg[/img]
+
+[h2]Tempos que seguem o jogo[/h2]
+
+O tempo restante é calculado do jeito que o jogo envelhece a comida:
+[list]
+[*]opções sandbox [i]Deterioração dos Alimentos[/i] e [i]Eficiência da Refrigeração[/i];
+[*]uma geladeira ou freezer desacelera a deterioração enquanto tem energia: um gerador, ou a rede até o dia do corte, depois a comida volta a estragar na velocidade normal;
+[*]comida congelada não estraga;
+[*]as idades de deterioração de cada item (comida cozida é diferente da crua).
+[/list]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/03-frozen.jpg[/img]
+
+[h2]O que mudou em relação aos originais[/h2]
+
+[list]
+[*]Linhas da dica pelo [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3694097672]TooltipLib[/url]: sem caixa desenhada sob a dica, sem dica pulando, compatível com outros mods de dica.
+[*]Geladeira sem energia, comida congelada e cozida dão tempos corretos.
+[*]Unidades sempre em ordem: os originais podiam mostrar "5m 2d 1w" ou esquecer os anos.
+[*]O estado "Podre" voltou a aparecer; os textos da opção e as traduções carregam na 42.21 (JSON).
+[*]A barra do inventário não se sobrepõe mais à linha de nutrição ou de cozimento.
+[/list]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/04-read-the-label.jpg[/img]
+
+[h2]Multijogador[/h2]
+
+Só visual: nada é enviado ao servidor nem salvo. Instale no servidor para os clientes baixarem; cada jogador ajusta a opção para si. Pode ser adicionado ou removido com segurança em um mundo existente.
+
+[h2]Requisitos[/h2]
+
+[list]
+[*]Build 42.21 ou mais recente.
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3694097672]TooltipLib[/url].
+[/list]
+
+[h2]Idiomas[/h2]
+
+Inglês, francês, alemão, espanhol, italiano, polonês, português, português do Brasil, russo, chinês simplificado.
+
+[h2]Apoie o projeto[/h2]
+
+Curtiu o mod? Um café ajuda a financiar novos recursos e traduções.
+[url=https://ko-fi.com/Z8Z8QJV31][img]https://storage.ko-fi.com/cdn/kofi6.png?v=6[/img][/url]
+
+[h2]Créditos[/h2]
+
+Ideia e mod originais: eris. Adaptações para a Build 42: os autores dos dois itens acima. Fork de batman, código reescrito. Sem vínculo com os autores originais.
