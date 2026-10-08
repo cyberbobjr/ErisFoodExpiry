@@ -20,7 +20,8 @@ Beide nutzen die Mod-ID [i]eris_food_expiry[/i]: Dieser Fork ist als inkompatibe
 [list]
 [*][b]Frische[/b]-Balken: voll bei neuen Lebensmitteln, leer wenn sie verdorben sind.
 [*][b]Abgestanden in[/b] und [b]Verdorben in[/b]: verbleibende Zeit, größte Einheiten zuerst (Jahre, Monate, Wochen, Tage, Stunden, Minuten).
-[*]Gefrorenes: „Gefroren: verdirbt nicht“. Konserven und Trockenwaren: „Verdirbt nie“.
+[*]Gefrorenes: „Gefroren: verdirbt nicht“ in einem laufenden Gefrierschrank; anderswo [b]Aufgetaut in[/b], danach die Zeiten nach dem Auftauen. Konserven und Trockenwaren: „Verdirbt nie“.
+[*]Verdorbenes: [b]Verschwindet in[/b], wenn die Sandbox-Option [i]Verdorbene Nahrungsmittel entfernen[/i] aktiv ist (ein Komposter behält es).
 [*]Option (Optionen > Mods): genaue Zeiten nur mit der Eigenschaft Ernährungswissenschaftler. Eine lesbare Verpackung zeigt sie immer, wie die Nährwerte im Spiel. Sonst ein ungefährer Zustand: sehr frisch, frisch, sieht okay aus, beginnt zu verderben, fast verdorben, verdorben.
 [/list]
 
@@ -32,7 +33,7 @@ Die Restzeit wird so berechnet, wie das Spiel Lebensmittel altern lässt:
 [list]
 [*]Sandbox-Optionen [i]Lebensmittel verderben[/i] und [i]Kühlwirkung[/i];
 [*]ein Kühl- oder Gefrierschrank verlangsamt das Verderben, solange er Strom hat: per Generator oder aus dem Netz bis zum Tag des Stromausfalls, danach verdirbt das Essen wieder normal schnell;
-[*]Gefrorenes verdirbt nicht;
+[*]Gefrorenes verdirbt erst, wenn es aufgetaut ist;
 [*]die eigenen Haltbarkeitswerte jedes Gegenstands (Gekochtes unterscheidet sich von Rohem).
 [/list]
 

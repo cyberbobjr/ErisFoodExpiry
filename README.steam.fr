@@ -20,7 +20,8 @@ Les deux utilisent l'ID de mod [i]eris_food_expiry[/i] : ce fork est déclaré i
 [list]
 [*]Barre de [b]Fraîcheur[/b] : pleine quand l'aliment est neuf, vide quand il est pourri.
 [*][b]Périmé dans[/b] et [b]Pourri dans[/b] : temps restant, les plus grandes unités d'abord (années, mois, semaines, jours, heures, minutes).
-[*]Aliment congelé : « Congelé : ne s'abîme pas ». Conserves et aliments secs : « Ne se périme jamais ».
+[*]Aliment congelé : « Congelé : ne s'abîme pas » dans un congélateur en marche ; ailleurs, [b]Décongelé dans[/b], puis les durées une fois décongelé. Conserves et aliments secs : « Ne se périme jamais ».
+[*]Aliment pourri : [b]Disparaît dans[/b], quand l'option sandbox [i]Disparition de la nourriture pourrie[/i] est active (un composteur le garde).
 [*]Option (Options > Mods) : exiger le trait Nutritionniste pour les durées exactes. Un emballage lisible les affiche toujours, comme les valeurs nutritionnelles vanilla. Sinon, un état approximatif : très frais, frais, semble correct, commence à pourrir, presque pourri, pourri.
 [/list]
 
@@ -32,7 +33,7 @@ Le temps restant est calculé comme le jeu fait vieillir la nourriture :
 [list]
 [*]options sandbox [i]Péremption de la nourriture[/i] et [i]Efficacité du réfrigérateur[/i] ;
 [*]un réfrigérateur ou un congélateur ralentit la péremption tant qu'il a du courant : un groupe électrogène, ou le réseau jusqu'au jour de la coupure, après quoi la nourriture s'abîme de nouveau à vitesse normale ;
-[*]un aliment congelé ne s'abîme pas ;
+[*]un aliment congelé ne s'abîme pas avant d'être décongelé ;
 [*]les âges de péremption propres à chaque objet (un plat cuisiné diffère de l'aliment cru).
 [/list]
 

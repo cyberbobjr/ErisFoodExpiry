@@ -5,7 +5,7 @@
 --   age (days) += elapsed hours * FoodRotSpeed / 24
 --   * FridgeFactor in a fridge or freezer powered by a generator, or still on
 --     grid power (world age < ElecShutModifier days), then normal speed;
---   * 0 while the food is frozen.
+--   * 0 while the food is frozen (until it has thawed).
 -- Stale at age >= offAge, rotten at age >= offAgeMax (instance values, which
 -- may differ from the item script after cooking or a recipe).
 -- ============================================================================
@@ -39,12 +39,9 @@ function EFE.canAge(item)
     return item:getOffAgeMax() < EFE.NEVER
 end
 
--- Game days until the item's age reaches targetAge where it is now.
--- Returns nil when it does not age there (frozen, or fridge factor "never").
-function EFE.daysUntil(item, targetAge)
-    local delta = targetAge - item:getAge()
-    if delta <= 0 then return 0 end
-    if item:isFrozen() then return nil end
+-- Game days for the age to grow by delta where the item is now, starting
+-- startDays from now; nil when it does not age there (fridge factor "never").
+local function agingDays(item, delta, startDays)
     local rot = EFE.rotSpeed()
     local container = item:getOutermostContainer()
     if not container or not (container:isFridge() or container:isFreezer()) then
@@ -57,14 +54,58 @@ function EFE.daysUntil(item, targetAge)
         return delta / cold
     end
     local shutDays = getSandboxOptions():getElecShutModifier()
-    local nowDays = getGameTime():getWorldAgeHours() / 24
-    if shutDays > -1 and nowDays < shutDays then
-        local gridDays = shutDays - nowDays
+    local startAt = getGameTime():getWorldAgeHours() / 24 + startDays
+    if shutDays > -1 and startAt < shutDays then
+        local gridDays = shutDays - startAt
         local gridAge = gridDays * cold
-        if delta <= gridAge then return delta / cold end
+        if delta <= gridAge then
+            if cold <= 0 then return nil end
+            return delta / cold
+        end
         return gridDays + (delta - gridAge) / rot
     end
     return delta / rot
+end
+
+-- Game days until frozen food has thawed (Food.updateFreezing, 42.21): 1.5 h
+-- from fully frozen, twice as long in a powered fridge, six times faster in
+-- a container warmer than 1.0. nil while it stays frozen (powered freezer).
+function EFE.thawDays(item)
+    if not item:isFrozen() or not item:isThawing() then return nil end
+    local hours = 1.5
+    local container = item:getOutermostContainer()
+    if container then
+        if container:isFridge() and container:isPowered() then hours = hours * 2 end
+        if container:getTemperature() > 1.0 then hours = hours / 6 end
+    end
+    return item:getFreezingTime() / 100 * hours / 24
+end
+
+-- Game days until the item's age reaches targetAge where it is now: frozen
+-- food does not age until it has thawed. nil when it never gets there.
+function EFE.daysUntil(item, targetAge)
+    local delta = targetAge - item:getAge()
+    if delta <= 0 then return 0 end
+    local startDays = 0
+    if item:isFrozen() then
+        startDays = EFE.thawDays(item)
+        if startDays == nil then return nil end
+    end
+    local days = agingDays(item, delta, startDays)
+    if days == nil then return nil end
+    return startDays + days
+end
+
+-- Game days until rotten food is removed from the map (sandbox Rotten Food
+-- Removal, Food.updateRotting): age > offAgeMax + DaysForRottenFoodRemoval.
+-- nil when the option is off (-1) or in a composter, which keeps it.
+function EFE.removalDays(item)
+    local option = getSandboxOptions():getOptionByName("DaysForRottenFoodRemoval")
+    local removal = option and tonumber(option:getValue()) or -1
+    if removal < 0 then return nil end
+    local container = item:getOutermostContainer()
+    if container and instanceof(container:getParent(), "IsoCompost") then return nil end
+    return EFE.daysUntil(item, item:getOffAgeMax() + removal)
 end
 
 EFE.COLORS = {

@@ -6,6 +6,8 @@
   "UI_EFE_Freshness": "新鲜度",
   "UI_EFE_StaleIn": "陈腐倒计时",
   "UI_EFE_RottenIn": "变质倒计时",
+  "UI_EFE_ThawedIn": "解冻倒计时",
+  "UI_EFE_RemovedIn": "消失倒计时",
   "UI_EFE_Paused": "在此不会变质",
   "UI_EFE_Frozen": "冷冻：不会变质",
   "UI_EFE_NeverPerish": "永不变质",

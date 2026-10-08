@@ -1,8 +1,14 @@
 # Changelog
 
-## 0.1.1 — 2026-10-08
+## 0.2.0 — 2026-10-08
+
+### Added
+- Thawing food: "Thawed in" countdown, then the stale and rotten times counted from the end of thawing (faster near a heat source, slower in a running fridge).
+- Rotten food: "Disappears in" when the sandbox Rotten Food Removal option is on. Not shown in a composter, which keeps it.
 
 ### Changed
+- Frozen food in a running freezer shows a single line, "Frozen: not spoiling".
+- Food that does not spoil where it is (fridge set to "No decay") shows a single line, "Not spoiling here".
 - Option names, tooltips and the TooltipLib entry are translated by the game's options screen, like vanilla options. No visible change.
 - Same freshness colours in the tooltip and in the inventory strip (green fresh, orange stale, red rotten).
 

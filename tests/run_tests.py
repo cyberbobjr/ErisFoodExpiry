@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT.parent / ".claude" / "tools"))
 
 # Minimal doubles of the Java API used by the mod (42.21 names and semantics).
 STUBS = r"""
-SANDBOX = { FoodRotSpeed = 3, FridgeFactor = 3, ElecShutModifier = 14 }
+SANDBOX = { FoodRotSpeed = 3, FridgeFactor = 3, ElecShutModifier = 14, DaysForRottenFoodRemoval = -1 }
 WORLD_HOURS = 24
 function getSandboxOptions()
     return {
@@ -32,10 +32,19 @@ function getText(key) return key end
 function instanceof(o, class) return type(o) == "table" and o._class == class end
 CharacterTrait = { NUTRITIONIST = "nut", NUTRITIONIST2 = "nut2", ILLITERATE = "illit" }
 
-function makeContainer(kind, generator)
+-- powered: ItemContainer.isPowered (generator or grid); temperature as in
+-- ItemContainer.getTemperature: 0.2 for a powered fridge/freezer, else 1.0
+-- unless given (stove, barbecue...).
+function makeContainer(kind, generator, powered, temperature, parent)
     return {
         isFridge = function() return kind == "fridge" end,
         isFreezer = function() return kind == "freezer" end,
+        isPowered = function() return powered == true end,
+        getTemperature = function()
+            if powered and (kind == "fridge" or kind == "freezer") then return 0.2 end
+            return temperature or 1.0
+        end,
+        getParent = function() return parent end,
         getSourceGrid = function() return { haveElectricity = function() return generator end } end,
     }
 end
@@ -45,6 +54,14 @@ function makeFood(t)
     function f:getOffAge() return t.offAge end
     function f:getOffAgeMax() return t.offAgeMax end
     function f:isFrozen() return t.frozen == true end
+    function f:getFreezingTime() return t.freezingTime or (t.frozen and 100 or 0) end
+    -- Food.isThawing (42.21)
+    function f:isThawing()
+        if self:getFreezingTime() <= 0 then return false end
+        local c = t.container
+        if not (c and c:isFreezer()) then return true end
+        return not c:isPowered()
+    end
     function f:isPackaged() return t.packaged == true end
     function f:getOutermostContainer() return t.container end
     function f:getModData() return t.modData or {} end
@@ -128,9 +145,37 @@ def lua_checks() -> list[str]:
         failed.append("no power: normal speed expected")
     lua.execute("SANDBOX.ElecShutModifier = 14")
 
-    lua.execute("frozen = makeFood{age=1, offAge=3, offAgeMax=5, frozen=true}")
-    if days("frozen", "3") is not None:
-        failed.append("frozen food must not spoil")
+    lua.execute("frozen = makeFood{age=1, offAge=3, offAgeMax=5, frozen=true, "
+                "container=makeContainer('freezer', false, true)}")
+    if days("frozen", "3") is not None or ev("ErisFoodExpiry.thawDays(frozen)") is not None:
+        failed.append("frozen food in a powered freezer must not spoil nor thaw")
+    # thawing: 1.5 h from fully frozen, x2 in a powered fridge, /6 when warm
+    lua.execute("thawing = makeFood{age=1, offAge=3, offAgeMax=5, frozen=true, freezingTime=50}")
+    if not approx(ev("ErisFoodExpiry.thawDays(thawing)"), 0.75 / 24):
+        failed.append("thaw time on the floor: 45 min expected")
+    if not approx(days("thawing", "3"), 0.75 / 24 + 2):
+        failed.append("spoilage starts after thawing")
+    lua.execute("fridgeThaw = makeFood{age=1, offAge=3, offAgeMax=5, frozen=true, "
+                "container=makeContainer('fridge', true, true)}")
+    if not approx(ev("ErisFoodExpiry.thawDays(fridgeThaw)"), 3 / 24):
+        failed.append("thaw time in a powered fridge: 3 h expected")
+    lua.execute("stoveThaw = makeFood{age=1, offAge=3, offAgeMax=5, frozen=true, "
+                "container=makeContainer('stove', false, true, 2.0)}")
+    if not approx(ev("ErisFoodExpiry.thawDays(stoveThaw)"), 0.25 / 24):
+        failed.append("thaw time in a warm container: 15 min expected")
+
+    # rotten food removal: age > offAgeMax + option, composters keep it
+    lua.execute("rotten = makeFood{age=6, offAge=3, offAgeMax=5}")
+    if ev("ErisFoodExpiry.removalDays(rotten)") is not None:
+        failed.append("removal shown while the option is off")
+    lua.execute("SANDBOX.DaysForRottenFoodRemoval = 3")
+    if not approx(ev("ErisFoodExpiry.removalDays(rotten)"), 2):
+        failed.append("removal in 2 days expected")
+    lua.execute("compost = makeFood{age=6, offAge=3, offAgeMax=5, "
+                "container=makeContainer('compost', false, false, nil, { _class = 'IsoCompost' })}")
+    if ev("ErisFoodExpiry.removalDays(compost)") is not None:
+        failed.append("composter keeps rotten food")
+    lua.execute("SANDBOX.DaysForRottenFoodRemoval = -1")
     if days("plain", "0.5") != 0:
         failed.append("past threshold: 0 expected")
 
@@ -199,9 +244,28 @@ def lua_checks() -> list[str]:
         out = ev("runTooltip(plain)")
         if out != "P:UI_EFE_Freshness=0.80|L:UI_EFE_StateFresh":
             failed.append(f"rough state: {out}")
-        out = ev("runTooltip(makeFood{age=2, offAge=3, offAgeMax=5, frozen=true, packaged=true})")
-        if "L:UI_EFE_Frozen" not in out or "UI_EFE_Paused" not in out:
+        out = ev("runTooltip(makeFood{age=2, offAge=3, offAgeMax=5, frozen=true, packaged=true, "
+                 "container=makeContainer('freezer', false, true)})")
+        if out != "P:UI_EFE_Freshness=0.60|L:UI_EFE_Frozen":
             failed.append(f"frozen tooltip: {out}")
+        out = ev("runTooltip(makeFood{age=2, offAge=3, offAgeMax=5, frozen=true, packaged=true})")
+        if out != ("P:UI_EFE_Freshness=0.60|KV:UI_EFE_ThawedIn=1 UI_EFE_Hours 30 UI_EFE_Minutes"
+                   "|KV:UI_EFE_StaleIn=1 UI_EFE_Days 1 UI_EFE_Hours 30 UI_EFE_Minutes"
+                   "|KV:UI_EFE_RottenIn=3 UI_EFE_Days 1 UI_EFE_Hours 30 UI_EFE_Minutes"):
+            failed.append(f"thawing tooltip: {out}")
+        lua.execute("SANDBOX.DaysForRottenFoodRemoval = 3")
+        out = ev("runTooltip(makeFood{age=6, offAge=3, offAgeMax=5})")
+        if out != "P:UI_EFE_Freshness=0.00|L:UI_EFE_StateRotten|KV:UI_EFE_RemovedIn=2 UI_EFE_Days":
+            failed.append(f"rotten tooltip (rough state): {out}")
+        lua.execute('ErisFoodExpiry.options:getOption("RequireTrait").value = false')
+        out = ev("runTooltip(makeFood{age=6, offAge=3, offAgeMax=5})")
+        if out != "P:UI_EFE_Freshness=0.00|L:UI_EFE_StateRotten|KV:UI_EFE_RemovedIn=2 UI_EFE_Days":
+            failed.append(f"rotten tooltip: {out}")
+        lua.execute("SANDBOX.FridgeFactor = 6")
+        out = ev("runTooltip(makeFood{age=1, offAge=3, offAgeMax=5, container=makeContainer('fridge', true, true)})")
+        if out != "P:UI_EFE_Freshness=0.80|L:UI_EFE_Paused":
+            failed.append(f"no-decay fridge tooltip: {out}")
+        lua.execute("SANDBOX.FridgeFactor = 3; SANDBOX.DaysForRottenFoodRemoval = -1")
 
     # Inventory strip keeps the vanilla line and draws two rectangles
     lua.execute(r"""

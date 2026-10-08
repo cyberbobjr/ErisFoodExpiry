@@ -20,7 +20,8 @@ Ambos usan el ID de mod [i]eris_food_expiry[/i]: este fork está marcado como in
 [list]
 [*]Barra de [b]Frescura[/b]: llena cuando el alimento es nuevo, vacía cuando está podrido.
 [*][b]Rancio en[/b] y [b]Podrido en[/b]: tiempo restante, primero las unidades mayores (años, meses, semanas, días, horas, minutos).
-[*]Comida congelada: «Congelado: no se estropea». Conservas y comida seca: «No caduca nunca».
+[*]Comida congelada: «Congelado: no se estropea» en un congelador en marcha; en otro sitio, [b]Descongelado en[/b] y luego los tiempos una vez descongelada. Conservas y comida seca: «No caduca nunca».
+[*]Comida podrida: [b]Desaparece en[/b], cuando la opción sandbox [i]Eliminación de comida podrida[/i] está activa (un compostador la conserva).
 [*]Opción (Opciones > Mods): exigir el rasgo Nutricionista para los tiempos exactos. Un envase legible siempre los muestra, como la información nutricional del juego. Si no, un estado aproximado: muy fresco, fresco, parece bien, empieza a pudrirse, casi podrido, podrido.
 [/list]
 
@@ -32,7 +33,7 @@ El tiempo restante se calcula igual que el juego envejece la comida:
 [list]
 [*]opciones sandbox [i]Deterioro de la comida[/i] y [i]Eficacia de la refrigeración[/i];
 [*]una nevera o un congelador frena el deterioro mientras tiene corriente: un generador, o la red hasta el día del corte, después la comida vuelve a estropearse a velocidad normal;
-[*]la comida congelada no se estropea;
+[*]la comida congelada no se estropea hasta descongelarse;
 [*]las edades de deterioro propias de cada objeto (la comida cocinada difiere de la cruda).
 [/list]
 
