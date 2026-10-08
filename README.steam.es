@@ -1,5 +1,3 @@
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/01-food-expiry.jpg[/img]
-
 [h1]Eris Food Expiry (fork TooltipLib)[/h1]
 
 [b]Fork no oficial · Build 42.21 · Un jugador y multijugador[/b]
@@ -72,4 +70,4 @@ Inglés, francés, alemán, español, italiano, polaco, portugués, portugués d
 
 [h2]Créditos[/h2]
 
-Idea y mod original: eris. Ports a Build 42: los autores de los dos objetos de arriba. Fork de batman, código reescrito. Sin relación con los autores originales.
+Idea y mod original: eris. Ports a Build 42: los autores de los dos objetos de arriba. Fork de batman, código reescrito. Sin relación con los autores originales. Código fuente (MIT) en [url=https://github.com/cyberbobjr/ErisFoodExpiry]GitHub[/url].

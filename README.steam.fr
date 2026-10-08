@@ -1,5 +1,3 @@
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/01-food-expiry.jpg[/img]
-
 [h1]Eris Food Expiry (fork TooltipLib)[/h1]
 
 [b]Fork non officiel · Build 42.21 · Solo et multijoueur[/b]
@@ -72,4 +70,4 @@ Le mod vous plaît ? Un café aide à financer de nouvelles fonctions et traduct
 
 [h2]Crédits[/h2]
 
-Idée et mod d'origine : eris. Portages Build 42 : les auteurs des deux objets ci-dessus. Fork par batman, code réécrit. Sans lien avec les auteurs d'origine.
+Idée et mod d'origine : eris. Portages Build 42 : les auteurs des deux objets ci-dessus. Fork par batman, code réécrit. Sans lien avec les auteurs d'origine. Code source (MIT) sur [url=https://github.com/cyberbobjr/ErisFoodExpiry]GitHub[/url].

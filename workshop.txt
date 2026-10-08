@@ -1,8 +1,6 @@
 version=1
 id=3815719265
 title=Eris Food Expiry (TooltipLib fork)
-description=[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/01-food-expiry.jpg[/img]
-description=
 description=[h1]Eris Food Expiry (TooltipLib fork)[/h1]
 description=
 description=[b]Unofficial fork · Build 42.21 · Singleplayer and multiplayer[/b]
@@ -75,6 +73,6 @@ description=[url=https://ko-fi.com/Z8Z8QJV31][img]https://storage.ko-fi.com/cdn/
 description=
 description=[h2]Credits[/h2]
 description=
-description=Original idea and mod: eris. Build 42 ports: the authors of the two items above. Fork by batman, code rewritten. Not affiliated with the original authors.
+description=Original idea and mod: eris. Build 42 ports: the authors of the two items above. Fork by batman, code rewritten. Not affiliated with the original authors. Source code (MIT) on [url=https://github.com/cyberbobjr/ErisFoodExpiry]GitHub[/url].
 tags=Build 42;Food;Interface;QoL;Multiplayer
 visibility=unlisted

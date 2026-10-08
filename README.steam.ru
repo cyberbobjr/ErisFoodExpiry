@@ -1,5 +1,3 @@
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/01-food-expiry.jpg[/img]
-
 [h1]Eris Food Expiry (форк TooltipLib)[/h1]
 
 [b]Неофициальный форк · Build 42.21 · Одиночная и сетевая игра[/b]
@@ -72,4 +70,4 @@
 
 [h2]Авторы[/h2]
 
-Идея и исходный мод: eris. Переносы на Build 42: авторы двух предметов выше. Форк — batman, код переписан. Не связан с авторами оригиналов.
+Идея и исходный мод: eris. Переносы на Build 42: авторы двух предметов выше. Форк — batman, код переписан. Не связан с авторами оригиналов. Исходный код (MIT) на [url=https://github.com/cyberbobjr/ErisFoodExpiry]GitHub[/url].
