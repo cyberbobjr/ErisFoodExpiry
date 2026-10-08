@@ -1,8 +1,7 @@
 -- ============================================================================
 -- Eris Food Expiry (batman fork) — spoilage projection and formatting
 --
--- Fork of eris_food_expiry (Workshop 3392259028). The projection follows
--- Food.updateAge in 42.21:
+-- The projection follows Food.updateAge in 42.21:
 --   age (days) += elapsed hours * FoodRotSpeed / 24
 --   * FridgeFactor in a fridge or freezer powered by a generator, or still on
 --     grid power (world age < ElecShutModifier days), then normal speed;
@@ -68,12 +67,26 @@ function EFE.daysUntil(item, targetAge)
     return delta / rot
 end
 
--- Rough state for players who cannot read the exact time, consistent with
--- vanilla stale/rotten thresholds.
+EFE.COLORS = {
+    fresh = { 0.3, 0.85, 0.3, 1 },
+    stale = { 1, 0.75, 0.2, 1 },
+    rotten = { 0.9, 0.25, 0.2, 1 },
+}
+
+-- "fresh", "stale" or "rotten", with the vanilla thresholds.
+function EFE.stage(item)
+    local age = item:getAge()
+    if age >= item:getOffAgeMax() then return "rotten" end
+    if age >= item:getOffAge() then return "stale" end
+    return "fresh"
+end
+
+-- Rough state for players who cannot read the exact time.
 function EFE.stateKey(item)
     local age, offAge, offAgeMax = item:getAge(), item:getOffAge(), item:getOffAgeMax()
-    if age >= offAgeMax then return "UI_EFE_StateRotten" end
-    if age >= offAge then
+    local stage = EFE.stage(item)
+    if stage == "rotten" then return "UI_EFE_StateRotten" end
+    if stage == "stale" then
         if offAgeMax > offAge and (age - offAge) / (offAgeMax - offAge) >= 0.5 then
             return "UI_EFE_StateAlmostRotten"
         end
@@ -104,8 +117,7 @@ local UNITS = {
     { key = "UI_EFE_Minutes", days = 1 / 1440 },
 }
 
--- "1 yr 2 mth 3 d": the largest non-zero units, at most maxParts of them,
--- in order (the original walked a hash table with pairs: random order).
+-- "1 yr 2 mth 3 d": the largest non-zero units, at most maxParts of them.
 function EFE.formatDays(days, maxParts)
     maxParts = maxParts or EFE.MAX_PARTS
     local minutes = math.floor(days * 1440 + 0.5)

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1 — 2026-10-08
+
+### Changed
+- Option names, tooltips and the TooltipLib entry are translated by the game's options screen, like vanilla options. No visible change.
+- Same freshness colours in the tooltip and in the inventory strip (green fresh, orange stale, red rotten).
+
 ## 0.1.0 — 2026-10-08
 
 ### First release

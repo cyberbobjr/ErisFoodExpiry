@@ -56,9 +56,12 @@ function makeChar(traits, dark)
     function c:tooDarkToRead() return dark == true end
     return c
 end
-PZAPI = { ModOptions = { create = function(_, id)
+PZAPI = { ModOptions = { create = function(_, id, name)
     local o = { dict = {} }
-    function o:addTickBox(oid, _, value) self.dict[oid] = { getValue = function(s) return s.value end, value = value } end
+    o.name = name
+    function o:addTickBox(oid, name, value, tooltip)
+        self.dict[oid] = { getValue = function(s) return s.value end, value = value, name = name, tooltip = tooltip }
+    end
     function o:getOption(oid) return self.dict[oid] end
     return o
 end } }
@@ -88,7 +91,11 @@ def lua_checks() -> list[str]:
     for name in ("EFE_Core", "EFE_Options", "EFE_Tooltip", "EFE_InventoryBar"):
         lua.execute(f'package.preload["ErisFoodExpiry/{name}"] = function() end')
     for name in ("EFE_Core", "EFE_Options", "EFE_Tooltip", "EFE_InventoryBar"):
+        # getText marks translated text while loading: the provider description
+        # must stay a key (MainOptions translates mod option names itself).
+        lua.execute('getTextKey = getText; getText = function(k) return "T:" .. k end')
         lua.execute((LUA / f"{name}.lua").read_text(encoding="utf-8"))
+        lua.execute("getText = getTextKey")
     ev = lua.eval
 
     def days(food: str, target: str):
@@ -161,9 +168,16 @@ def lua_checks() -> list[str]:
     if ev(f"{read}(pack, makeChar{{illit=true}}, true)") or ev(f"{read}(pack, makeChar({{}}, true), true)"):
         failed.append("illiterate or too dark: package not readable")
 
+    for food, stage in (("plain", "fresh"), ("makeFood{age=4, offAge=3, offAgeMax=5}", "stale"),
+                        ("makeFood{age=5, offAge=3, offAgeMax=5}", "rotten")):
+        if ev(f"ErisFoodExpiry.stage({food})") != stage:
+            failed.append(f"stage {food} -> {stage}")
+
     # Tooltip provider
     if ev("#PROVIDERS") != 1:
         failed.append("provider not registered")
+    elif ev("PROVIDERS[1].description") != "UI_EFE_TooltipProvider" or ev("ErisFoodExpiry.options.name") != "UI_EFE_Title"             or ev('ErisFoodExpiry.options:getOption("RequireTrait").name') != "UI_EFE_RequireTrait"             or ev('ErisFoodExpiry.options:getOption("RequireTrait").tooltip') != "UI_EFE_RequireTrait_tooltip":
+        failed.append("option names, tooltips and provider description must be translation keys (MainOptions translates them)")
     else:
         lua.execute(r"""
         function runTooltip(item)
@@ -205,7 +219,6 @@ def lua_checks() -> list[str]:
 def translation_checks() -> list[str]:
     failed = []
     lua_keys = set()
-    import re
     for path in LUA.glob("*.lua"):
         lua_keys |= set(re.findall(r'"(UI_EFE_\w+)"', path.read_text(encoding="utf-8")))
     for path in (MOD / "shared/Translate").glob("*/*.json"):
