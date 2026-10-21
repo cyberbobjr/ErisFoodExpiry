@@ -4,7 +4,7 @@
 
 Combien de temps avant que ce lait tourne ? Survolez un aliment : l'infobulle affiche sa fraîcheur et le temps exact avant qu'il soit périmé puis pourri. Dépliez une pile dans l'inventaire pour voir une fine bande de fraîcheur sous chaque objet.
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/05-tooltip-fridge.png[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/screenshots/05-tooltip-fridge.png[/img]
 
 [h2]Deux mods d'origine, un fork[/h2]
 
@@ -25,7 +25,7 @@ Les deux utilisent l'ID de mod [i]eris_food_expiry[/i] : ce fork est déclaré i
 [*]Option (Options > Mods) : exiger le trait Nutritionniste pour les durées exactes. Un emballage lisible les affiche toujours, comme les valeurs nutritionnelles vanilla. Sinon, un état approximatif : très frais, frais, semble correct, commence à pourrir, presque pourri, pourri.
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/02-fridge.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/02-fridge.jpg[/img]
 
 [h2]Des durées qui suivent le jeu[/h2]
 
@@ -37,9 +37,9 @@ Le temps restant est calculé comme le jeu fait vieillir la nourriture :
 [*]les âges de péremption propres à chaque objet (un plat cuisiné diffère de l'aliment cru).
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/03-frozen.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/03-frozen.jpg[/img]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/06-tooltip-thawing.png[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/screenshots/06-tooltip-thawing.png[/img]
 
 [h2]Ce qui change par rapport aux originaux[/h2]
 
@@ -51,7 +51,7 @@ Le temps restant est calculé comme le jeu fait vieillir la nourriture :
 [*]La bande de l'inventaire ne chevauche plus la ligne de nutrition ou de cuisson.
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/04-read-the-label.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/04-read-the-label.jpg[/img]
 
 [h2]Multijoueur[/h2]
 

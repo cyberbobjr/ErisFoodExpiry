@@ -4,7 +4,7 @@
 
 Сколько ещё простоит это молоко? Наведите курсор на любую еду: подсказка покажет свежесть и точное время, через которое еда залежится, а затем испортится. Разверните стопку в инвентаре — под каждым предметом появится тонкая полоса свежести.
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/05-tooltip-fridge.png[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/screenshots/05-tooltip-fridge.png[/img]
 
 [h2]Два исходных мода, один форк[/h2]
 
@@ -25,7 +25,7 @@
 [*]Опция (Настройки > Моды): точное время только с чертой «Диетолог». Читаемая упаковка всегда его показывает, как пищевую ценность в игре. Иначе — примерное состояние: очень свежее, свежее, выглядит нормально, начинает портиться, почти испорчено, испорчено.
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/02-fridge.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/02-fridge.jpg[/img]
 
 [h2]Время по правилам игры[/h2]
 
@@ -37,9 +37,9 @@
 [*]собственные сроки свежести каждого предмета (приготовленная еда отличается от сырой).
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/03-frozen.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/03-frozen.jpg[/img]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/06-tooltip-thawing.png[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/screenshots/06-tooltip-thawing.png[/img]
 
 [h2]Отличия от оригиналов[/h2]
 
@@ -51,7 +51,7 @@
 [*]Полоса в инвентаре больше не перекрывает строку питательности или готовки.
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/04-read-the-label.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/04-read-the-label.jpg[/img]
 
 [h2]Сетевая игра[/h2]
 

@@ -4,7 +4,7 @@
 
 Quanto tempo falta até este leite azedar? Passe o rato sobre qualquer alimento: a dica mostra a frescura e o tempo exato até ficar insonso e depois podre. Expanda uma pilha no inventário para ver uma barra fina de frescura sob cada objeto.
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/05-tooltip-fridge.png[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/screenshots/05-tooltip-fridge.png[/img]
 
 [h2]Dois mods originais, um fork[/h2]
 
@@ -25,7 +25,7 @@ Ambos usam o ID de mod [i]eris_food_expiry[/i]: este fork está marcado como inc
 [*]Opção (Opções > Mods): exigir o traço Nutricionista para os tempos exatos. Uma embalagem legível mostra-os sempre, como a informação nutricional do jogo. Caso contrário, um estado aproximado: muito fresco, fresco, parece bom, começa a apodrecer, quase podre, podre.
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/02-fridge.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/02-fridge.jpg[/img]
 
 [h2]Tempos que seguem o jogo[/h2]
 
@@ -37,9 +37,9 @@ O tempo restante é calculado como o jogo envelhece a comida:
 [*]as idades de deterioração próprias de cada objeto (a comida cozinhada difere da crua).
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/03-frozen.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/03-frozen.jpg[/img]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/06-tooltip-thawing.png[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/screenshots/06-tooltip-thawing.png[/img]
 
 [h2]O que muda em relação aos originais[/h2]
 
@@ -51,7 +51,7 @@ O tempo restante é calculado como o jogo envelhece a comida:
 [*]A barra do inventário já não se sobrepõe à linha de nutrição ou de cozedura.
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/04-read-the-label.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/04-read-the-label.jpg[/img]
 
 [h2]Multijogador[/h2]
 

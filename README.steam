@@ -4,7 +4,7 @@
 
 How long before this milk turns? Hover any food: the tooltip shows its freshness and the exact time left before it goes stale and rots. Expand a stack in your inventory to see a thin freshness strip under each item.
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/05-tooltip-fridge.png[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/screenshots/05-tooltip-fridge.png[/img]
 
 [h2]Two original mods, one fork[/h2]
 
@@ -25,7 +25,7 @@ Both use the mod ID [i]eris_food_expiry[/i]: this fork is marked incompatible wi
 [*]Option (Options > Mods): require the Nutritionist trait for exact times. A readable package always shows them, like the vanilla nutrition facts. Otherwise you get a rough state: very fresh, fresh, looks okay, starting to rot, almost rotten, rotten.
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/02-fridge.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/02-fridge.jpg[/img]
 
 [h2]Times that follow the game[/h2]
 
@@ -37,9 +37,9 @@ The time left is computed the way the game ages food:
 [*]each item's own stale and rotten ages (cooked food differs from raw food).
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/03-frozen.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/03-frozen.jpg[/img]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/06-tooltip-thawing.png[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/screenshots/06-tooltip-thawing.png[/img]
 
 [h2]What changed from the originals[/h2]
 
@@ -51,7 +51,7 @@ The time left is computed the way the game ages food:
 [*]The inventory strip no longer overlaps the nutrition or cooking line.
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/04-read-the-label.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/04-read-the-label.jpg[/img]
 
 [h2]Multiplayer[/h2]
 

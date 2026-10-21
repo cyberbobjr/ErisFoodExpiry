@@ -4,7 +4,7 @@
 
 这盒牛奶还能放多久？将鼠标悬停在任意食物上：提示框会显示新鲜度，以及变陈腐、变质前剩余的准确时间。在物品栏中展开一组物品，每个物品下方会出现一条细细的新鲜度条。
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/05-tooltip-fridge.png[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/screenshots/05-tooltip-fridge.png[/img]
 
 [h2]两个原版模组，一个分支[/h2]
 
@@ -25,7 +25,7 @@
 [*]选项（选项 > 模组）：只有拥有“营养学家”特质才显示准确时间。可读的包装始终显示，与游戏中的营养信息相同。否则显示大致状态：非常新鲜、新鲜、看起来还行、开始变质、快要变质、已变质。
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/02-fridge.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/02-fridge.jpg[/img]
 
 [h2]与游戏一致的时间[/h2]
 
@@ -37,9 +37,9 @@
 [*]每个物品自身的陈腐与变质时间（熟食与生食不同）。
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/03-frozen.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/03-frozen.jpg[/img]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/06-tooltip-thawing.png[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/screenshots/06-tooltip-thawing.png[/img]
 
 [h2]与原版的区别[/h2]
 
@@ -51,7 +51,7 @@
 [*]物品栏中的新鲜度条不再与营养或烹饪行重叠。
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/04-read-the-label.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/04-read-the-label.jpg[/img]
 
 [h2]多人游戏[/h2]
 

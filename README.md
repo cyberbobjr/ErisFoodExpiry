@@ -13,7 +13,7 @@ Mod ID `batman_ErisFoodExpiry`, requires `TooltipLib`. Published unlisted on the
 - `EFE_Tooltip.lua`: TooltipLib provider.
 - `EFE_InventoryBar.lua`: freshness strip after vanilla `ISInventoryPane:drawItemDetails`.
 - `EFE_Options.lua`: mod option `RequireTrait`.
-- `docs/steam/`: illustrations of the Workshop page (linked from `README.steam*`).
+- `docs/`: development documentation (French) and player wiki; start at [docs/README.md](docs/README.md). Workshop page images are in `docs/images/screenshots/` and `docs/images/art/` (linked from `README.steam*`).
 
 ## Multiplayer
 Client only. The client recomputes the age of displayed food itself (`ISInventoryPane` calls `updateAge`), sandbox values come from the server. No network command, no saved data.

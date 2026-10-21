@@ -4,7 +4,7 @@
 
 ¿Cuánto falta para que esta leche se eche a perder? Pasa el ratón sobre cualquier alimento: el tooltip muestra su frescura y el tiempo exacto hasta que se pone rancio y se pudre. Despliega una pila en el inventario para ver una fina barra de frescura bajo cada objeto.
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/05-tooltip-fridge.png[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/screenshots/05-tooltip-fridge.png[/img]
 
 [h2]Dos mods originales, un fork[/h2]
 
@@ -25,7 +25,7 @@ Ambos usan el ID de mod [i]eris_food_expiry[/i]: este fork está marcado como in
 [*]Opción (Opciones > Mods): exigir el rasgo Nutricionista para los tiempos exactos. Un envase legible siempre los muestra, como la información nutricional del juego. Si no, un estado aproximado: muy fresco, fresco, parece bien, empieza a pudrirse, casi podrido, podrido.
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/02-fridge.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/02-fridge.jpg[/img]
 
 [h2]Tiempos que siguen al juego[/h2]
 
@@ -37,9 +37,9 @@ El tiempo restante se calcula igual que el juego envejece la comida:
 [*]las edades de deterioro propias de cada objeto (la comida cocinada difiere de la cruda).
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/03-frozen.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/03-frozen.jpg[/img]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/06-tooltip-thawing.png[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/screenshots/06-tooltip-thawing.png[/img]
 
 [h2]Cambios respecto a los originales[/h2]
 
@@ -51,7 +51,7 @@ El tiempo restante se calcula igual que el juego envejece la comida:
 [*]La barra del inventario ya no se superpone a la línea de nutrición o de cocción.
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/04-read-the-label.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/04-read-the-label.jpg[/img]
 
 [h2]Multijugador[/h2]
 

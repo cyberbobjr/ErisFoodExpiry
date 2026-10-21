@@ -4,7 +4,7 @@
 
 Wie lange hält diese Milch noch? Fahre über ein Lebensmittel: Der Tooltip zeigt seine Frische und die genaue Zeit, bis es abgestanden und dann verdorben ist. Klappe einen Stapel im Inventar auf, um unter jedem Gegenstand einen dünnen Frischebalken zu sehen.
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/05-tooltip-fridge.png[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/screenshots/05-tooltip-fridge.png[/img]
 
 [h2]Zwei Originalmods, ein Fork[/h2]
 
@@ -25,7 +25,7 @@ Beide nutzen die Mod-ID [i]eris_food_expiry[/i]: Dieser Fork ist als inkompatibe
 [*]Option (Optionen > Mods): genaue Zeiten nur mit der Eigenschaft Ernährungswissenschaftler. Eine lesbare Verpackung zeigt sie immer, wie die Nährwerte im Spiel. Sonst ein ungefährer Zustand: sehr frisch, frisch, sieht okay aus, beginnt zu verderben, fast verdorben, verdorben.
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/02-fridge.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/02-fridge.jpg[/img]
 
 [h2]Zeiten wie im Spiel[/h2]
 
@@ -37,9 +37,9 @@ Die Restzeit wird so berechnet, wie das Spiel Lebensmittel altern lässt:
 [*]die eigenen Haltbarkeitswerte jedes Gegenstands (Gekochtes unterscheidet sich von Rohem).
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/03-frozen.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/03-frozen.jpg[/img]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/06-tooltip-thawing.png[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/screenshots/06-tooltip-thawing.png[/img]
 
 [h2]Änderungen gegenüber den Originalen[/h2]
 
@@ -51,7 +51,7 @@ Die Restzeit wird so berechnet, wie das Spiel Lebensmittel altern lässt:
 [*]Der Inventarbalken überdeckt die Nährwert- oder Kochzeile nicht mehr.
 [/list]
 
-[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/steam/04-read-the-label.jpg[/img]
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/04-read-the-label.jpg[/img]
 
 [h2]Mehrspieler[/h2]
 
