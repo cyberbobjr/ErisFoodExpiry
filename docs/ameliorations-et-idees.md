@@ -25,7 +25,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   - `Food.java:686-687` : aucun vieillissement une fois congelé.
 - **Risque** : bug d'affichage (durée très surestimée), le plus visible du mod. C'est un usage courant (congélateur au début de la partie).
 - **Correction** : dans `daysUntil`, si `not item:isFrozen() and item:isFreezing()`, calculer `freezeDays = (100 - getFreezingTime()) / 100 × 4 / 24`. Si la cible est atteinte pendant ce temps (`agingDays` limité à `freezeDays`), rendre cette durée ; sinon rendre `nil`. Dans l'infobulle, afficher « Congelé dans 2 h 10 min » puis « Ne s'abîme pas une fois congelé ». Il faut une nouvelle clé `UI_EFE_FrozenIn`, traduite dans les 10 langues. Ajouter un test lupa qui reproduit `isFreezing` du Java. Un aliment `CantBeFrozen` (51 dans `food.txt`) garde le facteur froid.
-- **Statut** : confirmé statiquement ; durée affichée à contrôler en jeu.
+- **Statut : corrigé (commit d7e1955), à vérifier en jeu** (confirmé statiquement ; durée affichée à contrôler en jeu).
 - **Priorité** : haute. **Effort** : S.
 
 ### C02 : aliments `ReplaceOnRotten` présentés comme « Pourri dans » et « Disparaît dans »
@@ -37,7 +37,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   - `EFE_Tooltip.lua:58-71`.
 - **Risque** : bug d'affichage et texte trompeur.
 - **Correction** : si `item:getReplaceOnRotten()` n'est pas vide, remplacer « Pourri dans » par « Se transforme dans » suivi du nom du remplaçant. Le nom s'obtient par `getScriptManager():FindItem(module .. "." .. nom):getDisplayName()`, déjà traduit sur le client. Ne pas afficher « Disparaît dans » ni l'état « Pourri » pour ces objets. Nouvelle clé `UI_EFE_TurnsInto`.
-- **Statut** : confirmé statiquement.
+- **Statut : corrigé (commit d7e1955), à vérifier en jeu**.
 - **Priorité** : moyenne. **Effort** : S.
 
 ### C03 : l'état est recalculé au lieu de lire `isFresh()` / `isRotten()` (œufs fécondés)
@@ -47,7 +47,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   - `Food.java:1653-1665` : `isRotten()` et `isFresh()` rendent `false` et `true` si `isFertilized()`.
 - **Risque** : bug d'affichage sur l'élevage (B42).
 - **Correction** : faire reposer `stage` sur `item:isRotten()` et `item:isFresh()`. Pour un œuf fécondé, afficher une ligne « Fécondé : ne se périme pas » sans compte à rebours. La durée avant l'éclosion n'est pas calculable : seul `getTimeToHatch()` est public, `fertilizedTime` n'a pas de getter (`Food.java:2183-2210`). La disparition d'un œuf fécondé pourri (`Food.java:626-637` ne teste pas `isFertilized`) est à vérifier en jeu.
-- **Statut** : confirmé statiquement pour l'état ; disparition à vérifier en jeu.
+- **Statut : corrigé (commit d7e1955), à vérifier en jeu** (confirmé statiquement pour l'état ; disparition à vérifier en jeu).
 - **Priorité** : moyenne. **Effort** : S.
 
 ### C04 : « Congelé : ne s'abîme pas » au congélateur branché sur le réseau, sans parler de la coupure
@@ -165,7 +165,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   La vérification des traductions ne détecte ni les clés en trop, ni les valeurs vides, ni les clés absentes de `EN` (`:283-293`).
 - **Risque** : maintenance. Les corrections C01 à C03 n'auraient aucun garde-fou.
 - **Correction** : reproduire fidèlement dans les doubles `isFreezing`, `isFertilized`, `getReplaceOnRotten` et `canBeFrozen` du Java, comme le demande la préférence « faithful Java mocks ». Ajouter les cas ; comparer chaque `UI.json` à `EN` dans les deux sens.
-- **Statut** : confirmé statiquement.
+- **Statut : corrigé (commit d7e1955), à vérifier en jeu** (traduction : clés comparées à EN dans les deux sens ; tests C01-C03 ajoutés).
 - **Priorité** : moyenne (préalable à C01-C03). **Effort** : S.
 
 ### C15 : `.luacheckrc` copié d'un autre projet, globales non contrôlées
