@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 — 2026-10-21
 
 ### Fixed
 - Fresh food put in a running freezer now shows "Frozen in" followed by "Frozen: not spoiling", instead of a far-off rotting date.
