@@ -68,6 +68,11 @@ Solo visual: no se envía nada al servidor ni se guarda nada. Instálalo en el s
 
 Inglés, francés, alemán, español, italiano, polaco, portugués, portugués de Brasil, ruso, chino simplificado.
 
+[h2]Discord[/h2]
+
+¿Preguntas, errores o ideas? Únete al Discord:
+[url=https://discord.gg/QEsBya7hUA]https://discord.gg/QEsBya7hUA[/url]
+
 [h2]Apoya el proyecto[/h2]
 
 ¿Te gusta el mod? Un café ayuda a financiar nuevas funciones y traducciones.

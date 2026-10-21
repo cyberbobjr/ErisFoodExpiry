@@ -68,6 +68,11 @@ Affichage seulement : rien n'est envoyé au serveur ni sauvegardé. Installez-le
 
 Anglais, français, allemand, espagnol, italien, polonais, portugais, portugais du Brésil, russe, chinois simplifié.
 
+[h2]Discord[/h2]
+
+Questions, bugs ou idées ? Rejoignez le Discord :
+[url=https://discord.gg/QEsBya7hUA]https://discord.gg/QEsBya7hUA[/url]
+
 [h2]Soutenir le projet[/h2]
 
 Le mod vous plaît ? Un café aide à financer de nouvelles fonctions et traductions.
