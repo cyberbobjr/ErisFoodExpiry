@@ -1,6 +1,6 @@
 version=1
 id=3815719265
-title=Eris Food Expiry (TooltipLib fork)
+title=Food Expiry
 description=[h1]Food Expiry[/h1]
 description=
 description=[b]Unofficial fork of [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3392259028]Eris Food Expiry[/url] · Build 42.21 · Singleplayer and multiplayer[/b]
