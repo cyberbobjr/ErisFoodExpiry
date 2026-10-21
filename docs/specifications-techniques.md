@@ -37,7 +37,8 @@ Lues par `getSandboxOptions():getOptionByName(nom):getValue()` à chaque calcul.
 Toutes les durées sont en **jours de jeu**. `NEVER = 1 000 000 000` (valeur par défaut d'`offAge`/`offAgeMax` d'un objet qui ne vieillit pas).
 
 - `canAge(item)` : `getOffAgeMax() < NEVER`.
-- `stage(item)` : `"rotten"` si `age >= offAgeMax`, `"stale"` si `age >= offAge`, sinon `"fresh"`.
+- `stage(item)` : `"rotten"` si `item:isRotten()`, `"fresh"` si `item:isFresh()`, sinon `"stale"` (lecture du jeu : un œuf fécondé reste frais, `Food.isRotten`/`isFresh` 42.21).
+- `replacementName(item)` : `nil` si `getReplaceOnRotten()` est vide ; sinon le nom affiché du script `getModule() .. "." .. nom` (`getScriptManager():FindItem`), ou le nom brut si le script est introuvable.
 - `freshFraction(item)` : `(offAgeMax − age) / offAgeMax`, bornée à [0, 1] ; 0 si `offAgeMax <= 0`.
 
 ### Vieillissement là où se trouve l'objet (`agingDays`, local)
@@ -54,13 +55,17 @@ Pour faire croître l'âge de `delta` à partir de `startDays` jours dans le fut
 
 `nil` si l'objet n'est pas congelé ou ne décongèle pas (`isThawing()` faux : congélateur en marche). Sinon `heures = 1,5`, ×2 si le conteneur est un réfrigérateur `isPowered()`, ÷6 si `getTemperature() > 1,0` ; résultat `getFreezingTime() / 100 × heures / 24` (d'après `Food.updateFreezing` 42.21).
 
+### Congélation (`freezeDays`)
+
+`nil` si l'objet est déjà congelé ou si `isFreezing()` est faux (non congelable, hors congélateur ou congélateur sans courant). Sinon `(100 − getFreezingTime()) / 100 × 4 / 24` (d'après `Food.updateFreezing` 42.21 : `freezingTime += heures / 4 × 100`, congelé à 100).
+
 ### Échéance d'un âge (`daysUntil`)
 
-`delta = cible − age` ; 0 si `delta <= 0`. Pour un objet congelé, `startDays = thawDays(item)` (`nil` → `nil`). Résultat `startDays + agingDays(item, delta, startDays)`, ou `nil` si l'objet n'atteint jamais la cible à cet endroit.
+`delta = cible − age` ; 0 si `delta <= 0`. Pour un objet congelé, `startDays = thawDays(item)` (`nil` → `nil`). Si `freezeDays(item)` n'est pas `nil` et que `agingDays` le dépasse, `nil` : l'objet sera congelé avant d'atteindre la cible. Résultat `startDays + agingDays(item, delta, startDays)`, ou `nil` si l'objet n'atteint jamais la cible à cet endroit.
 
 ### Suppression d'un aliment pourri (`removalDays`)
 
-`nil` si `DaysForRottenFoodRemoval < 0` ou si le parent du conteneur est un `IsoCompost` ; sinon `daysUntil(item, offAgeMax + DaysForRottenFoodRemoval)` (d'après `Food.updateRotting` 42.21).
+`nil` si `replacementName(item)` n'est pas `nil` (objet remplacé avant toute suppression), si `DaysForRottenFoodRemoval < 0` ou si le parent du conteneur est un `IsoCompost` ; sinon `daysUntil(item, offAgeMax + DaysForRottenFoodRemoval)` (d'après `Food.updateRotting` 42.21).
 
 ### État approximatif (`stateKey`)
 
@@ -136,7 +141,7 @@ Table globale créée par `EFE_Core.lua` (`ErisFoodExpiry = ErisFoodExpiry or {}
 
 `media/lua/shared/Translate/<LANGUE>/UI.json` (format JSON 42.21), langues `CN`, `DE`, `EN`, `ES`, `FR`, `IT`, `PL`, `PT`, `PTBR`, `RU`. Préfixe unique `UI_EFE_` ; 24 clés :
 
-`UI_EFE_Title`, `UI_EFE_RequireTrait`, `UI_EFE_RequireTrait_tooltip`, `UI_EFE_TooltipProvider`, `UI_EFE_Freshness`, `UI_EFE_StaleIn`, `UI_EFE_RottenIn`, `UI_EFE_ThawedIn`, `UI_EFE_RemovedIn`, `UI_EFE_Paused`, `UI_EFE_Frozen`, `UI_EFE_NeverPerish`, `UI_EFE_StateVeryFresh`, `UI_EFE_StateFresh`, `UI_EFE_StateOk`, `UI_EFE_StateRotting`, `UI_EFE_StateAlmostRotten`, `UI_EFE_StateRotten`, `UI_EFE_Years`, `UI_EFE_Months`, `UI_EFE_Weeks`, `UI_EFE_Days`, `UI_EFE_Hours`, `UI_EFE_Minutes`.
+`UI_EFE_Title`, `UI_EFE_RequireTrait`, `UI_EFE_RequireTrait_tooltip`, `UI_EFE_TooltipProvider`, `UI_EFE_Freshness`, `UI_EFE_StaleIn`, `UI_EFE_RottenIn`, `UI_EFE_ThawedIn`, `UI_EFE_FrozenIn`, `UI_EFE_TurnsInto` (`%1` = nom de l'objet), `UI_EFE_Fertilized`, `UI_EFE_RemovedIn`, `UI_EFE_Paused`, `UI_EFE_Frozen`, `UI_EFE_NeverPerish`, `UI_EFE_StateVeryFresh`, `UI_EFE_StateFresh`, `UI_EFE_StateOk`, `UI_EFE_StateRotting`, `UI_EFE_StateAlmostRotten`, `UI_EFE_StateRotten`, `UI_EFE_Years`, `UI_EFE_Months`, `UI_EFE_Weeks`, `UI_EFE_Days`, `UI_EFE_Hours`, `UI_EFE_Minutes`.
 
 `UI_EFE_Title`, `UI_EFE_RequireTrait`, `UI_EFE_RequireTrait_tooltip` et `UI_EFE_TooltipProvider` sont passés **en clé** (traduits par `MainOptions`) ; les autres sont traduits par `getText` à l'affichage. Messages console en anglais.
 

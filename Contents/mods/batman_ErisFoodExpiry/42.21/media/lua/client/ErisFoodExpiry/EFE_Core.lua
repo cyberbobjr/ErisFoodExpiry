@@ -5,7 +5,8 @@
 --   age (days) += elapsed hours * FoodRotSpeed / 24
 --   * FridgeFactor in a fridge or freezer powered by a generator, or still on
 --     grid power (world age < ElecShutModifier days), then normal speed;
---   * 0 while the food is frozen (until it has thawed).
+--   * 0 while the food is frozen (until it has thawed); fresh food in a
+--     powered freezer freezes within 4 h, then stops aging.
 -- Stale at age >= offAge, rotten at age >= offAgeMax (instance values, which
 -- may differ from the item script after cooking or a recipe).
 -- ============================================================================
@@ -81,8 +82,17 @@ function EFE.thawDays(item)
     return item:getFreezingTime() / 100 * hours / 24
 end
 
+-- Game days until food in a powered freezer is frozen (Food.updateFreezing,
+-- 42.21: freezingTime += hours / 4 * 100, frozen at 100; Food.isFreezing:
+-- canBeFrozen, below 100, in a powered freezer). nil when it is not freezing.
+function EFE.freezeDays(item)
+    if item:isFrozen() or not item:isFreezing() then return nil end
+    return (100 - item:getFreezingTime()) / 100 * 4 / 24
+end
+
 -- Game days until the item's age reaches targetAge where it is now: frozen
--- food does not age until it has thawed. nil when it never gets there.
+-- food does not age until it has thawed, freezing food stops aging once
+-- frozen. nil when it never gets there.
 function EFE.daysUntil(item, targetAge)
     local delta = targetAge - item:getAge()
     if delta <= 0 then return 0 end
@@ -93,13 +103,17 @@ function EFE.daysUntil(item, targetAge)
     end
     local days = agingDays(item, delta, startDays)
     if days == nil then return nil end
+    local freeze = EFE.freezeDays(item)
+    if freeze and days > freeze then return nil end
     return startDays + days
 end
 
 -- Game days until rotten food is removed from the map (sandbox Rotten Food
 -- Removal, Food.updateRotting): age > offAgeMax + DaysForRottenFoodRemoval.
--- nil when the option is off (-1) or in a composter, which keeps it.
+-- nil when the option is off (-1), in a composter, which keeps it, or for
+-- food replaced by another item when it rots (ReplaceOnRotten).
 function EFE.removalDays(item)
+    if EFE.replacementName(item) then return nil end
     local option = getSandboxOptions():getOptionByName("DaysForRottenFoodRemoval")
     local removal = option and tonumber(option:getValue()) or -1
     if removal < 0 then return nil end
@@ -114,12 +128,22 @@ EFE.COLORS = {
     rotten = { 0.9, 0.25, 0.2, 1 },
 }
 
--- "fresh", "stale" or "rotten", with the vanilla thresholds.
+-- Display name of the item that replaces this one when it rots
+-- (ReplaceOnRotten, Food.updateRotting: module of the item + name), nil when
+-- it rots normally. Script names are already translated on the client.
+function EFE.replacementName(item)
+    local name = item:getReplaceOnRotten()
+    if name == nil or name == "" then return nil end
+    local script = getScriptManager():FindItem(item:getModule() .. "." .. name)
+    return script and script:getDisplayName() or name
+end
+
+-- "fresh", "stale" or "rotten", as the game reads it (Food.isFresh and
+-- Food.isRotten: a fertilized egg stays fresh).
 function EFE.stage(item)
-    local age = item:getAge()
-    if age >= item:getOffAgeMax() then return "rotten" end
-    if age >= item:getOffAge() then return "stale" end
-    return "fresh"
+    if item:isRotten() then return "rotten" end
+    if item:isFresh() then return "fresh" end
+    return "stale"
 end
 
 -- Rough state for players who cannot read the exact time.

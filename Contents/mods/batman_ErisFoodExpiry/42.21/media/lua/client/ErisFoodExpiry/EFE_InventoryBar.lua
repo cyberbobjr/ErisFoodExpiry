@@ -20,7 +20,7 @@ end
 
 function ISInventoryPane:drawItemDetails(item, y, xoff, yoff, red)
     original(self, item, y, xoff, yoff, red)
-    if not instanceof(item, "Food") or not EFE.canAge(item) then return end
+    if not instanceof(item, "Food") or not EFE.canAge(item) or item:isFertilized() then return end
     local fraction = EFE.freshFraction(item)
     local left = 40 + 30 + xoff
     -- vanilla label column (min 120) + progress bar, as in drawTextAndProgressBar

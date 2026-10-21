@@ -11,6 +11,9 @@ Hover any food item: the mod adds its lines at the bottom of the tooltip.
 | **Rotten in** | Time before the food rots. |
 | **Thawed in** | Frozen food outside a running freezer: time before it has thawed. See [Fridge and freezing](03-fridge-and-freezing.md). |
 | **Frozen: not spoiling** | Frozen food in a running freezer. |
+| **Frozen in** | Food just put in a running freezer: time before it is frozen (4 in-game hours at most). |
+| **Turns into … in** | Food that becomes another item instead of rotting (ice cream melts, sugar beet syrup turns into sugar). |
+| **Fertilized: does not expire** | Fertilized egg: the game keeps it fresh. |
 | **Not spoiling here** | The food does not age where it is (powered fridge with the sandbox Refrigeration Effectiveness set to no decay). |
 | **Does not expire** | Food that never spoils, such as canned and dry food. |
 | **Rotten** + **Disappears in** | Rotten food; the second line appears only when the sandbox *Rotten Food Removal* option is on, and not in a composter. |

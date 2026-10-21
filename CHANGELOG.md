@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+- Fresh food put in a running freezer now shows "Frozen in" followed by "Frozen: not spoiling", instead of a far-off rotting date.
+- Food that turns into another item instead of rotting (ice cream, sugar beet syrup) shows "Turns into <item> in" and no longer "Rotten in" or "Disappears in".
+- Fertilized eggs show "Fertilized: does not expire", like the game, instead of a stale or rotten countdown.
+
 ## 0.2.0 — 2026-10-08
 
 ### Added

@@ -38,12 +38,17 @@ TooltipLib.registerProvider({
             ctx:addLabel(getText("UI_EFE_NeverPerish"), MUTED)
             return
         end
-        local color = EFE.COLORS[EFE.stage(item)]
+        if item:isFertilized() then
+            ctx:addLabel(getText("UI_EFE_Fertilized"), MUTED)
+            return
+        end
+        local stage = EFE.stage(item)
+        local color = EFE.COLORS[stage]
         ctx:addProgress(getText("UI_EFE_Freshness"), EFE.freshFraction(item), LABEL, color)
         local character = ctx.tooltip and ctx.tooltip:getCharacter() or getSpecificPlayer(0)
         if not EFE.canReadExact(item, character, EFE.requireTrait()) then
             ctx:addLabel(getText(EFE.stateKey(item)), color)
-            if EFE.stage(item) == "rotten" then addRemoval(ctx, item) end
+            if stage == "rotten" then addRemoval(ctx, item) end
             return
         end
         if item:isFrozen() then
@@ -54,20 +59,30 @@ TooltipLib.registerProvider({
             end
             ctx:addKeyValue(getText("UI_EFE_ThawedIn"), EFE.formatDays(thaw), LABEL, VALUE)
         end
-        local age = item:getAge()
-        if age >= item:getOffAgeMax() then
+        local freeze = EFE.freezeDays(item)
+        if freeze then
+            ctx:addKeyValue(getText("UI_EFE_FrozenIn"), EFE.formatDays(freeze), LABEL, VALUE)
+        end
+        local replacement = EFE.replacementName(item)
+        local rottenLabel = replacement and getText("UI_EFE_TurnsInto", replacement) or getText("UI_EFE_RottenIn")
+        if stage == "rotten" then
+            if replacement then
+                ctx:addKeyValue(rottenLabel, EFE.formatDays(0), LABEL, VALUE)
+                return
+            end
             ctx:addLabel(getText("UI_EFE_StateRotten"), color)
             addRemoval(ctx, item)
             return
         end
+        local stale = stage == "fresh" and EFE.daysUntil(item, item:getOffAge()) or nil
+        if stale then
+            ctx:addKeyValue(getText("UI_EFE_StaleIn"), EFE.formatDays(stale), LABEL, VALUE)
+        end
         local rotten = EFE.daysUntil(item, item:getOffAgeMax())
         if rotten == nil then
-            ctx:addLabel(getText("UI_EFE_Paused"), VALUE)
+            ctx:addLabel(getText(freeze and "UI_EFE_Frozen" or "UI_EFE_Paused"), VALUE)
             return
         end
-        if age < item:getOffAge() then
-            ctx:addKeyValue(getText("UI_EFE_StaleIn"), EFE.formatDays(EFE.daysUntil(item, item:getOffAge())), LABEL, VALUE)
-        end
-        ctx:addKeyValue(getText("UI_EFE_RottenIn"), EFE.formatDays(rotten), LABEL, VALUE)
+        ctx:addKeyValue(rottenLabel, EFE.formatDays(rotten), LABEL, VALUE)
     end,
 })

@@ -28,7 +28,18 @@ function getSandboxOptions()
     }
 end
 function getGameTime() return { getWorldAgeHours = function() return WORLD_HOURS end } end
-function getText(key) return key end
+function getText(key, arg)
+    if arg ~= nil then return key .. "(" .. tostring(arg) .. ")" end
+    return key
+end
+SCRIPT_NAMES = { ["Base.IcecreamMelted"] = "Ice Cream (Melted)" }
+function getScriptManager()
+    return { FindItem = function(_, fullType)
+        local name = SCRIPT_NAMES[fullType]
+        if name == nil then return nil end
+        return { getDisplayName = function() return name end }
+    end }
+end
 function instanceof(o, class) return type(o) == "table" and o._class == class end
 CharacterTrait = { NUTRITIONIST = "nut", NUTRITIONIST2 = "nut2", ILLITERATE = "illit" }
 
@@ -45,7 +56,10 @@ function makeContainer(kind, generator, powered, temperature, parent)
             return temperature or 1.0
         end,
         getParent = function() return parent end,
-        getSourceGrid = function() return { haveElectricity = function() return generator end } end,
+        getSourceGrid = function()
+            if generator == nil then return nil end
+            return { haveElectricity = function() return generator end }
+        end,
     }
 end
 function makeFood(t)
@@ -55,14 +69,35 @@ function makeFood(t)
     function f:getOffAgeMax() return t.offAgeMax end
     function f:isFrozen() return t.frozen == true end
     function f:getFreezingTime() return t.freezingTime or (t.frozen and 100 or 0) end
+    function f:canBeFrozen() return t.canBeFrozen ~= false end
+    -- Food.isFreezing (42.21)
+    function f:isFreezing()
+        local c = t.container
+        if not self:canBeFrozen() or self:getFreezingTime() >= 100 or not (c and c:isFreezer()) then
+            return false
+        end
+        return c:isPowered()
+    end
     -- Food.isThawing (42.21)
     function f:isThawing()
-        if self:getFreezingTime() <= 0 then return false end
+        if not self:canBeFrozen() or self:getFreezingTime() <= 0 then return false end
         local c = t.container
         if not (c and c:isFreezer()) then return true end
         return not c:isPowered()
     end
     function f:isPackaged() return t.packaged == true end
+    -- Food.isFertilized / isRotten / isFresh (42.21)
+    function f:isFertilized() return t.fertilized == true end
+    function f:isRotten()
+        if self:isFertilized() then return false end
+        return t.age >= t.offAgeMax
+    end
+    function f:isFresh()
+        if self:isFertilized() then return true end
+        return t.age < t.offAge
+    end
+    function f:getReplaceOnRotten() return t.replaceOnRotten end
+    function f:getModule() return t.module or "Base" end
     function f:getOutermostContainer() return t.container end
     function f:getModData() return t.modData or {} end
     return f
@@ -164,6 +199,33 @@ def lua_checks() -> list[str]:
     if not approx(ev("ErisFoodExpiry.thawDays(stoveThaw)"), 0.25 / 24):
         failed.append("thaw time in a warm container: 15 min expected")
 
+    # freezing in a powered freezer: frozen after 4 h (Food.updateFreezing),
+    # then no more aging; CantBeFrozen food keeps the fridge factor
+    lua.execute("freezing = makeFood{age=1, offAge=3, offAgeMax=5, "
+                "container=makeContainer('freezer', true, true)}")
+    if not approx(ev("ErisFoodExpiry.freezeDays(freezing)"), 4 / 24):
+        failed.append("fresh food in a powered freezer: frozen in 4 h expected")
+    if days("freezing", "3") is not None:
+        failed.append("freezing food: no spoilage once frozen expected")
+    lua.execute("halfFrozen = makeFood{age=1, offAge=3, offAgeMax=5, freezingTime=50, "
+                "container=makeContainer('freezer', true, true)}")
+    if not approx(ev("ErisFoodExpiry.freezeDays(halfFrozen)"), 2 / 24):
+        failed.append("half frozen: frozen in 2 h expected")
+    lua.execute("almostStale = makeFood{age=2.99, offAge=3, offAgeMax=5, "
+                "container=makeContainer('freezer', true, true)}")
+    if not approx(days("almostStale", "3"), 0.01 / 0.2):
+        failed.append("threshold reached before freezing: duration expected")
+    lua.execute("cantFreeze = makeFood{age=1, offAge=3, offAgeMax=5, canBeFrozen=false, "
+                "container=makeContainer('freezer', true, true)}")
+    if ev("ErisFoodExpiry.freezeDays(cantFreeze)") is not None or not approx(days("cantFreeze", "3"), 2 / 0.2):
+        failed.append("CantBeFrozen food: fridge factor, no freezing expected")
+    if ev("ErisFoodExpiry.freezeDays(frozen)") is not None:
+        failed.append("already frozen food is not freezing")
+    # no source square (Food.updateAge: grid power rule)
+    lua.execute("noSquare = makeFood{age=1, offAge=3, offAgeMax=5, container=makeContainer('fridge', nil, true)}")
+    if not approx(days("noSquare", "3"), 2 / 0.2):
+        failed.append("fridge without source square: grid power rule expected")
+
     # rotten food removal: age > offAgeMax + option, composters keep it
     lua.execute("rotten = makeFood{age=6, offAge=3, offAgeMax=5}")
     if ev("ErisFoodExpiry.removalDays(rotten)") is not None:
@@ -175,6 +237,9 @@ def lua_checks() -> list[str]:
                 "container=makeContainer('compost', false, false, nil, { _class = 'IsoCompost' })}")
     if ev("ErisFoodExpiry.removalDays(compost)") is not None:
         failed.append("composter keeps rotten food")
+    lua.execute("melted = makeFood{age=6, offAge=3, offAgeMax=5, replaceOnRotten='IcecreamMelted'}")
+    if ev("ErisFoodExpiry.removalDays(melted)") is not None:
+        failed.append("ReplaceOnRotten food is replaced, not removed")
     lua.execute("SANDBOX.DaysForRottenFoodRemoval = -1")
     if days("plain", "0.5") != 0:
         failed.append("past threshold: 0 expected")
@@ -213,7 +278,8 @@ def lua_checks() -> list[str]:
     if ev(f"{read}(pack, makeChar{{illit=true}}, true)") or ev(f"{read}(pack, makeChar({{}}, true), true)"):
         failed.append("illiterate or too dark: package not readable")
 
-    for food, stage in (("plain", "fresh"), ("makeFood{age=4, offAge=3, offAgeMax=5}", "stale"),
+    for food, stage in (("makeFood{age=6, offAge=3, offAgeMax=5, fertilized=true}", "fresh"),
+                        ("plain", "fresh"), ("makeFood{age=4, offAge=3, offAgeMax=5}", "stale"),
                         ("makeFood{age=5, offAge=3, offAgeMax=5}", "rotten")):
         if ev(f"ErisFoodExpiry.stage({food})") != stage:
             failed.append(f"stage {food} -> {stage}")
@@ -265,7 +331,21 @@ def lua_checks() -> list[str]:
         out = ev("runTooltip(makeFood{age=1, offAge=3, offAgeMax=5, container=makeContainer('fridge', true, true)})")
         if out != "P:UI_EFE_Freshness=0.80|L:UI_EFE_Paused":
             failed.append(f"no-decay fridge tooltip: {out}")
-        lua.execute("SANDBOX.FridgeFactor = 3; SANDBOX.DaysForRottenFoodRemoval = -1")
+        lua.execute("SANDBOX.FridgeFactor = 3")
+        out = ev("runTooltip(freezing)")
+        if out != "P:UI_EFE_Freshness=0.80|KV:UI_EFE_FrozenIn=4 UI_EFE_Hours|L:UI_EFE_Frozen":
+            failed.append(f"freezing tooltip: {out}")
+        out = ev("runTooltip(makeFood{age=1, offAge=3, offAgeMax=5, replaceOnRotten='IcecreamMelted'})")
+        if out != ("P:UI_EFE_Freshness=0.80|KV:UI_EFE_StaleIn=2 UI_EFE_Days"
+                   "|KV:UI_EFE_TurnsInto(Ice Cream (Melted))=4 UI_EFE_Days"):
+            failed.append(f"ReplaceOnRotten tooltip: {out}")
+        out = ev("runTooltip(melted)")
+        if out != "P:UI_EFE_Freshness=0.00|KV:UI_EFE_TurnsInto(Ice Cream (Melted))=< 1 UI_EFE_Minutes":
+            failed.append(f"ReplaceOnRotten tooltip past offAgeMax: {out}")
+        out = ev("runTooltip(makeFood{age=6, offAge=3, offAgeMax=5, fertilized=true})")
+        if out != "L:UI_EFE_Fertilized":
+            failed.append(f"fertilized egg tooltip: {out}")
+        lua.execute("SANDBOX.DaysForRottenFoodRemoval = -1")
 
     # Inventory strip keeps the vanilla line and draws two rectangles
     lua.execute(r"""
@@ -273,9 +353,10 @@ def lua_checks() -> list[str]:
         pane = { headerHgt = 16, itemHgt = 18, getProgressBarWidth = function() return 200 end,
                  drawRect = function() RECTS = RECTS + 1 end }
         ISInventoryPane.drawItemDetails(pane, plain, 0, 0, 0, false)
-        ISInventoryPane.drawItemDetails(pane, { _class = "Clothing" }, 0, 0, 0, false)""")
-    if ev("#DRAWN") != 2 or ev("RECTS") != 2:
-        failed.append("inventory strip: vanilla line kept, strip on food only")
+        ISInventoryPane.drawItemDetails(pane, { _class = "Clothing" }, 0, 0, 0, false)
+        ISInventoryPane.drawItemDetails(pane, makeFood{age=1, offAge=3, offAgeMax=5, fertilized=true}, 0, 0, 0, false)""")
+    if ev("#DRAWN") != 3 or ev("RECTS") != 2:
+        failed.append("inventory strip: vanilla line kept, strip on aging food only (not fertilized eggs)")
     print("Lua checks done")
     return failed
 
@@ -285,11 +366,19 @@ def translation_checks() -> list[str]:
     lua_keys = set()
     for path in LUA.glob("*.lua"):
         lua_keys |= set(re.findall(r'"(UI_EFE_\w+)"', path.read_text(encoding="utf-8")))
+    english = set(json.loads((MOD / "shared/Translate/EN/UI.json").read_text(encoding="utf-8")))
     for path in (MOD / "shared/Translate").glob("*/*.json"):
-        keys = set(json.loads(path.read_text(encoding="utf-8")))
-        missing = lua_keys - keys
+        data = json.loads(path.read_text(encoding="utf-8"))
+        keys = set(data)
+        missing = (lua_keys | english) - keys
         if missing:
             failed.append(f"{path.parent.name}/{path.name}: missing {sorted(missing)}")
+        extra = keys - english
+        if extra:
+            failed.append(f"{path.parent.name}/{path.name}: keys not in EN {sorted(extra)}")
+        empty = sorted(k for k, v in data.items() if not str(v).strip())
+        if empty:
+            failed.append(f"{path.parent.name}/{path.name}: empty values {empty}")
     return failed
 
 

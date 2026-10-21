@@ -15,7 +15,7 @@ A future generator shutdown (out of fuel) is not anticipated: the time changes w
 
 Frozen food does not spoil until it has thawed.
 
-- In a **running freezer**: **Frozen: not spoiling**.
+- In a **running freezer**: **Frozen: not spoiling**. Food not frozen yet shows **Frozen in** first: it freezes within 4 in-game hours, then stops spoiling.
 - **Anywhere else**: **Thawed in**, then **Stale in** and **Rotten in** counted from the end of thawing.
 
 ![Thawing beef patty](../../images/screenshots/06-tooltip-thawing.png)

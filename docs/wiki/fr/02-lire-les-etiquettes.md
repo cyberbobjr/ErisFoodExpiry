@@ -11,6 +11,9 @@ Survolez un aliment : le mod ajoute ses lignes en bas de l'infobulle.
 | **Pourri dans** | Temps avant pourriture. |
 | **Décongelé dans** | Aliment congelé hors d'un congélateur en marche : temps avant décongélation. Voir [Réfrigérateur et congélation](03-frigo-et-congelation.md). |
 | **Congelé : ne s'abîme pas** | Aliment congelé dans un congélateur en marche. |
+| **Congelé dans** | Aliment qu'on vient de mettre dans un congélateur en marche : temps avant qu'il soit congelé (4 heures de jeu au plus). |
+| **Devient … dans** | Aliment qui se transforme en un autre objet au lieu de pourrir (la glace fond, le sirop de betterave devient du sucre). |
+| **Fécondé : ne se périme pas** | Œuf fécondé : le jeu le garde frais. |
 | **Ne s'abîme pas ici** | L'aliment ne vieillit pas là où il est (réfrigérateur alimenté, option sandbox d'efficacité de la réfrigération réglée sur aucune dégradation). |
 | **Ne se périme jamais** | Aliment qui ne s'abîme jamais, comme les conserves et les aliments secs. |
 | **Pourri** + **Disparaît dans** | Aliment pourri ; la seconde ligne n'apparaît que si l'option sandbox de suppression des aliments pourris est active, et pas dans un composteur. |

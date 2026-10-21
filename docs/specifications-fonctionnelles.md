@@ -13,6 +13,9 @@ Au survol d'un aliment (objet `Food`), l'infobulle reçoit, sous les lignes vani
 | Aliment qui ne vieillit pas (conserves, aliments secs : `offAgeMax` = 1 000 000 000) | « Does not expire » / « Ne se périme jamais » (gris), rien d'autre. |
 | Cas général | Barre **Freshness / Fraîcheur**, puis **Stale in / Périmé dans** (si l'aliment est encore frais) et **Rotten in / Pourri dans**. |
 | Congelé dans un congélateur en marche | Barre, puis « Frozen: not spoiling » / « Congelé : ne s'abîme pas ». |
+| Pas encore congelé dans un congélateur en marche (aliment congelable) | Barre, **Frozen in / Congelé dans** (4 h de jeu au plus depuis un aliment non congelé), puis « Congelé : ne s'abîme pas ». Si l'aliment devient périmé ou pourri avant d'être congelé, la durée correspondante est affichée. |
+| Aliment remplacé par un autre objet au lieu de pourrir (`ReplaceOnRotten` : glaces, sirop de betterave) | « Pourri dans » devient **Turns into <objet> in / Devient <objet> dans** ; jamais « Disparaît dans ». |
+| Œuf fécondé | « Fertilized: does not expire » / « Fécondé : ne se périme pas » (gris), rien d'autre : le jeu le considère toujours frais. |
 | Congelé ailleurs (décongélation en cours) | Barre, **Thawed in / Décongelé dans**, puis « Périmé dans » et « Pourri dans » comptés à partir de la fin de la décongélation (F04). |
 | Aliment qui ne s'abîme pas à cet endroit (réfrigérateur alimenté, option sandbox *Refrigeration Effectiveness* réglée sur « No decay ») | Barre, puis « Not spoiling here » / « Ne s'abîme pas ici ». |
 | Aliment pourri | Barre vide, « Rotten » / « Pourri », puis **Disappears in / Disparaît dans** si F05 s'applique. |

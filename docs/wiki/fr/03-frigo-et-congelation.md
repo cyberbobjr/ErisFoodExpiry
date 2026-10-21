@@ -15,7 +15,7 @@ Un arrêt futur du générateur (panne de carburant) n'est pas anticipé : la du
 
 Un aliment congelé ne s'abîme pas avant d'être décongelé.
 
-- Dans un **congélateur en marche** : **Congelé : ne s'abîme pas**.
+- Dans un **congélateur en marche** : **Congelé : ne s'abîme pas**. Un aliment pas encore congelé affiche d'abord **Congelé dans** : il gèle en 4 heures de jeu au plus, puis ne s'abîme plus.
 - **Partout ailleurs** : **Décongelé dans**, puis **Périmé dans** et **Pourri dans** comptés à partir de la fin de la décongélation.
 
 ![Steak en train de décongeler](../../images/screenshots/06-tooltip-thawing.png)
