@@ -1,6 +1,6 @@
-[h1]Eris Food Expiry (fork TooltipLib)[/h1]
+[h1]Food Expiry[/h1]
 
-[b]Fork no oficial · Build 42.21 · Un jugador y multijugador[/b]
+[b]Fork no oficial de [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3392259028]Eris Food Expiry[/url] · Build 42.21 · Un jugador y multijugador[/b]
 
 ¿Cuánto falta para que esta leche se eche a perder? Pasa el ratón sobre cualquier alimento: el tooltip muestra su frescura y el tiempo exacto hasta que se pone rancio y se pudre. Despliega una pila en el inventario para ver una fina barra de frescura bajo cada objeto.
 

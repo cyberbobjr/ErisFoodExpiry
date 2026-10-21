@@ -1,9 +1,9 @@
 version=1
 id=3815719265
 title=Eris Food Expiry (TooltipLib fork)
-description=[h1]Eris Food Expiry (TooltipLib fork)[/h1]
+description=[h1]Food Expiry[/h1]
 description=
-description=[b]Unofficial fork · Build 42.21 · Singleplayer and multiplayer[/b]
+description=[b]Unofficial fork of [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3392259028]Eris Food Expiry[/url] · Build 42.21 · Singleplayer and multiplayer[/b]
 description=
 description=How long before this milk turns? Hover any food: the tooltip shows its freshness and the exact time left before it goes stale and rots. Expand a stack in your inventory to see a thin freshness strip under each item.
 description=

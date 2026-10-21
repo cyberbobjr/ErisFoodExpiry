@@ -1,6 +1,6 @@
-[h1]Eris Food Expiry (fork TooltipLib)[/h1]
+[h1]Food Expiry[/h1]
 
-[b]Fork non officiel · Build 42.21 · Solo et multijoueur[/b]
+[b]Fork non officiel de [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3392259028]Eris Food Expiry[/url] · Build 42.21 · Solo et multijoueur[/b]
 
 Combien de temps avant que ce lait tourne ? Survolez un aliment : l'infobulle affiche sa fraîcheur et le temps exact avant qu'il soit périmé puis pourri. Dépliez une pile dans l'inventaire pour voir une fine bande de fraîcheur sous chaque objet.
 
