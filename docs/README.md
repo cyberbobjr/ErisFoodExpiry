@@ -10,6 +10,7 @@ La présentation GitHub (anglais) est dans le [README](../README.md) racine, l'h
 | [specifications-fonctionnelles.md](specifications-fonctionnelles.md) | Ce que voit le joueur : lignes de l'infobulle, bande d'inventaire, option, effets des options sandbox, solo/MP, limites (F01…). |
 | [specifications-techniques.md](specifications-techniques.md) | Contrats précis : formules de projection, API Lua `ErisFoodExpiry`, fournisseur TooltipLib, option, clés de traduction, contraintes de version. |
 | [ameliorations-et-idees.md](ameliorations-et-idees.md) | Améliorations de code proposées et idées de fonctionnalités (propositions, sans autorisation d'implémentation). |
+| [annexes/tests/autotest.md](annexes/tests/autotest.md) | Tests en jeu automatiques (pz-autotest) : commandes exactes, parcours nominal vérifié en solo et en client MP. |
 | [wiki/](wiki/) | Source du wiki GitHub : guides joueur et administrateur en anglais ([wiki/en/Home.md](wiki/en/Home.md)) et en français ([wiki/fr/Home.md](wiki/fr/Home.md)). |
 | [images/](images/) | Images de la documentation et de la page Workshop : `screenshots/` (captures en jeu), `art/` (illustrations). |
 
