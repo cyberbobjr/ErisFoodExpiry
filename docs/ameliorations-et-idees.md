@@ -3,12 +3,65 @@
 - **Mod** : Food Expiry, fork d'Eris Food Expiry pour TooltipLib (Workshop 3815719265, non répertorié)
 - **`id`** : `batman_ErisFoodExpiry` (`require=\TooltipLib`, `incompatible=\eris_food_expiry`, `versionMin=42.21`)
 - **Version analysée** : 0.2.0 (CHANGELOG du 2026-10-08, `modversion=0.2.0`)
-- **Date de l'analyse** : 2026-10-21
+- **Date de l'analyse** : 2026-10-21 ; **avancement mis à jour le 2026-10-23** (version publiée : 0.3.0 ; les corrections suivantes sont sur `main`, section `Unreleased` du `CHANGELOG.md`).
 - **Build cible** : 42.21. Sources comparées : Java décompilé `E:\pz-decompiled\42.21.0\java`, Lua et scripts vanilla `D:\SteamLibrary\steamapps\common\ProjectZomboid\media`, TooltipLib 1.7.0 (Workshop 3694097672, variante `42`, lue sans rien modifier).
 - **Périmètre** : `Contents/mods/batman_ErisFoodExpiry/42.21/` (4 fichiers Lua, 10 `UI.json`, `mod.info`), `README.md`, `CHANGELOG.md`, `README.steam*`, `workshop.txt`, `.luacheckrc`, `tests/run_tests.py`, `docs/steam/`. Base moteur consultée : `api-42-21.md` (vieillissement des aliments), `multiplayer.md` (âge recalculé par le client), `power-and-lights.md` (coupure du réseau), `mod-loading.md`.
 - **État constaté** : `python tests/run_tests.py` affiche `OK` et `luacheck` ne signale aucun avertissement (0 sur 4 fichiers). Aucun test en jeu n'a été fait pour cette analyse.
 
 Légende du statut : **confirmé statiquement** (lecture du code du mod et du Java ou Lua vanilla 42.21) ; **à vérifier en jeu** (déduction ou comportement qui dépend de l'exécution).
+
+---
+
+## Tableau de bord — ce qui est fait et ce qui reste
+
+**Légende** : ✅ fait · 🟡 fait en partie · ⬜ pas commencé · ❌ abandonné (décision de l'utilisateur). « Publié » = présent dans une version du Workshop ; « non publié » = sur `main`, dans la section `Unreleased` du `CHANGELOG.md`. « lupa » = `tests/run_tests.py` ; « autotest » = parcours nominal `pz-autotest` du 2026-10-21 sur le code de 0.3.0 (solo et client MP : 32 PASS, 0 FAIL ; voir `docs/annexes/tests/autotest.md`). Détail de chaque point dans les parties 1 et 2.
+
+**Bilan** : améliorations de code **14 faites, 0 en partie, 3 à faire, 1 abandonnée** (sur 18) ; idées de fonctionnalités **0 faite, 0 en partie, 16 à faire, 1 abandonnée** (sur 17).
+
+### Améliorations de code
+
+| ID | Sujet | État | Testé | Publié | Commit | Ce qui reste |
+|---|---|---|---|---|---|---|
+| C01 | Aliment « bientôt congelé » au congélateur alimenté | ✅ Corrigé | lupa (congélateur alimenté non couvert par l'autotest) | 0.3.0 | `d7e1955` | Vérifier en jeu la durée « Congelé dans » |
+| C02 | Aliments `ReplaceOnRotten` | ✅ Corrigé | lupa | 0.3.0 | `d7e1955` | Vérifier en jeu (glace, sirop de betterave) |
+| C03 | État lu par `isFresh()`/`isRotten()` (œufs fécondés) | ✅ Corrigé | lupa ; autotest solo et MP (stade = `isFresh`/`isRotten` sur un steak) | 0.3.0 | `d7e1955` | Vérifier en jeu un œuf fécondé et sa disparition une fois pourri |
+| C04 | Coupure du réseau au congélateur | ❌ Abandonné | lupa (réfrigérateur sur le réseau) | jamais (ajout puis retrait avant publication) | `cdbe650`, `19f6014`, `3aab60c` | — (annoncer la coupure est de la triche) ; correction de l'affichage après la coupure à vérifier en jeu |
+| C05 | Valeurs exactes en mode « Nutritionniste » | ✅ Corrigé | lupa | non publié | `cdbe650` | Vérifier en jeu |
+| C06 | État congelé, en pause ou en décongélation en mode approximatif | ✅ Corrigé | lupa | non publié | `cdbe650` | Vérifier en jeu |
+| C07 | Bande de l'inventaire décalée | ✅ Corrigé | lupa (position calculée) | non publié | `cdbe650` | Rendu à contrôler en FR, DE, RU, police Large |
+| C08 | `formatDays` : unités éloignées, fausse précision | ⬜ À faire | — | — | — | Tout |
+| C09 | Cuisson qui remet l'âge à zéro | ✅ Corrigé | lupa | non publié | `cdbe650` | Vérifier en jeu (four, marmite de riz) |
+| C10 | Générateur vu par un client MP | ✅ Corrigé statiquement | lupa (réfrigérateur sur générateur) | non publié | `cdbe650` | Test MP : générateur posé pendant la session, avant et après reconnexion |
+| C11 | Calculs répétés à chaque passe de rendu | ✅ Corrigé | lupa (nombre de lectures) | non publié | `cdbe650` | — |
+| C12 | Repli `getSpecificPlayer(0)` en écran partagé | ✅ Corrigé | lupa | non publié | `cdbe650` | — |
+| C13 | Version minimale de TooltipLib non contrôlée | ⬜ À faire | — | — | — | Tout |
+| C14 | Tests incomplets sur les cas du moteur | ✅ Corrigé | lupa | 0.3.0 (outil hors mod) | `d7e1955` | — |
+| C15 | `.luacheckrc` sans contrôle des globales | ✅ Corrigé | luacheck | non publié (outil hors mod) | `cdbe650` | — |
+| C16 | Noms affichés hétérogènes | ✅ Corrigé | — | non publié | `cdbe650` | Vérifier le nom dans le menu Mods et Options > Mods |
+| C17 | Descriptions Workshop et langues manquantes | ⬜ À faire | — | — | — | Tout |
+| C18 | `common/` absent, images liées à `docs/steam/` | ✅ Corrigé | — | non publié | `cdbe650` | — |
+
+### Idées de fonctionnalités
+
+| ID | Idée | État | Remarque |
+|---|---|---|---|
+| I01 | Compte à rebours de la coupure de courant | ❌ Abandonnée | Même décision que C04 (2026-10-23) : jour de coupure caché par le jeu |
+| I02 | Bilan d'un frigo au survol du meuble | ⬜ Proposée | |
+| I03 | Tri « par fraîcheur » dans l'inventaire | ⬜ Proposée | |
+| I04 | Pastille de fraîcheur sur une pile repliée | ⬜ Proposée | |
+| I05 | Infobulle d'une pile | ⬜ Proposée | |
+| I06 | « Jeter les aliments pourris » | ⬜ Proposée | |
+| I07 | Option serveur qui impose la règle du Nutritionniste | ⬜ Proposée | C05 et C06 faits |
+| I08 | Durées exactes selon le niveau de Cuisine | ⬜ Proposée | |
+| I09 | Date « À consommer avant » | ⬜ Proposée | |
+| I10 | Palette pour daltoniens et repère « périmé » | ⬜ Proposée | |
+| I11 | Détails sur Maj et verbosité | ⬜ Proposée | |
+| I12 | Compte à rebours de cuisson et de brûlure | ⬜ Proposée | C09 affiche déjà « Cuisson » sans durée |
+| I13 | Avertissement quand un aliment porté se périme | ⬜ Proposée | |
+| I14 | Infobulle dans les emplacements de fabrication | ⬜ Proposée | |
+| I15 | Autonomie du générateur dans la projection | ⬜ Proposée | |
+| I16 | Composteur : temps avant le compost | ⬜ Proposée | |
+| I17 | Objets au sol et cadavres d'animaux | ⬜ Proposée | |
 
 ---
 
@@ -25,7 +78,8 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   - `Food.java:686-687` : aucun vieillissement une fois congelé.
 - **Risque** : bug d'affichage (durée très surestimée), le plus visible du mod. C'est un usage courant (congélateur au début de la partie).
 - **Correction** : dans `daysUntil`, si `not item:isFrozen() and item:isFreezing()`, calculer `freezeDays = (100 - getFreezingTime()) / 100 × 4 / 24`. Si la cible est atteinte pendant ce temps (`agingDays` limité à `freezeDays`), rendre cette durée ; sinon rendre `nil`. Dans l'infobulle, afficher « Congelé dans 2 h 10 min » puis « Ne s'abîme pas une fois congelé ». Il faut une nouvelle clé `UI_EFE_FrozenIn`, traduite dans les 10 langues. Ajouter un test lupa qui reproduit `isFreezing` du Java. Un aliment `CantBeFrozen` (51 dans `food.txt`) garde le facteur froid.
-- **Statut : corrigé (commit d7e1955), à vérifier en jeu** (confirmé statiquement ; durée affichée à contrôler en jeu).
+- **Statut** : confirmé statiquement ; durée affichée à contrôler en jeu.
+- **Avancement : ✅ corrigé, publié en 0.3.0 (commit d7e1955), à vérifier en jeu** — clé `UI_EFE_FrozenIn` ; tests lupa (`isFreezing` fidèle au Java).
 - **Priorité** : haute. **Effort** : S.
 
 ### C02 : aliments `ReplaceOnRotten` présentés comme « Pourri dans » et « Disparaît dans »
@@ -37,7 +91,8 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   - `EFE_Tooltip.lua:58-71`.
 - **Risque** : bug d'affichage et texte trompeur.
 - **Correction** : si `item:getReplaceOnRotten()` n'est pas vide, remplacer « Pourri dans » par « Se transforme dans » suivi du nom du remplaçant. Le nom s'obtient par `getScriptManager():FindItem(module .. "." .. nom):getDisplayName()`, déjà traduit sur le client. Ne pas afficher « Disparaît dans » ni l'état « Pourri » pour ces objets. Nouvelle clé `UI_EFE_TurnsInto`.
-- **Statut : corrigé (commit d7e1955), à vérifier en jeu**.
+- **Statut** : confirmé statiquement.
+- **Avancement : ✅ corrigé, publié en 0.3.0 (commit d7e1955), à vérifier en jeu** — « Se transforme en <objet> dans », sans ligne de disparition ; tests lupa.
 - **Priorité** : moyenne. **Effort** : S.
 
 ### C03 : l'état est recalculé au lieu de lire `isFresh()` / `isRotten()` (œufs fécondés)
@@ -47,7 +102,8 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   - `Food.java:1653-1665` : `isRotten()` et `isFresh()` rendent `false` et `true` si `isFertilized()`.
 - **Risque** : bug d'affichage sur l'élevage (B42).
 - **Correction** : faire reposer `stage` sur `item:isRotten()` et `item:isFresh()`. Pour un œuf fécondé, afficher une ligne « Fécondé : ne se périme pas » sans compte à rebours. La durée avant l'éclosion n'est pas calculable : seul `getTimeToHatch()` est public, `fertilizedTime` n'a pas de getter (`Food.java:2183-2210`). La disparition d'un œuf fécondé pourri (`Food.java:626-637` ne teste pas `isFertilized`) est à vérifier en jeu.
-- **Statut : corrigé (commit d7e1955), à vérifier en jeu** (confirmé statiquement pour l'état ; disparition à vérifier en jeu).
+- **Statut** : confirmé statiquement pour l'état ; disparition à vérifier en jeu.
+- **Avancement : ✅ corrigé, publié en 0.3.0 (commit d7e1955), à vérifier en jeu** — stade lu par `isFresh()`/`isRotten()` (contrôlé par l'autotest solo et MP sur un steak), « Fécondé : ne se périme pas » ; œuf fécondé non testé en jeu.
 - **Priorité** : moyenne. **Effort** : S.
 
 ### C04 : « Congelé : ne s'abîme pas » au congélateur branché sur le réseau, sans parler de la coupure
@@ -63,7 +119,8 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   - `ItemContainer.java:2218-2220`, `:2280-2281`.
 - **Risque** : information trompeuse juste avant la coupure, qui est justement le moment où le joueur en a besoin.
 - **Correction** : avec un courant du réseau seulement (pas de générateur, `doesPowerGridExist()` vrai), ajouter « Courant coupé dans X ». Calculer X depuis `ElecShutModifier - getWorldAgeDaysSinceBegin()`, la même formule que la coupure réelle, puis donner la durée de décongélation et le temps restant ensuite. Garder la formule de `Food.updateAge` pour la vitesse de vieillissement, et écrire dans un commentaire que le moteur utilise deux horloges différentes. Voir aussi I01.
-- **Statut : abandonné** (décision du 2026-10-23 : annoncer la coupure, ou une échéance calculée d'après elle, est de la triche ; le jeu tire ce jour au hasard et le garde caché). La ligne « Courant coupé dans » et la projection au congélateur après la coupure ont été retirées ; la projection au réfrigérateur sur le réseau ne se sert plus du jour de coupure (facteur froid tant que le réseau ralentit le vieillissement, correction à l'affichage suivant la coupure) ; l'écart des deux horloges reste documenté dans la base moteur.
+- **Statut** : confirmé statiquement.
+- **Avancement : ❌ abandonné, jamais publié (ajout `cdbe650`, retrait `19f6014` et `3aab60c`)** (décision du 2026-10-23 : annoncer la coupure, ou une échéance calculée d'après elle, est de la triche ; le jeu tire ce jour au hasard et le garde caché). La ligne « Courant coupé dans » et la projection au congélateur après la coupure ont été retirées ; la projection au réfrigérateur sur le réseau ne se sert plus du jour de coupure (facteur froid tant que le réseau ralentit le vieillissement, correction à l'affichage suivant la coupure) ; l'écart des deux horloges reste documenté dans la base moteur.
 - **Priorité** : moyenne. **Effort** : M.
 
 ### C05 : le mode « durées exactes avec Nutritionniste » laisse passer des valeurs exactes
@@ -77,7 +134,8 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   - `tests/run_tests.py:256-259`.
 - **Risque** : incohérence de jeu. L'option perd une partie de son sens.
 - **Correction** : à décider par l'utilisateur. Une piste : en mode approximatif, arrondir la barre au tiers (1/3, 2/3, 1), qui correspond aux seuils de `stateKey`. Pour la bande de l'inventaire, n'afficher que la couleur. « Disparaît dans » pourrait devenir « Va bientôt disparaître ».
-- **Statut : corrigé, à vérifier en jeu** (options appliquées : barre arrondie au tiers supérieur, bande d'inventaire entièrement de la couleur du stade, « Va disparaître » sans durée ; tests lupa).
+- **Statut** : confirmé statiquement.
+- **Avancement : ✅ corrigé, non publié (commit cdbe650), à vérifier en jeu** — options appliquées : barre arrondie au tiers supérieur, bande d'inventaire entièrement de la couleur du stade, « Va disparaître » sans durée ; tests lupa.
 - **Priorité** : basse (choix de conception). **Effort** : S.
 
 ### C06 : le mode approximatif masque l'état congelé, en pause ou en décongélation
@@ -85,7 +143,8 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Preuve** : `EFE_Tooltip.lua:44-48`, puis `:49-56` et `:64-66`, jamais atteintes dans ce mode.
 - **Risque** : information de jeu perdue. Le vanilla montre pourtant la barre de congélation à tout le monde.
 - **Correction** : afficher « Congelé », « Décongèle » ou « Ne s'abîme pas ici » avant de sortir, sans durée.
-- **Statut : corrigé, à vérifier en jeu** (`EFE.conditionKey` : « Congelé : ne s'abîme pas », « Décongélation en cours », « Congélation en cours », « Cuisson… », « Ne s'abîme pas ici » après l'état approximatif ; tests lupa).
+- **Statut** : confirmé statiquement.
+- **Avancement : ✅ corrigé, non publié (commit cdbe650), à vérifier en jeu** — `EFE.conditionKey` : « Congelé : ne s'abîme pas », « Décongélation en cours », « Congélation en cours », « Cuisson… », « Ne s'abîme pas ici » après l'état approximatif ; tests lupa.
 - **Priorité** : basse. **Effort** : S.
 
 ### C07 : la bande de l'inventaire se décale par rapport à la barre vanilla
@@ -93,7 +152,8 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Preuve** : `EFE_InventoryBar.lua:25-27` ; `ISInventoryPane.lua:2640-2643`, `:2615-2617`, `:2682-2688`.
 - **Risque** : défaut visuel qui dépend de la langue et de la police.
 - **Correction** : recalculer le décalage du libellé vanilla de la même branche. Plus simple et plus stable : tracer la bande sur une largeur fixe depuis `40 + 30 + xoff` jusqu'à `self.column3 - 8`, sans chercher à s'aligner sur la barre.
-- **Statut : corrigé, à vérifier en jeu** (libellé de la barre vanilla recalculé dans la même branche que `drawItemDetails`, bande jusqu'à la fin de la barre ; rendu à contrôler en FR, DE et RU, police Large).
+- **Statut** : confirmé statiquement ; rendu à vérifier en jeu.
+- **Avancement : ✅ corrigé, non publié (commit cdbe650), à vérifier en jeu** — libellé de la barre vanilla recalculé dans la même branche que `drawItemDetails`, bande jusqu'à la fin de la barre ; rendu à contrôler en FR, DE et RU, police Large.
 - **Priorité** : basse. **Effort** : S.
 
 ### C08 : `formatDays` peut associer des unités éloignées et donne une fausse précision
@@ -107,6 +167,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   - ajouter une clé de format `UI_EFE_Amount` = `%1 %2` (CN `%1%2`) et une clé `UI_EFE_LessThan` ;
   - mettre le test à jour.
 - **Statut** : confirmé statiquement.
+- **Avancement : ⬜ à faire.**
 - **Priorité** : basse. **Effort** : S.
 
 ### C09 : la cuisson qui remet l'âge à zéro n'est pas prise en compte
@@ -114,7 +175,8 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Preuve** : `Food.java:353-410`, notamment `:403-407` et `:375-397`.
 - **Risque** : faible, mais la durée affichée est trompeuse quelques minutes.
 - **Correction** : quand `isCookable() and getHeat() > 1.6 and not isCooked()`, remplacer les durées par « En cuisson » (voir I12 pour un compte à rebours).
-- **Statut : corrigé, à vérifier en jeu** (`EFE.isCooking` = test de la barre vanilla « Cuisson », ni cuit ni brûlé : « Cuisson : durées affichées une fois cuit » à la place des durées).
+- **Statut** : confirmé statiquement.
+- **Avancement : ✅ corrigé, non publié (commit cdbe650), à vérifier en jeu** (`EFE.isCooking` = test de la barre vanilla « Cuisson », ni cuit ni brûlé : « Cuisson : durées affichées une fois cuit » à la place des durées).
 - **Priorité** : basse. **Effort** : S.
 
 ### C10 : générateur vu par un client multijoueur
@@ -122,7 +184,8 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Preuve** : `EFE_Core.lua:51-55` ; `IsoGridSquare.java:8223-8228`.
 - **Risque** : MP, durée fausse dans un cas limite. Aucun risque pour l'autorité serveur, puisque le mod n'envoie rien.
 - **Correction** : aucune avant observation. Test proposé : client MP, frigo branché sur un générateur posé pendant la session, comparer l'infobulle avant et après reconnexion.
-- **Statut : corrigé statiquement, à vérifier en jeu** (test unique `EFE.generatorPowered` = `haveElectricity`, seul courant local lu par `Food.updateAge` ; le client reçoit les positions de générateur à chaque synchronisation, `IsoGenerator.java:550-567`, et les mods comme Live Wire les inscrivent aussi chez les clients par `addGeneratorPos` ; un courant que le moteur ne voit pas ne ralentit pas non plus le vieillissement réel). Test MP proposé inchangé : générateur posé pendant la session, infobulle avant et après reconnexion.
+- **Statut** : à vérifier en jeu.
+- **Avancement : ✅ corrigé statiquement, non publié (commit cdbe650), à vérifier en jeu** (test unique `EFE.generatorPowered` = `haveElectricity`, seul courant local lu par `Food.updateAge` ; le client reçoit les positions de générateur à chaque synchronisation, `IsoGenerator.java:550-567`, et les mods comme Live Wire les inscrivent aussi chez les clients par `addGeneratorPos` ; un courant que le moteur ne voit pas ne ralentit pas non plus le vieillissement réel). Test MP proposé inchangé : générateur posé pendant la session, infobulle avant et après reconnexion.
 - **Priorité** : basse. **Effort** : S (test).
 
 ### C11 : calculs répétés à chaque passe de rendu
@@ -136,7 +199,8 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   - calculer `stage` une fois par appel ;
   - mémoriser les valeurs sandbox le temps d'un appel, sans cache durable : une option sandbox peut changer en cours de partie en MP (`load-warnings.md`) ;
   - en option, `cacheable = true, maxAge = 30` dans `registerProvider`, avec `cacheKey` = `getAge()` arrondi et l'identifiant du conteneur.
-- **Statut : corrigé** (options sandbox mémorisées le temps d'une milliseconde, `getTimestampMs`, sans cache durable ; `stage` calculé une fois par appel et passé à `stateKey` ; test lupa du nombre de lectures). Le cache TooltipLib (`cacheable`) n'est pas utilisé.
+- **Statut** : confirmé statiquement.
+- **Avancement : ✅ corrigé, non publié (commit cdbe650)** (options sandbox mémorisées le temps d'une milliseconde, `getTimestampMs`, sans cache durable ; `stage` calculé une fois par appel et passé à `stateKey` ; test lupa du nombre de lectures). Le cache TooltipLib (`cacheable`) n'est pas utilisé.
 - **Priorité** : basse. **Effort** : S.
 
 ### C12 : repli `getSpecificPlayer(0)` en écran partagé
@@ -144,7 +208,8 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Preuve** : `EFE_Tooltip.lua:43`.
 - **Risque** : faible, seulement en écran partagé.
 - **Correction** : si le personnage est inconnu, considérer que la durée n'est pas lisible (le même choix que `canReadExact(…, nil, true)`) plutôt que de supposer le joueur 0.
-- **Statut : corrigé** (aucun repli `getSpecificPlayer(0)` : personnage inconnu = durées non lisibles si l'option est active ; test lupa).
+- **Statut** : confirmé statiquement.
+- **Avancement : ✅ corrigé, non publié (commit cdbe650)** (aucun repli `getSpecificPlayer(0)` : personnage inconnu = durées non lisibles si l'option est active ; test lupa).
 - **Priorité** : basse. **Effort** : S.
 
 ### C13 : version minimale de TooltipLib non contrôlée
@@ -153,6 +218,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Risque** : compatibilité.
 - **Correction** : passer `minVersion = "<version testée>"` dans `registerProvider` (à relever, la variante installée est 1.7.0). Tester la valeur rendue par `registerProvider` et écrire un message anglais si elle est fausse.
 - **Statut** : confirmé statiquement.
+- **Avancement : ⬜ à faire.**
 - **Priorité** : basse. **Effort** : S.
 
 ### C14 : tests incomplets sur les cas du moteur
@@ -165,7 +231,8 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   La vérification des traductions ne détecte ni les clés en trop, ni les valeurs vides, ni les clés absentes de `EN` (`:283-293`).
 - **Risque** : maintenance. Les corrections C01 à C03 n'auraient aucun garde-fou.
 - **Correction** : reproduire fidèlement dans les doubles `isFreezing`, `isFertilized`, `getReplaceOnRotten` et `canBeFrozen` du Java, comme le demande la préférence « faithful Java mocks ». Ajouter les cas ; comparer chaque `UI.json` à `EN` dans les deux sens.
-- **Statut : corrigé (commit d7e1955), à vérifier en jeu** (traduction : clés comparées à EN dans les deux sens ; tests C01-C03 ajoutés).
+- **Statut** : confirmé statiquement.
+- **Avancement : ✅ corrigé, livré avec 0.3.0 (commit d7e1955 ; tests hors mod)** — doubles fidèles `isFreezing`, `canBeFrozen`, `isFertilized`, `getReplaceOnRotten`, case `nil` ; traductions comparées à EN dans les deux sens ; tests C01-C03 ajoutés.
 - **Priorité** : moyenne (préalable à C01-C03). **Effort** : S.
 
 ### C15 : `.luacheckrc` copié d'un autre projet, globales non contrôlées
@@ -176,7 +243,8 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   - ajouter `globals = { "ErisFoodExpiry", "ISInventoryPane" }` ;
   - lister en `read_globals` les quelques API utilisées (`getText`, `getSandboxOptions`, `getGameTime`, `instanceof`, `getSpecificPlayer`, `CharacterTrait`, `PZAPI`, `TooltipLib`) ;
   - retirer la mention de MTIR.
-- **Statut : corrigé** (globales contrôlées : `globals` et `read_globals` du mod, contrôle désactivé pour `autotest/**` ; mention de MTIR et `source/**` retirées ; une globale inconnue est signalée `W113`).
+- **Statut** : confirmé statiquement.
+- **Avancement : ✅ corrigé, non publié (commit cdbe650 ; outil hors mod)** (globales contrôlées : `globals` et `read_globals` du mod, contrôle désactivé pour `autotest/**` ; mention de MTIR et `source/**` retirées ; une globale inconnue est signalée `W113`).
 - **Priorité** : basse. **Effort** : S.
 
 ### C16 : noms affichés hétérogènes
@@ -188,7 +256,8 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Preuve** : `mod.info:1` ; `workshop.txt:3` ; `Translate/*/UI.json` (`UI_EFE_Title`).
 - **Risque** : le joueur cherche le mod sous plusieurs noms dans le menu Mods et dans Options > Mods.
 - **Correction** : choisir un seul nom (par exemple « Food Expiry ») pour `UI_EFE_Title` dans les dix langues et pour `name=`, en gardant `id` inchangé.
-- **Statut : corrigé** (`name=Food Expiry` et `UI_EFE_Title` = « Food Expiry » dans les dix langues ; `id` inchangé).
+- **Statut** : confirmé statiquement.
+- **Avancement : ✅ corrigé, non publié (commit cdbe650)** (`name=Food Expiry` et `UI_EFE_Title` = « Food Expiry » dans les dix langues ; `id` inchangé).
 - **Priorité** : basse. **Effort** : S.
 
 ### C17 : descriptions Workshop et langues manquantes
@@ -200,6 +269,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   - en priorité, les langues à forte audience : JP, KO, TR, UA ;
   - reprendre le vocabulaire vanilla de `Tooltip.json` (`Tooltip_food_Stale`, `Tooltip_food_Frozen`…) comme pour FR.
 - **Statut** : confirmé statiquement.
+- **Avancement : ⬜ à faire.**
 - **Priorité** : basse. **Effort** : M.
 
 ### C18 : dossier `common/` absent et images Workshop liées à `docs/steam/`
@@ -209,7 +279,8 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Preuve** : arborescence du mod ; `README.steam:7`, `:30`, `:44-46`, `:58` ; `tests/run_tests.py:306-309`, qui détecte une image absente.
 - **Risque** : maintenance et publication.
 - **Correction** : créer `common/` vide (avec un `.gitkeep`, git ne suit pas les dossiers vides). Garder `docs/steam/` à ce chemin, ou mettre à jour toutes les descriptions et republier dans la même opération.
-- **Statut : corrigé** (`common/.gitkeep` créé ; `docs/steam/` conservé à son chemin).
+- **Statut** : confirmé statiquement.
+- **Avancement : ✅ corrigé, non publié (commit cdbe650)** (`common/.gitkeep` créé ; `docs/steam/` conservé à son chemin).
 - **Priorité** : basse (`common`), moyenne (liens d'images pendant la réorganisation). **Effort** : S.
 
 ---
@@ -226,6 +297,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Impact MP** : aucun. Options sandbox lues sur le client, valeurs du serveur.
 - **Dépendances** : aucune. Complète C04.
 - **Effort** : S.
+- **Avancement : ❌ abandonnée** (décision du 2026-10-23, comme C04 : le jour de coupure est tiré au hasard et caché par le jeu, l'annoncer est de la triche).
 
 ### I02 : bilan d'un frigo ou d'un congélateur au survol du meuble
 - **Description** : en survolant un réfrigérateur, un congélateur ou un comptoir, afficher « 12 aliments ; le premier pourrit dans 2 j (lait) ; 3 périmés ».
@@ -238,6 +310,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Impact MP** : le contenu d'un meuble n'est connu du client qu'une fois chargé ou ouvert. TooltipLib propose `mpContainers` (requête serveur et cache de 2 s) ; son contenu exact est à étudier, à vérifier en jeu. Sinon, n'afficher le bilan que pour les meubles déjà ouverts pendant la session.
 - **Dépendances** : TooltipLib (surface `object`).
 - **Effort** : M (solo) à L (MP).
+- **Avancement : ⬜ pas commencée.**
 
 ### I03 : tri « par fraîcheur » dans l'inventaire
 - **Description** : un en-tête ou une entrée du menu contextuel de l'inventaire qui trie les aliments du plus proche de pourrir au plus frais.
@@ -246,6 +319,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Impact MP** : aucun (local).
 - **Dépendances** : risque de conflit avec les mods qui remplacent `ISInventoryPane` (à vérifier par mod).
 - **Effort** : M.
+- **Avancement : ⬜ pas commencée.**
 
 ### I04 : pastille de fraîcheur sur la ligne repliée d'une pile
 - **Description** : aujourd'hui, la bande n'apparaît que dans une pile dépliée (`ISInventoryPane.lua:2553`, branche `count > 1`). Ajouter une pastille ou une bande sur la ligne de tête, à la couleur du pire objet de la pile.
@@ -254,6 +328,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Impact MP** : aucun.
 - **Dépendances** : à tester avec les mods d'inventaire courants.
 - **Effort** : M.
+- **Avancement : ⬜ pas commencée.**
 
 ### I05 : infobulle d'une pile, du plus frais au plus abîmé
 - **Description** : sur une pile repliée, ajouter « 5 autres : de 1 j à 4 j ».
@@ -262,6 +337,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Impact MP** : aucun.
 - **Dépendances** : TooltipLib (version des champs `ctx`).
 - **Effort** : M.
+- **Avancement : ⬜ pas commencée.**
 
 ### I06 : « Jeter les aliments pourris » depuis un meuble ou un sac
 - **Description** : une entrée du menu contextuel d'un conteneur, qui dépose au sol ou dans une poubelle tous les aliments `isRotten()`.
@@ -270,6 +346,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Impact MP** : les transferts vanilla passent par l'autorité serveur (transactions Java, `combat-and-xp.md`). Aucune commande propre.
 - **Dépendances** : aucune. Exclure le composteur (`IsoCompost`) et les objets `ReplaceOnRotten` (C02).
 - **Effort** : M.
+- **Avancement : ⬜ pas commencée.**
 
 ### I07 : option serveur qui impose la règle du Nutritionniste
 - **Description** : une option sandbox `ErisFoodExpiry.RequireTrait` (Désactivé / Choix du joueur / Imposé) en plus de l'option du joueur.
@@ -278,6 +355,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Impact MP** : valeur du serveur transmise au client. C'est seulement de l'affichage : un client modifié peut toujours voir les durées, ce qui est acceptable (« anti-triche basse priorité »).
 - **Dépendances** : traduction des libellés sandbox (`Sandbox_…` dans `Sandbox.json`).
 - **Effort** : S.
+- **Avancement : ⬜ pas commencée** (C05 et C06, qui rendent l'option cohérente, sont faits).
 
 ### I08 : durées exactes selon le niveau de Cuisine
 - **Description** : en plus du Nutritionniste et de l'emballage lisible, donner les durées exactes à partir de Cuisine 3 (réglable), et un état plus fin au-dessous.
@@ -286,6 +364,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Impact MP** : aucun (niveau connu du client pour son personnage).
 - **Dépendances** : I07 pour un seuil fixé par le serveur.
 - **Effort** : S.
+- **Avancement : ⬜ pas commencée.**
 
 ### I09 : date « À consommer avant » sur les emballages
 - **Description** : pour un aliment emballé et lisible, afficher une date du calendrier du jeu (« Avant le 14 août ») au lieu, ou en plus, d'une durée.
@@ -294,6 +373,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Impact MP** : aucun.
 - **Dépendances** : option d'affichage (durée, date, les deux).
 - **Effort** : S.
+- **Avancement : ⬜ pas commencée.**
 
 ### I10 : palette pour daltoniens et repère « périmé » sur la barre
 - **Description** :
@@ -304,6 +384,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Impact MP** : aucun.
 - **Dépendances** : TooltipLib pour la barre de l'infobulle.
 - **Effort** : S.
+- **Avancement : ⬜ pas commencée.**
 
 ### I11 : détails sur Maj (`detailOnly`) et réglage de la verbosité
 - **Description** : n'afficher par défaut que la barre et « Pourri dans ». Maj (touche de détail de TooltipLib) ajoute « Périmé dans », la décongélation, la disparition et les facteurs (frigo, générateur, réseau). Ajouter des options « Masquer "Ne se périme jamais" » (bruit sur toutes les conserves) et « Nombre d'unités (1 à 3) ».
@@ -312,6 +393,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Impact MP** : aucun.
 - **Dépendances** : TooltipLib.
 - **Effort** : S.
+- **Avancement : ⬜ pas commencée.**
 
 ### I12 : compte à rebours de cuisson et de brûlure
 - **Description** : dans un four ou sur un barbecue allumé, afficher « Cuit dans 6 min, brûle dans 14 min ».
@@ -320,6 +402,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Impact MP** : `cookingTime` est envoyé au client par `sendItemStats` à chaque minute de cuisson (`Food.java:359-361`) ; valeur fiable côté client à vérifier en jeu.
 - **Dépendances** : aucune ; remplace l'affichage trompeur de C09.
 - **Effort** : M.
+- **Avancement : ⬜ pas commencée** (C09 affiche « Cuisson » sans durée en attendant).
 
 ### I13 : avertissement discret quand un aliment porté devient périmé ou pourri
 - **Description** : un texte flottant (« Votre lait est périmé ») quand un aliment de l'inventaire principal change d'état. Option désactivée par défaut.
@@ -328,6 +411,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Impact MP** : appeler `updateAge` sur la copie cliente reste local (`multiplayer.md`) ; aucune commande réseau.
 - **Dépendances** : traductions des messages.
 - **Effort** : M.
+- **Avancement : ⬜ pas commencée.**
 
 ### I14 : infobulle dans les emplacements de fabrication (`itemSlot`)
 - **Description** : afficher la même fraîcheur dans les emplacements d'ingrédients de la fenêtre de fabrication et de cuisine.
@@ -336,6 +420,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Impact MP** : aucun.
 - **Dépendances** : TooltipLib.
 - **Effort** : S.
+- **Avancement : ⬜ pas commencée.**
 
 ### I15 : autonomie du générateur dans la projection
 - **Description** : pour un frigo alimenté par générateur, afficher « Générateur vide dans ~1 j 4 h », puis la durée restante à vitesse normale.
@@ -344,6 +429,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Impact MP** : carburant connu du client par la synchronisation de l'objet (à vérifier en jeu).
 - **Dépendances** : compatibilité avec les mods d'électricité (par exemple LiveWire de l'utilisateur).
 - **Effort** : L.
+- **Avancement : ⬜ pas commencée.**
 
 ### I16 : composteur : temps avant le compost
 - **Description** : pour un aliment dans un composteur, remplacer « Pourri » par « Compost dans X ».
@@ -352,6 +438,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Impact MP** : compost calculé par le serveur ; valeur cliente à vérifier.
 - **Dépendances** : aucune.
 - **Effort** : M (après relevé du Java).
+- **Avancement : ⬜ pas commencée.**
 
 ### I17 : objets au sol et cadavres d'animaux
 - **Description** : afficher la fraîcheur de la viande au sol et des carcasses (objets `Food` d'animal) au survol dans le monde.
@@ -360,23 +447,26 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Impact MP** : objet au sol connu du client ; aucune commande.
 - **Dépendances** : TooltipLib.
 - **Effort** : M.
+- **Avancement : ⬜ pas commencée.**
 
 ---
 
 ## Partie 3 : priorisation
 
+Avancement au 2026-10-23 indiqué en tête de chaque action.
+
 | Rang | Action | Pourquoi | Effort |
 |---|---|---|---|
-| 1 | C14 puis C01 : doubles fidèles, puis projection « congelé dans… » au congélateur | Bug le plus visible (durée fausse sur la viande au congélateur) ; corrigé en quelques lignes une fois le test en place | S |
-| 2 | C02 + C03 : `ReplaceOnRotten` et `isFresh()`/`isRotten()` vanilla | Textes faux sur les glaces, le sucre de betterave et les œufs fécondés ; corrections locales | S |
-| 3 | I01 + C04 : coupure de courant annoncée | Information décisive au moment de la coupure, faite avec les API déjà utilisées | S-M |
-| 4 | I07 : option sandbox du Nutritionniste (avec C05/C06) | Rend l'option cohérente en multijoueur, demande peu de code | S |
-| 5 | I04 ou I03 : fraîcheur visible sans déplier, ou tri par fraîcheur | Le geste le plus naturel (ouvrir le frigo et voir) ; plus de valeur que l'infobulle seule | M |
+| 1 | ✅ C14 puis C01 : doubles fidèles, puis projection « congelé dans… » au congélateur | Bug le plus visible (durée fausse sur la viande au congélateur) ; corrigé en quelques lignes une fois le test en place | S |
+| 2 | ✅ C02 + C03 : `ReplaceOnRotten` et `isFresh()`/`isRotten()` vanilla | Textes faux sur les glaces, le sucre de betterave et les œufs fécondés ; corrections locales | S |
+| 3 | ❌ I01 + C04 : coupure de courant annoncée (abandonnées le 2026-10-23 : triche) | Information décisive au moment de la coupure, faite avec les API déjà utilisées | S-M |
+| 4 | 🟡 I07 : option sandbox du Nutritionniste (avec C05/C06) — C05 et C06 faits, I07 à faire | Rend l'option cohérente en multijoueur, demande peu de code | S |
+| 5 | ⬜ I04 ou I03 : fraîcheur visible sans déplier, ou tri par fraîcheur | Le geste le plus naturel (ouvrir le frigo et voir) ; plus de valeur que l'infobulle seule | M |
 
-Au passage, garder le chemin `docs/steam/` (C18), car les images de la page Workshop publiée en dépendent.
+Au passage (✅ C18), garder le chemin `docs/steam/`, car les images de la page Workshop publiée en dépendent.
 
 ---
 
 ## Note finale
 
-Ce document propose des pistes. Rien n'est implémenté sans validation explicite de l'utilisateur. Les points marqués « à vérifier en jeu » demandent un test (solo, puis client MP si besoin) avant toute conclusion. Les numéros de ligne correspondent à la version 0.2.0 et au Java 42.21.0 lus le 2026-10-21. Ils sont à relire après une mise à jour du mod, de TooltipLib ou du jeu.
+Document de proposition mis à jour au fil des corrections : l'état de chaque point est dans le tableau de bord en tête. Les points encore à faire attendent la validation explicite de l'utilisateur avant tout code. Les points marqués « à vérifier en jeu » demandent un test (solo, puis client MP si besoin) avant toute conclusion. Les numéros de ligne des constats correspondent à la version 0.2.0 et au Java 42.21.0 lus le 2026-10-21. Ils sont à relire après une mise à jour du mod, de TooltipLib ou du jeu.
