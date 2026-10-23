@@ -33,13 +33,13 @@ La barre est pleine pour un aliment neuf et vide pour un aliment pourri : elle r
 
 Les durées tiennent compte :
 - de l'option sandbox *Food Spoilage* (`FoodRotSpeed`) ;
-- de l'option sandbox *Refrigeration Effectiveness* (`FridgeFactor`) pour un aliment dans un réfrigérateur ou un congélateur alimenté par un générateur, ou par le réseau jusqu'au jour de la coupure (`ElecShutModifier`) ; après la coupure, la projection repasse à la vitesse normale ;
+- de l'option sandbox *Refrigeration Effectiveness* (`FridgeFactor`) pour un aliment dans un réfrigérateur ou un congélateur alimenté par un générateur, ou par le réseau tant qu'il fonctionne : la projection suppose que le courant du réseau ne sera jamais coupé ; après la coupure, elle repasse à la vitesse normale ;
 - de la congélation : un aliment congelé ne vieillit pas avant d'être décongelé ;
 - des âges de péremption et de pourriture **propres à l'objet** (un plat cuisiné diffère de l'aliment cru).
 
 Les générateurs ajoutés par d'autres mods sont pris en compte s'ils alimentent les cases comme un générateur vanilla (position de générateur du chunk, par exemple les onduleurs de Live Wire) : c'est le seul courant local que le jeu utilise pour faire vieillir la nourriture.
 
-Le mod n'annonce jamais le jour de la coupure du réseau, que le jeu tire au hasard et garde caché.
+Le mod n'annonce ni n'utilise le jour de la coupure du réseau, que le jeu tire au hasard et garde caché : au réfrigérateur sur le réseau, la durée affichée est juste tant que le courant tient et se corrige à l'affichage suivant la coupure.
 
 Les durées s'écrivent avec les unités les plus grandes d'abord, au plus trois unités non nulles parmi années (365 j), mois (30 j), semaines, jours, heures et minutes, par exemple « 2 sem 13 h 33 min » ; en dessous d'une minute : « < 1 min ».
 
@@ -92,7 +92,7 @@ Pendant la cuisson, les durées sont remplacées par « Cuisson : durées affich
 
 - Les durées sont une **projection depuis l'état actuel** : déplacer l'aliment, une coupure de générateur, un changement de température ou d'option sandbox change la valeur à l'affichage suivant.
 - Une coupure de générateur future n'est pas anticipée.
-- Au réfrigérateur sur le réseau, la projection change de vitesse au jour de coupure (`ElecShutModifier`) : une durée longue laisse deviner ce jour.
+- Au réfrigérateur sur le réseau, une durée qui dépasse la coupure est trop longue jusqu'à ce que la coupure arrive (le jour de coupure reste caché).
 - Le temps avant décongélation ne prévoit pas de recongélation.
 - Incompatible avec les mods d'origine `eris_food_expiry` (ne pas activer ensemble).
 - TooltipLib est obligatoire : sans lui, aucune ligne n'apparaît dans l'infobulle (la bande d'inventaire reste active).

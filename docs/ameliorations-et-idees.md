@@ -63,7 +63,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   - `ItemContainer.java:2218-2220`, `:2280-2281`.
 - **Risque** : information trompeuse juste avant la coupure, qui est justement le moment où le joueur en a besoin.
 - **Correction** : avec un courant du réseau seulement (pas de générateur, `doesPowerGridExist()` vrai), ajouter « Courant coupé dans X ». Calculer X depuis `ElecShutModifier - getWorldAgeDaysSinceBegin()`, la même formule que la coupure réelle, puis donner la durée de décongélation et le temps restant ensuite. Garder la formule de `Food.updateAge` pour la vitesse de vieillissement, et écrire dans un commentaire que le moteur utilise deux horloges différentes. Voir aussi I01.
-- **Statut : abandonné** (décision du 2026-10-23 : annoncer la coupure, ou une échéance calculée d'après elle, est de la triche ; le jeu tire ce jour au hasard et le garde caché). La ligne « Courant coupé dans » et la projection au congélateur après la coupure ont été retirées ; l'écart des deux horloges reste documenté dans la base moteur.
+- **Statut : abandonné** (décision du 2026-10-23 : annoncer la coupure, ou une échéance calculée d'après elle, est de la triche ; le jeu tire ce jour au hasard et le garde caché). La ligne « Courant coupé dans » et la projection au congélateur après la coupure ont été retirées ; la projection au réfrigérateur sur le réseau ne se sert plus du jour de coupure (facteur froid tant que le réseau ralentit le vieillissement, correction à l'affichage suivant la coupure) ; l'écart des deux horloges reste documenté dans la base moteur.
 - **Priorité** : moyenne. **Effort** : M.
 
 ### C05 : le mode « durées exactes avec Nutritionniste » laisse passer des valeurs exactes

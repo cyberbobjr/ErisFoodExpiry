@@ -9,6 +9,7 @@
 - The mod is now called "Food Expiry" everywhere: mod list, mod options and Workshop page.
 - "Exact times need Nutritionist" option: without the exact times, the freshness bar is rounded to a third, the inventory strip shows only the colour, and rotten food shows "Will disappear" instead of an exact time.
 - Without the exact times, the tooltip still tells when food is frozen, thawing, freezing, cooking or not spoiling where it is.
+- Fridges on grid power: times no longer give away the day the power will be cut. They assume the power stays on and are updated once it is cut.
 
 ### Fixed
 - The inventory strip now ends with the vanilla bar, whatever the language and font size.

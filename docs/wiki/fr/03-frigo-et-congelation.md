@@ -5,7 +5,7 @@
 Un réfrigérateur ou un congélateur ralentit la dégradation selon l'option sandbox d'efficacité de la réfrigération, tant qu'il a du courant :
 
 - **générateur** : le ralentissement s'applique tant que la case est alimentée par un générateur ;
-- **réseau électrique** : le ralentissement s'applique jusqu'au jour de coupure de l'électricité du sandbox ; la durée projetée repasse à la vitesse normale pour la part postérieure à ce jour.
+- **réseau électrique** : le ralentissement s'applique tant que le réseau fonctionne. La durée projetée suppose que le courant reste : après la coupure, elle se corrige à l'affichage suivant.
 
 Les générateurs ajoutés par d'autres mods sont pris en compte s'ils alimentent les cases comme un générateur vanilla (par exemple les onduleurs de Live Wire) : c'est le seul courant local que le jeu utilise pour faire vieillir la nourriture.
 

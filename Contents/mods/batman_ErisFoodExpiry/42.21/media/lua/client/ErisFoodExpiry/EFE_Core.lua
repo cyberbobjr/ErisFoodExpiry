@@ -4,12 +4,14 @@
 -- The projection follows Food.updateAge in 42.21:
 --   age (days) += elapsed hours * FoodRotSpeed / 24
 --   * FridgeFactor in a fridge or freezer powered by a generator, or still on
---     grid power (world age < ElecShutModifier days), then normal speed;
+--     grid power (world age < ElecShutModifier days), else normal speed;
 --   * 0 while the food is frozen (until it has thawed); fresh food in a
 --     powered freezer freezes within 4 h, then stops aging.
 -- Stale at age >= offAge, rotten at age >= offAgeMax (instance values, which
 -- may differ from the item script after cooking or a recipe).
--- The day of the grid shutoff is never shown: the game keeps it hidden.
+-- The day of the grid shutoff is never shown nor used: the game draws it at
+-- random and keeps it hidden. While the grid still slows aging, the projection
+-- assumes it never stops; it is corrected on the next display after the cut.
 -- ============================================================================
 
 ErisFoodExpiry = ErisFoodExpiry or {}
@@ -74,9 +76,9 @@ function EFE.generatorPowered(container)
     return square ~= nil and square:haveElectricity()
 end
 
--- Game days for the age to grow by delta where the item is now, starting
--- startDays from now; nil when it does not age there (fridge factor "never").
-local function agingDays(item, delta, startDays)
+-- Game days for the age to grow by delta where the item is now, with the
+-- power it has now; nil when it does not age there (fridge factor "never").
+local function agingDays(item, delta)
     local rot = EFE.rotSpeed()
     local container = item:getOutermostContainer()
     if not isCold(container) then
@@ -87,16 +89,12 @@ local function agingDays(item, delta, startDays)
         if cold <= 0 then return nil end
         return delta / cold
     end
+    -- grid power: the engine keeps the fridge factor while the world age
+    -- (getWorldAgeHours) is below ElecShutModifier days (Food.updateAge)
     local shutDays = sandboxValue("ElecShutModifier") or -1
-    local startAt = getGameTime():getWorldAgeHours() / 24 + startDays
-    if shutDays > -1 and startAt < shutDays then
-        local gridDays = shutDays - startAt
-        local gridAge = gridDays * cold
-        if delta <= gridAge then
-            if cold <= 0 then return nil end
-            return delta / cold
-        end
-        return gridDays + (delta - gridAge) / rot
+    if shutDays > -1 and getGameTime():getWorldAgeHours() / 24 < shutDays then
+        if cold <= 0 then return nil end
+        return delta / cold
     end
     return delta / rot
 end
@@ -134,7 +132,7 @@ function EFE.daysUntil(item, targetAge)
         startDays = EFE.thawDays(item)
         if startDays == nil then return nil end
     end
-    local days = agingDays(item, delta, startDays)
+    local days = agingDays(item, delta)
     if days == nil then return nil end
     local freeze = EFE.freezeDays(item)
     if freeze and days > freeze then return nil end

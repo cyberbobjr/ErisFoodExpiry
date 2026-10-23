@@ -5,7 +5,7 @@
 A fridge or freezer slows spoilage by the sandbox *Refrigeration Effectiveness* factor while it has power:
 
 - **generator**: the slowdown applies as long as the square has generator power;
-- **grid power**: the slowdown applies until the electricity shutoff day of the sandbox; the projected time switches to normal speed for the part after that day.
+- **grid power**: the slowdown applies while the grid works. The projected time assumes the power stays on: after the shutoff, the time is corrected the next time you look.
 
 Generators added by other mods count when they power squares like a vanilla generator (for example Live Wire inverters): that is the only local power the game uses to age food.
 

@@ -29,7 +29,7 @@ Lues par `getSandboxOptions():getOptionByName(nom):getValue()`, mémorisées le 
 | --- | --- |
 | `FoodRotSpeed` (« Food Spoilage » : Very Fast … Very Slow) | 1 → ×1,7 ; 2 → ×1,4 ; 3 → ×1,0 ; 4 → ×0,7 ; 5 → ×0,4 ; autre ou absente → 1,0 (`Food.getFoodRotSpeed` 42.21) |
 | `FridgeFactor` (« Refrigeration Effectiveness » : Very Low … No decay) | 1 → 0,4 ; 2 → 0,3 ; 3 → 0,2 ; 4 → 0,1 ; 5 → 0,03 ; 6 → 0,0 (aucune dégradation) ; autre → 0,2 (`Food.getFridgeFactor` 42.21) |
-| `ElecShutModifier` (dérivé de « Electricity Shutoff ») | jour de coupure du réseau ; une valeur ≤ −1 désactive la période de réseau dans la projection |
+| `ElecShutModifier` (dérivé de « Electricity Shutoff ») | sert seulement à savoir si le réseau ralentit le vieillissement **maintenant** (`worldAgeHours / 24 < ElecShutModifier`) ; jamais pour projeter une échéance ; une valeur ≤ −1 = pas de réseau |
 | `DaysForRottenFoodRemoval` (« Rotten Food Removal ») | < 0 (ou absente) : pas de ligne « Disparaît dans » ; sinon nombre de jours après la pourriture |
 
 ## Projection des durées
@@ -43,12 +43,12 @@ Toutes les durées sont en **jours de jeu**. `NEVER = 1 000 000 000` (valeur par
 
 ### Vieillissement là où se trouve l'objet (`agingDays`, local)
 
-Pour faire croître l'âge de `delta` à partir de `startDays` jours dans le futur, avec `rot = rotSpeed()` :
+Pour faire croître l'âge de `delta` avec le courant présent maintenant, avec `rot = rotSpeed()` :
 
 1. Conteneur le plus extérieur absent, ou ni réfrigérateur ni congélateur : `delta / rot`.
 2. Sinon `cold = rot × fridgeFactor()`.
    - `generatorPowered(container)` (case du conteneur avec `haveElectricity()`) : `delta / cold`, ou `nil` si `cold <= 0`.
-   - Sinon, si `ElecShutModifier > −1` et `début = worldAgeHours / 24 + startDays < ElecShutModifier` : `gridDays = ElecShutModifier − début`, `gridAge = gridDays × cold` ; si `delta <= gridAge` → `delta / cold` (`nil` si `cold <= 0`), sinon `gridDays + (delta − gridAge) / rot`.
+   - Sinon, si `ElecShutModifier > −1` et `worldAgeHours / 24 < ElecShutModifier` (réseau qui ralentit encore le vieillissement, `Food.java:691`) : `delta / cold` (`nil` si `cold <= 0`), sans tenir compte de la coupure à venir.
    - Sinon : `delta / rot`.
 
 ### Courant de générateur (`generatorPowered`)
@@ -69,7 +69,7 @@ Jamais affiché ni utilisé pour annoncer une échéance : le jeu le tire au has
 
 ### Échéance d'un âge (`daysUntil`)
 
-`delta = cible − age` ; 0 si `delta <= 0`. Pour un objet congelé, `startDays = thawDays(item)` (`nil` → `nil`). Si `freezeDays(item)` n'est pas `nil` et que `agingDays` le dépasse, `nil` : l'objet sera congelé avant d'atteindre la cible. Résultat `startDays + agingDays(item, delta, startDays)`, ou `nil` si l'objet n'atteint jamais la cible à cet endroit.
+`delta = cible − age` ; 0 si `delta <= 0`. Pour un objet congelé, `startDays = thawDays(item)` (`nil` → `nil`). Si `freezeDays(item)` n'est pas `nil` et que `agingDays` le dépasse, `nil` : l'objet sera congelé avant d'atteindre la cible. Résultat `startDays + agingDays(item, delta)`, ou `nil` si l'objet n'atteint jamais la cible à cet endroit.
 
 ### Suppression d'un aliment pourri (`removalDays`)
 

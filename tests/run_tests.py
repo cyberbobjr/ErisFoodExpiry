@@ -190,12 +190,17 @@ def lua_checks() -> list[str]:
         failed.append("fridge factor 'never': nil expected")
     lua.execute("SANDBOX.FridgeFactor = 3")
 
-    # grid power until day 14, now day 1: 13 days at 0.2 = 2.6 age, then normal
+    # grid power until day 14, now day 1: the shutoff day stays hidden, the
+    # fridge factor is kept for the whole projection
     lua.execute("grid = makeFood{age=0, offAge=2, offAgeMax=5, container=makeContainer('freezer', false)}")
     if not approx(days("grid", "2"), 2 / 0.2):
         failed.append("grid fridge before shutoff: fridge factor expected")
-    if not approx(days("grid", "5"), 13 + (5 - 2.6)):
-        failed.append("grid fridge across shutoff: piecewise projection expected")
+    if not approx(days("grid", "5"), 5 / 0.2):
+        failed.append("grid fridge: projection must not use the shutoff day")
+    lua.execute("WORLD_HOURS = 24 * 15")
+    if not approx(days("grid", "2"), 2):
+        failed.append("grid fridge after the shutoff: normal speed expected")
+    lua.execute("WORLD_HOURS = 24")
     lua.execute("SANDBOX.ElecShutModifier = -1")
     if not approx(days("grid", "2"), 2):
         failed.append("no power: normal speed expected")
@@ -392,7 +397,7 @@ def lua_checks() -> list[str]:
         out = ev("runTooltip(makeFood{age=1, offAge=3, offAgeMax=5, packaged=true, "
                  "container=makeContainer('fridge', false, true)})")
         expected = ("P:UI_EFE_Freshness=0.80|KV:UI_EFE_StaleIn=1 UI_EFE_Weeks 3 UI_EFE_Days"
-                    "|KV:UI_EFE_RottenIn=2 UI_EFE_Weeks 9 UI_EFE_Hours 36 UI_EFE_Minutes")
+                    "|KV:UI_EFE_RottenIn=2 UI_EFE_Weeks 6 UI_EFE_Days")
         if out != expected:
             failed.append(f"grid fridge tooltip: {out}")
         # C09: cooking replaces the times
