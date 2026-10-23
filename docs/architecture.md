@@ -73,7 +73,7 @@ Tous les fichiers sont sous `media/lua/client/ErisFoodExpiry/` : rien n'est char
 
 ## Flux de données
 
-1. **Lecture** à chaque affichage : `Food:getAge()`, `getOffAge()`, `getOffAgeMax()`, `isFrozen()`, `isThawing()`, `isFreezing()`, `getFreezingTime()`, `isIsCookable()`, `getHeat()`, `isCooked()`, `isBurnt()`, `isPackaged()`, `getModData().NoLabel` ; conteneur le plus extérieur (`getOutermostContainer`) : `isFridge`, `isFreezer`, `isPowered`, `getTemperature`, `getSourceGrid():haveElectricity()`, `getParent()` (composteur) ; options sandbox `FoodRotSpeed`, `FridgeFactor`, `ElecShutModifier`, `DaysForRottenFoodRemoval` (mémorisées une milliseconde) ; `getGameTime():getWorldAgeHours()` et `getWorldAgeDaysSinceBegin()`.
+1. **Lecture** à chaque affichage : `Food:getAge()`, `getOffAge()`, `getOffAgeMax()`, `isFrozen()`, `isThawing()`, `isFreezing()`, `getFreezingTime()`, `isIsCookable()`, `getHeat()`, `isCooked()`, `isBurnt()`, `isPackaged()`, `getModData().NoLabel` ; conteneur le plus extérieur (`getOutermostContainer`) : `isFridge`, `isFreezer`, `isPowered`, `getTemperature`, `getSourceGrid():haveElectricity()`, `getParent()` (composteur) ; options sandbox `FoodRotSpeed`, `FridgeFactor`, `ElecShutModifier`, `DaysForRottenFoodRemoval` (mémorisées une milliseconde) ; `getGameTime():getWorldAgeHours()`.
 2. **Projection** par `EFE_Core` (formules dans les [spécifications techniques](specifications-techniques.md#projection-des-durées)).
 3. **Affichage** : lignes TooltipLib (`addProgress`, `addKeyValue`, `addLabel`) et `drawRect` dans le panneau d'inventaire.
 

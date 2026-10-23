@@ -5,11 +5,11 @@
 A fridge or freezer slows spoilage by the sandbox *Refrigeration Effectiveness* factor while it has power:
 
 - **generator**: the slowdown applies as long as the square has generator power;
-- **grid power**: the slowdown applies until the electricity shutoff day of the sandbox; the projected time switches to normal speed for the part after that day. The tooltip shows **Power cut in**: the time before the shutoff stops the appliance (nothing when the shutoff is disabled).
+- **grid power**: the slowdown applies until the electricity shutoff day of the sandbox; the projected time switches to normal speed for the part after that day.
 
 Generators added by other mods count when they power squares like a vanilla generator (for example Live Wire inverters): that is the only local power the game uses to age food.
 
-With *Months since the apocalypse* above 1, the game cuts the power earlier than it changes the spoilage speed of fridge food; the projection follows both, as the game does.
+The mod never tells when the grid power will be cut: the game keeps that day hidden.
 
 With *Refrigeration Effectiveness* set to no decay, a powered fridge shows **Not spoiling here**.
 
@@ -19,7 +19,7 @@ A future generator shutdown (out of fuel) is not anticipated: the time changes w
 
 Frozen food does not spoil until it has thawed.
 
-- In a **running freezer**: **Frozen: not spoiling**. Food not frozen yet shows **Frozen in** first: it freezes within 4 in-game hours, then stops spoiling. On grid power, **Power cut in** follows, then **Stale in** and **Rotten in** counted after the shutoff and 1.5 hours of thawing.
+- In a **running freezer**: **Frozen: not spoiling**. Food not frozen yet shows **Frozen in** first: it freezes within 4 in-game hours, then stops spoiling.
 - **Anywhere else**: **Thawed in**, then **Stale in** and **Rotten in** counted from the end of thawing.
 
 ![Thawing beef patty](../../images/screenshots/06-tooltip-thawing.png)

@@ -3,7 +3,6 @@
 ## Unreleased
 
 ### Added
-- Fridges and freezers on grid power show "Power cut in", the time before the electricity shutoff stops them. In a freezer, frozen food then shows when it will go stale and rot after the shutoff and the thaw, instead of only "Frozen: not spoiling".
 - Food being cooked shows "Cooking: times shown once cooked": cooking can change its times (rice and pasta pots start over).
 
 ### Changed

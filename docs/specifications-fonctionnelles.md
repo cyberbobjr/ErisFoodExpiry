@@ -12,13 +12,12 @@ Au survol d'un aliment (objet `Food`), l'infobulle reçoit, sous les lignes vani
 | --- | --- |
 | Aliment qui ne vieillit pas (conserves, aliments secs : `offAgeMax` = 1 000 000 000) | « Does not expire » / « Ne se périme jamais » (gris), rien d'autre. |
 | Cas général | Barre **Freshness / Fraîcheur**, puis **Stale in / Périmé dans** (si l'aliment est encore frais) et **Rotten in / Pourri dans**. |
-| Congelé dans un congélateur en marche sur générateur, ou sur le réseau quand la coupure est désactivée | Barre, puis « Frozen: not spoiling » / « Congelé : ne s'abîme pas ». |
-| Réfrigérateur ou congélateur en marche sur le **réseau**, coupure prévue (F09) | Barre, puis **Power cut in / Courant coupé dans**. Au congélateur, « Congelé : ne s'abîme pas » vient en tête, puis « Périmé dans » et « Pourri dans » comptés après la coupure et 1,5 h de décongélation. |
+| Congelé dans un congélateur en marche | Barre, puis « Frozen: not spoiling » / « Congelé : ne s'abîme pas ». Le jour de la coupure du réseau n'est jamais annoncé. |
 | Pas encore congelé dans un congélateur en marche (aliment congelable) | Barre, **Frozen in / Congelé dans** (4 h de jeu au plus depuis un aliment non congelé), puis « Congelé : ne s'abîme pas ». Si l'aliment devient périmé ou pourri avant d'être congelé, la durée correspondante est affichée. |
 | Aliment remplacé par un autre objet au lieu de pourrir (`ReplaceOnRotten` : glaces, sirop de betterave) | « Pourri dans » devient **Turns into <objet> in / Devient <objet> dans** ; jamais « Disparaît dans ». |
 | Œuf fécondé | « Fertilized: does not expire » / « Fécondé : ne se périme pas » (gris), rien d'autre : le jeu le considère toujours frais. |
 | Congelé ailleurs (décongélation en cours) | Barre, **Thawed in / Décongelé dans**, puis « Périmé dans » et « Pourri dans » comptés à partir de la fin de la décongélation (F04). |
-| Aliment en cours de cuisson (cuisable, non congelé, chaleur > 1,6, ni cuit ni brûlé) | Barre, puis « Cooking: times shown once cooked » / « Cuisson : durées affichées une fois cuit » : la cuisson change les durées (F10). |
+| Aliment en cours de cuisson (cuisable, non congelé, chaleur > 1,6, ni cuit ni brûlé) | Barre, puis « Cooking: times shown once cooked » / « Cuisson : durées affichées une fois cuit » : la cuisson change les durées (F09). |
 | Aliment qui ne s'abîme pas à cet endroit (réfrigérateur alimenté, option sandbox *Refrigeration Effectiveness* réglée sur « No decay ») | Barre, puis « Not spoiling here » / « Ne s'abîme pas ici ». |
 | Aliment pourri | Barre vide, « Rotten » / « Pourri », puis **Disappears in / Disparaît dans** si F05 s'applique. |
 
@@ -35,8 +34,12 @@ La barre est pleine pour un aliment neuf et vide pour un aliment pourri : elle r
 Les durées tiennent compte :
 - de l'option sandbox *Food Spoilage* (`FoodRotSpeed`) ;
 - de l'option sandbox *Refrigeration Effectiveness* (`FridgeFactor`) pour un aliment dans un réfrigérateur ou un congélateur alimenté par un générateur, ou par le réseau jusqu'au jour de la coupure (`ElecShutModifier`) ; après la coupure, la projection repasse à la vitesse normale ;
-- de la congélation : un aliment congelé ne vieillit pas avant d'être décongelé ; dans un congélateur sur le réseau, il reste congelé jusqu'à la coupure (F09), décongèle 1,5 h, puis vieillit ;
+- de la congélation : un aliment congelé ne vieillit pas avant d'être décongelé ;
 - des âges de péremption et de pourriture **propres à l'objet** (un plat cuisiné diffère de l'aliment cru).
+
+Les générateurs ajoutés par d'autres mods sont pris en compte s'ils alimentent les cases comme un générateur vanilla (position de générateur du chunk, par exemple les onduleurs de Live Wire) : c'est le seul courant local que le jeu utilise pour faire vieillir la nourriture.
+
+Le mod n'annonce jamais le jour de la coupure du réseau, que le jeu tire au hasard et garde caché.
 
 Les durées s'écrivent avec les unités les plus grandes d'abord, au plus trois unités non nulles parmi années (365 j), mois (30 j), semaines, jours, heures et minutes, par exemple « 2 sem 13 h 33 min » ; en dessous d'une minute : « < 1 min ».
 
@@ -75,15 +78,7 @@ Dans la liste de l'inventaire ou d'un conteneur, quand une pile est dépliée, c
 
 Textes du mod en anglais, français, allemand, espagnol, italien, polonais, portugais, portugais du Brésil, russe et chinois simplifié. Le nom de l'option, son infobulle et la description du fournisseur TooltipLib sont traduits par l'écran d'options du jeu.
 
-## F09 — Coupure du réseau électrique
-
-Un réfrigérateur ou un congélateur qui fonctionne sur le courant du réseau (pas de générateur sur la case) affiche **Power cut in / Courant coupé dans** : le temps avant la coupure définitive prévue par l'option sandbox *Electricity Shutoff*. Rien n'est affiché sur générateur, sans courant ou quand la coupure est désactivée. La ligne n'apparaît qu'avec les durées exactes (F06).
-
-Le jeu compte la coupure réelle depuis le début de l'apocalypse (option *Months since the apocalypse*, `TimeSinceApo`), mais fait vieillir les aliments d'après les jours de la partie : avec une valeur supérieure à 1, un réfrigérateur s'arrête avant que la vitesse de vieillissement ne change. La projection reproduit les deux comportements : un congélateur dégèle à la coupure réelle, la vitesse de vieillissement suit l'horloge du jeu.
-
-Les générateurs ajoutés par d'autres mods sont pris en compte s'ils alimentent les cases comme un générateur vanilla (position de générateur du chunk, par exemple les onduleurs de Live Wire) : c'est le seul courant local que le jeu utilise pour faire vieillir la nourriture.
-
-## F10 — Cuisson
+## F09 — Cuisson
 
 Pendant la cuisson, les durées sont remplacées par « Cuisson : durées affichées une fois cuit » : cuire peut remettre l'âge à zéro (marmites et poêles de riz ou de pâtes) ou remplacer l'objet (`ReplaceOnCooked`). Les durées reviennent une fois l'aliment cuit.
 
@@ -96,8 +91,8 @@ Pendant la cuisson, les durées sont remplacées par « Cuisson : durées affich
 ## Limites connues
 
 - Les durées sont une **projection depuis l'état actuel** : déplacer l'aliment, une coupure de générateur, un changement de température ou d'option sandbox change la valeur à l'affichage suivant.
-- Une coupure de générateur future n'est pas anticipée (seule la coupure du réseau par `ElecShutModifier` l'est, F09).
-- Le temps avant la coupure du réseau révèle le jour tiré au hasard par l'option *Electricity Shutoff* ; la projection le laissait déjà deviner.
+- Une coupure de générateur future n'est pas anticipée.
+- Au réfrigérateur sur le réseau, la projection change de vitesse au jour de coupure (`ElecShutModifier`) : une durée longue laisse deviner ce jour.
 - Le temps avant décongélation ne prévoit pas de recongélation.
 - Incompatible avec les mods d'origine `eris_food_expiry` (ne pas activer ensemble).
 - TooltipLib est obligatoire : sans lui, aucune ligne n'apparaît dans l'infobulle (la bande d'inventaire reste active).

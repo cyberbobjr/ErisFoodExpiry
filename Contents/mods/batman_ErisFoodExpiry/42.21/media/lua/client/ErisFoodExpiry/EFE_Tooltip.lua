@@ -66,15 +66,13 @@ TooltipLib.registerProvider({
             ctx:addLabel(getText("UI_EFE_Cooking"), VALUE)
             return
         end
-        local cut = EFE.powerCutDays(item)
         if item:isFrozen() then
             local thaw = EFE.thawDays(item)
             if thaw == nil then
                 ctx:addLabel(getText("UI_EFE_Frozen"), VALUE)
-                if not cut then return end
-            else
-                ctx:addKeyValue(getText("UI_EFE_ThawedIn"), EFE.formatDays(thaw), LABEL, VALUE)
+                return
             end
+            ctx:addKeyValue(getText("UI_EFE_ThawedIn"), EFE.formatDays(thaw), LABEL, VALUE)
         end
         local freeze = EFE.freezeDays(item)
         if freeze then
@@ -90,9 +88,6 @@ TooltipLib.registerProvider({
             ctx:addLabel(getText("UI_EFE_StateRotten"), color)
             addRemoval(ctx, item)
             return
-        end
-        if cut then
-            ctx:addKeyValue(getText("UI_EFE_PowerCutIn"), EFE.formatDays(cut), LABEL, VALUE)
         end
         local stale = stage == "fresh" and EFE.daysUntil(item, item:getOffAge()) or nil
         if stale then

@@ -12,7 +12,6 @@ Hover any food item: the mod adds its lines at the bottom of the tooltip.
 | **Thawed in** | Frozen food outside a running freezer: time before it has thawed. See [Fridge and freezing](03-fridge-and-freezing.md). |
 | **Frozen: not spoiling** | Frozen food in a running freezer. |
 | **Frozen in** | Food just put in a running freezer: time before it is frozen (4 in-game hours at most). |
-| **Power cut in** | Fridge or freezer running on grid power: time before the electricity shutoff stops it. See [Fridge and freezing](03-fridge-and-freezing.md). |
 | **Cooking: times shown once cooked** | Food being cooked: cooking can change its times (rice and pasta pots start over), so they come back once it is cooked. |
 | **Turns into … in** | Food that becomes another item instead of rotting (ice cream melts, sugar beet syrup turns into sugar). |
 | **Fertilized: does not expire** | Fertilized egg: the game keeps it fresh. |

@@ -29,7 +29,7 @@ Lues par `getSandboxOptions():getOptionByName(nom):getValue()`, mémorisées le 
 | --- | --- |
 | `FoodRotSpeed` (« Food Spoilage » : Very Fast … Very Slow) | 1 → ×1,7 ; 2 → ×1,4 ; 3 → ×1,0 ; 4 → ×0,7 ; 5 → ×0,4 ; autre ou absente → 1,0 (`Food.getFoodRotSpeed` 42.21) |
 | `FridgeFactor` (« Refrigeration Effectiveness » : Very Low … No decay) | 1 → 0,4 ; 2 → 0,3 ; 3 → 0,2 ; 4 → 0,1 ; 5 → 0,03 ; 6 → 0,0 (aucune dégradation) ; autre → 0,2 (`Food.getFridgeFactor` 42.21) |
-| `ElecShutModifier` (dérivé de « Electricity Shutoff ») | jour de coupure du réseau ; une valeur ≤ −1 désactive la période de réseau dans la projection ; `2147483647` (« Disabled », `SandboxOptions.randomElectricityShut`) : jamais de coupure, pas de ligne « Courant coupé dans » |
+| `ElecShutModifier` (dérivé de « Electricity Shutoff ») | jour de coupure du réseau ; une valeur ≤ −1 désactive la période de réseau dans la projection |
 | `DaysForRottenFoodRemoval` (« Rotten Food Removal ») | < 0 (ou absente) : pas de ligne « Disparaît dans » ; sinon nombre de jours après la pourriture |
 
 ## Projection des durées
@@ -55,11 +55,9 @@ Pour faire croître l'âge de `delta` à partir de `startDays` jours dans le fut
 
 `getSourceGrid()` non `nil` et `haveElectricity()` : position de générateur du chunk (`IsoGridSquare.java:8223-8228`), le seul courant local que lit `Food.updateAge` (`Food.java:689`). Les générateurs vanilla et les mods qui alimentent des cases pour le moteur (onduleurs de Live Wire par `IsoChunk.addGeneratorPos`) inscrivent ces positions sur le serveur **et sur chaque client** : `IsoGenerator.sync` appelle `setSurroundingElectricity` chez le client (`IsoGenerator.java:550-567`). Le client recalcule l'âge affiché avec ce même test (`ISInventoryPane` → `updateAge`), donc la projection suit l'âge qu'il montre. Un courant que le moteur ne voit pas ne ralentit pas non plus le vieillissement réel : il n'est pas compté.
 
-### Coupure du réseau (`powerCutDays`)
+### Jour de coupure du réseau
 
-`nil` si le conteneur n'est ni réfrigérateur ni congélateur, s'il est sur générateur, s'il n'est pas `isPowered()`, ou si `ElecShutModifier` < 0 ou ≥ `NEVER_SHUT`. Sinon `ElecShutModifier − getGameTime():getWorldAgeDaysSinceBegin()` (`nil` si négatif), même formule que `SandboxOptions.doesPowerGridExist` (`SandboxOptions.java:1230`, `IsoWorld.getWorldAgeDays` = `getWorldAgeDaysSinceBegin`).
-
-Deux horloges : `Food.updateAge` compare `getWorldAgeHours()` à `ElecShutModifier × 24` (`Food.java:691-696`), alors que la coupure réelle compte `(TimeSinceApo − 1) × 30` jours de plus (`GameTime.java:826-827`). `agingDays` suit la première ; `powerCutDays`, le gel et le dégel suivent la seconde.
+Jamais affiché ni utilisé pour annoncer une échéance : le jeu le tire au hasard et le garde caché. Un aliment congelé dans un congélateur en marche (réseau ou générateur) reste « Congelé : ne s'abîme pas ».
 
 ### Décongélation (`thawDays`)
 
@@ -71,13 +69,7 @@ Deux horloges : `Food.updateAge` compare `getWorldAgeHours()` à `ElecShutModifi
 
 ### Échéance d'un âge (`daysUntil`)
 
-`delta = cible − age` ; 0 si `delta <= 0`. `cut = powerCutDays(item)`.
-
-- Objet congelé : `startDays = thawDays(item)` ; s'il reste congelé (`nil`), `nil` sans coupure prévue, sinon `startDays = cut + getFreezingTime() / 100 × 1,5 / 24` (dégel dans le congélateur arrêté, à température 1,0).
-- `days = agingDays(item, delta, startDays)`, `freeze = freezeDays(item)`.
-- Pas de gel en cours, cible atteinte avant le gel (`days <= freeze`) ou coupure avant le gel (`cut <= freeze`) : `startDays + days` (`nil` si `days` l'est).
-- Gel avant la cible sans coupure prévue : `nil`.
-- Gel avant la cible puis coupure : l'objet vieillit `freeze` jours au rythme actuel (`gained = freeze × agingRate`), reste congelé jusqu'à la coupure, dégèle 1,5 h : `resume = cut + 1,5 / 24`, résultat `resume + agingDays(item, delta − gained, resume)`.
+`delta = cible − age` ; 0 si `delta <= 0`. Pour un objet congelé, `startDays = thawDays(item)` (`nil` → `nil`). Si `freezeDays(item)` n'est pas `nil` et que `agingDays` le dépasse, `nil` : l'objet sera congelé avant d'atteindre la cible. Résultat `startDays + agingDays(item, delta, startDays)`, ou `nil` si l'objet n'atteint jamais la cible à cet endroit.
 
 ### Suppression d'un aliment pourri (`removalDays`)
 
@@ -126,7 +118,7 @@ TooltipLib.registerProvider({
 })
 ```
 
-Ordre du rappel : aliment qui ne vieillit pas ; œuf fécondé ; sans durées exactes, barre arrondie, `stateKey`, `conditionKey`, puis `UI_EFE_RemovedSoon` si pourri et `removalDays` non `nil` ; avec les durées exactes, barre, cuisson (`UI_EFE_Cooking`, fin), congelé (`UI_EFE_Frozen`, fin sans coupure prévue, ou `UI_EFE_ThawedIn`), `UI_EFE_FrozenIn`, pourri (fin), `UI_EFE_PowerCutIn`, `UI_EFE_StaleIn`, `UI_EFE_RottenIn` ou `UI_EFE_TurnsInto`.
+Ordre du rappel : aliment qui ne vieillit pas ; œuf fécondé ; sans durées exactes, barre arrondie, `stateKey`, `conditionKey`, puis `UI_EFE_RemovedSoon` si pourri et `removalDays` non `nil` ; avec les durées exactes, barre, cuisson (`UI_EFE_Cooking`, fin), congelé (`UI_EFE_Frozen`, fin, ou `UI_EFE_ThawedIn`), `UI_EFE_FrozenIn`, pourri (fin), `UI_EFE_StaleIn`, `UI_EFE_RottenIn` ou `UI_EFE_TurnsInto`.
 
 Méthodes de `ctx` utilisées : `ctx.item`, `ctx.tooltip:getCharacter()` (`nil` = durées non lisibles si l'option est active), `ctx:addProgress(libellé, fraction, couleurLibellé, couleurBarre)`, `ctx:addKeyValue(clé, valeur, couleurClé, couleurValeur)`, `ctx:addLabel(texte, couleur)`. Ordre des lignes : voir [F01](specifications-fonctionnelles.md#f01--lignes-de-péremption-dans-linfobulle).
 
@@ -159,20 +151,20 @@ Table globale créée par `EFE_Core.lua` (`ErisFoodExpiry = ErisFoodExpiry or {}
 
 | Membre | Signature / valeur |
 | --- | --- |
-| `NEVER`, `NEVER_SHUT`, `MAX_PARTS`, `COLORS` | constantes ci-dessus |
+| `NEVER`, `MAX_PARTS`, `COLORS` | constantes ci-dessus |
 | `rotSpeed()`, `fridgeFactor()` | facteurs sandbox |
 | `canAge(item)`, `stage(item)`, `stateKey(item, stage)`, `conditionKey(item)`, `isCooking(item)`, `freshFraction(item)`, `roughFraction(fraction)` | état de l'aliment |
 | `generatorPowered(container)` | booléen |
-| `thawDays(item)`, `freezeDays(item)`, `powerCutDays(item)`, `daysUntil(item, targetAge)`, `removalDays(item)` | jours de jeu ou `nil` |
+| `thawDays(item)`, `freezeDays(item)`, `daysUntil(item, targetAge)`, `removalDays(item)` | jours de jeu ou `nil` |
 | `formatDays(days, maxParts)` | texte |
 | `canReadExact(item, character, requireTrait)` | booléen |
 | `options`, `requireTrait()` | définis par `EFE_Options.lua` |
 
 ## Traductions
 
-`media/lua/shared/Translate/<LANGUE>/UI.json` (format JSON 42.21), langues `CN`, `DE`, `EN`, `ES`, `FR`, `IT`, `PL`, `PT`, `PTBR`, `RU`. Préfixe unique `UI_EFE_` ; 32 clés :
+`media/lua/shared/Translate/<LANGUE>/UI.json` (format JSON 42.21), langues `CN`, `DE`, `EN`, `ES`, `FR`, `IT`, `PL`, `PT`, `PTBR`, `RU`. Préfixe unique `UI_EFE_` ; 31 clés :
 
-`UI_EFE_Title`, `UI_EFE_RequireTrait`, `UI_EFE_RequireTrait_tooltip`, `UI_EFE_TooltipProvider`, `UI_EFE_Freshness`, `UI_EFE_StaleIn`, `UI_EFE_RottenIn`, `UI_EFE_ThawedIn`, `UI_EFE_FrozenIn`, `UI_EFE_TurnsInto` (`%1` = nom de l'objet), `UI_EFE_Fertilized`, `UI_EFE_RemovedIn`, `UI_EFE_RemovedSoon`, `UI_EFE_PowerCutIn`, `UI_EFE_Paused`, `UI_EFE_Frozen`, `UI_EFE_Thawing`, `UI_EFE_Freezing`, `UI_EFE_Cooking`, `UI_EFE_NeverPerish`, `UI_EFE_StateVeryFresh`, `UI_EFE_StateFresh`, `UI_EFE_StateOk`, `UI_EFE_StateRotting`, `UI_EFE_StateAlmostRotten`, `UI_EFE_StateRotten`, `UI_EFE_Years`, `UI_EFE_Months`, `UI_EFE_Weeks`, `UI_EFE_Days`, `UI_EFE_Hours`, `UI_EFE_Minutes`.
+`UI_EFE_Title`, `UI_EFE_RequireTrait`, `UI_EFE_RequireTrait_tooltip`, `UI_EFE_TooltipProvider`, `UI_EFE_Freshness`, `UI_EFE_StaleIn`, `UI_EFE_RottenIn`, `UI_EFE_ThawedIn`, `UI_EFE_FrozenIn`, `UI_EFE_TurnsInto` (`%1` = nom de l'objet), `UI_EFE_Fertilized`, `UI_EFE_RemovedIn`, `UI_EFE_RemovedSoon`, `UI_EFE_Paused`, `UI_EFE_Frozen`, `UI_EFE_Thawing`, `UI_EFE_Freezing`, `UI_EFE_Cooking`, `UI_EFE_NeverPerish`, `UI_EFE_StateVeryFresh`, `UI_EFE_StateFresh`, `UI_EFE_StateOk`, `UI_EFE_StateRotting`, `UI_EFE_StateAlmostRotten`, `UI_EFE_StateRotten`, `UI_EFE_Years`, `UI_EFE_Months`, `UI_EFE_Weeks`, `UI_EFE_Days`, `UI_EFE_Hours`, `UI_EFE_Minutes`.
 
 `UI_EFE_Title`, `UI_EFE_RequireTrait`, `UI_EFE_RequireTrait_tooltip` et `UI_EFE_TooltipProvider` sont passés **en clé** (traduits par `MainOptions`) ; les autres sont traduits par `getText` à l'affichage. Messages console en anglais.
 
@@ -184,4 +176,4 @@ Table globale créée par `EFE_Core.lua` (`ErisFoodExpiry = ErisFoodExpiry or {}
 
 ## Points à confirmer
 
-- Affichage en jeu des corrections C04 à C12 (coupure du réseau, cuisson, mode approximatif, bande alignée en FR, DE et RU avec la police Large) : à vérifier en jeu.
+- Affichage en jeu des corrections C05 à C12 (cuisson, mode approximatif, bande alignée en FR, DE et RU avec la police Large) : à vérifier en jeu.

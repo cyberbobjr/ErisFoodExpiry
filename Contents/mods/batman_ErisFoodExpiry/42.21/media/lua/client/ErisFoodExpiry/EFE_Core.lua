@@ -9,12 +9,7 @@
 --     powered freezer freezes within 4 h, then stops aging.
 -- Stale at age >= offAge, rotten at age >= offAgeMax (instance values, which
 -- may differ from the item script after cooking or a recipe).
---
--- The engine uses two clocks for the grid shutoff: Food.updateAge compares
--- getWorldAgeHours() with ElecShutModifier * 24, while the real power cut
--- (SandboxOptions.doesPowerGridExist, ItemContainer.isPowered) compares
--- getWorldAgeDaysSinceBegin(), which adds (TimeSinceApo - 1) * 30 days. Aging
--- follows the first clock, freezing and thawing follow the second one.
+-- The day of the grid shutoff is never shown: the game keeps it hidden.
 -- ============================================================================
 
 ErisFoodExpiry = ErisFoodExpiry or {}
@@ -22,7 +17,6 @@ local EFE = ErisFoodExpiry
 
 EFE.NEVER = 1000000000 -- InventoryItem.offAge/offAgeMax default: never ages
 EFE.MAX_PARTS = 3
-EFE.NEVER_SHUT = 2147483647 -- ElecShutModifier of "Disabled" (SandboxOptions.randomElectricityShut)
 
 local HOURS_TO_FREEZE = 4.0 -- Food.updateFreezing
 local HOURS_TO_THAW = 1.5
@@ -107,35 +101,6 @@ local function agingDays(item, delta, startDays)
     return delta / rot
 end
 
--- Age gained per game day right now where the item is (Food.updateAge).
-local function agingRate(item)
-    local rot = EFE.rotSpeed()
-    local container = item:getOutermostContainer()
-    if not isCold(container) then return rot end
-    if EFE.generatorPowered(container) then return rot * EFE.fridgeFactor() end
-    local shutDays = sandboxValue("ElecShutModifier") or -1
-    if shutDays > -1 and getGameTime():getWorldAgeHours() / 24 < shutDays then
-        return rot * EFE.fridgeFactor()
-    end
-    return rot
-end
-
--- Game days until the grid shutoff stops the fridge or freezer the item is in
--- (SandboxOptions.doesPowerGridExist: world age in days since the start of the
--- apocalypse <= ElecShutModifier). nil when it is not running on grid power:
--- generator, no power, shutoff disabled.
-function EFE.powerCutDays(item)
-    local container = item:getOutermostContainer()
-    if not isCold(container) or EFE.generatorPowered(container) or not container:isPowered() then
-        return nil
-    end
-    local shut = sandboxValue("ElecShutModifier")
-    if shut == nil or shut < 0 or shut >= EFE.NEVER_SHUT then return nil end
-    local days = shut - getGameTime():getWorldAgeDaysSinceBegin()
-    if days < 0 then return nil end
-    return days
-end
-
 -- Game days until frozen food has thawed (Food.updateFreezing, 42.21): 1.5 h
 -- from fully frozen, twice as long in a powered fridge, six times faster in
 -- a container warmer than 1.0. nil while it stays frozen (powered freezer).
@@ -160,35 +125,20 @@ end
 
 -- Game days until the item's age reaches targetAge where it is now: frozen
 -- food does not age until it has thawed, freezing food stops aging once
--- frozen. In a freezer on grid power, frozen food thaws after the shutoff
--- (1.5 h in the unpowered freezer, which stays at 1.0), then ages again.
--- nil when it never gets there.
+-- frozen. nil when it never gets there.
 function EFE.daysUntil(item, targetAge)
     local delta = targetAge - item:getAge()
     if delta <= 0 then return 0 end
-    local cut = EFE.powerCutDays(item)
     local startDays = 0
     if item:isFrozen() then
         startDays = EFE.thawDays(item)
-        if startDays == nil then
-            if cut == nil then return nil end
-            startDays = cut + item:getFreezingTime() / 100 * HOURS_TO_THAW / 24
-        end
+        if startDays == nil then return nil end
     end
     local days = agingDays(item, delta, startDays)
+    if days == nil then return nil end
     local freeze = EFE.freezeDays(item)
-    if freeze == nil or (days ~= nil and days <= freeze) or (cut ~= nil and cut <= freeze) then
-        -- not freezing, target reached first, or power cut before it is frozen
-        if days == nil then return nil end
-        return startDays + days
-    end
-    if cut == nil then return nil end
-    -- ages until frozen, stays frozen until the shutoff, then thaws
-    local gained = freeze * agingRate(item)
-    local resume = cut + HOURS_TO_THAW / 24
-    local rest = agingDays(item, delta - gained, resume)
-    if rest == nil then return nil end
-    return resume + rest
+    if freeze and days > freeze then return nil end
+    return startDays + days
 end
 
 -- Game days until rotten food is removed from the map (sandbox Rotten Food

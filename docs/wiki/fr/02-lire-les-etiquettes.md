@@ -12,7 +12,6 @@ Survolez un aliment : le mod ajoute ses lignes en bas de l'infobulle.
 | **Décongelé dans** | Aliment congelé hors d'un congélateur en marche : temps avant décongélation. Voir [Réfrigérateur et congélation](03-frigo-et-congelation.md). |
 | **Congelé : ne s'abîme pas** | Aliment congelé dans un congélateur en marche. |
 | **Congelé dans** | Aliment qu'on vient de mettre dans un congélateur en marche : temps avant qu'il soit congelé (4 heures de jeu au plus). |
-| **Courant coupé dans** | Réfrigérateur ou congélateur sur le réseau électrique : temps avant que la coupure de l'électricité l'arrête. Voir [Réfrigérateur et congélation](03-frigo-et-congelation.md). |
 | **Cuisson : durées affichées une fois cuit** | Aliment en cours de cuisson : la cuisson peut changer ses durées (les marmites de riz ou de pâtes repartent de zéro), elles reviennent une fois l'aliment cuit. |
 | **Devient … dans** | Aliment qui se transforme en un autre objet au lieu de pourrir (la glace fond, le sirop de betterave devient du sucre). |
 | **Fécondé : ne se périme pas** | Œuf fécondé : le jeu le garde frais. |

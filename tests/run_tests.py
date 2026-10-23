@@ -18,8 +18,7 @@ STUBS = r"""
 -- Writing SANDBOX moves the millisecond clock, as an option change would
 -- happen in a later frame (the mod caches sandbox values per millisecond).
 STAMP = 0
-SANDBOX_VALUES = { FoodRotSpeed = 3, FridgeFactor = 3, ElecShutModifier = 14, DaysForRottenFoodRemoval = -1,
-                   TimeSinceApo = 1 }
+SANDBOX_VALUES = { FoodRotSpeed = 3, FridgeFactor = 3, ElecShutModifier = 14, DaysForRottenFoodRemoval = -1 }
 SANDBOX = setmetatable({}, {
     __index = SANDBOX_VALUES,
     __newindex = function(_, k, v) SANDBOX_VALUES[k] = v; STAMP = STAMP + 1 end,
@@ -38,11 +37,7 @@ function getSandboxOptions()
         getElecShutModifier = function() return SANDBOX.ElecShutModifier end,
     }
 end
--- GameTime.getWorldAgeDaysSinceBegin counts (TimeSinceApo - 1) * 30 days more
-function getGameTime() return {
-    getWorldAgeHours = function() return WORLD_HOURS end,
-    getWorldAgeDaysSinceBegin = function() return WORLD_HOURS / 24 + (SANDBOX.TimeSinceApo - 1) * 30 end,
-} end
+function getGameTime() return { getWorldAgeHours = function() return WORLD_HOURS end } end
 function getTextManager() return { MeasureStringX = function(_, font, text) return #text * 7 end } end
 function getText(key, arg)
     if arg ~= nil then return key .. "(" .. tostring(arg) .. ")" end
@@ -210,40 +205,19 @@ def lua_checks() -> list[str]:
                 "container=makeContainer('freezer', true, true)}")
     if days("frozen", "3") is not None or ev("ErisFoodExpiry.thawDays(frozen)") is not None:
         failed.append("frozen food in a generator freezer must not spoil nor thaw")
-    if ev("ErisFoodExpiry.powerCutDays(frozen)") is not None:
-        failed.append("generator freezer: no grid shutoff countdown")
 
-    # C04: freezer on grid power, world day 1, shutoff day 14: stays frozen 13 days,
-    # thaws 1.5 h in the unpowered freezer, then ages (aging clock past day 14: normal)
+    # freezer on grid power: stays frozen, the shutoff day is never anticipated
     lua.execute("gridFrozen = makeFood{age=1, offAge=3, offAgeMax=5, frozen=true, "
                 "container=makeContainer('freezer', false, true)}")
-    if not approx(ev("ErisFoodExpiry.powerCutDays(gridFrozen)"), 13):
-        failed.append("grid freezer: power cut in 13 days expected")
-    if not approx(days("gridFrozen", "3"), 13 + 1.5 / 24 + 2):
-        failed.append("grid freezer: frozen until the shutoff, thaw, then normal speed expected")
-    # TimeSinceApo 2: real cut 30 days earlier than the aging clock (two engine clocks)
-    lua.execute("SANDBOX.TimeSinceApo = 2; SANDBOX.ElecShutModifier = 40")
-    if not approx(ev("ErisFoodExpiry.powerCutDays(gridFrozen)"), 9):
-        failed.append("TimeSinceApo 2: power cut counted from the start of the apocalypse")
-    if not approx(days("gridFrozen", "3"), 9 + 1.5 / 24 + 2 / 0.2):
-        failed.append("TimeSinceApo 2: aging keeps the fridge factor after the real cut")
-    lua.execute("SANDBOX.TimeSinceApo = 1; SANDBOX.ElecShutModifier = 2147483647")
-    if ev("ErisFoodExpiry.powerCutDays(gridFrozen)") is not None or days("gridFrozen", "3") is not None:
-        failed.append("shutoff disabled: no countdown, stays frozen")
-    lua.execute("SANDBOX.ElecShutModifier = 14")
-    # freezing on grid power: 4 h at the fridge factor, frozen until the shutoff, thaw, aging
+    if days("gridFrozen", "3") is not None:
+        failed.append("grid freezer: frozen food must not show a time based on the shutoff day")
     lua.execute("gridFreezing = makeFood{age=1, offAge=3, offAgeMax=5, "
                 "container=makeContainer('freezer', false, true)}")
-    if not approx(days("gridFreezing", "3"), 13 + 1.5 / 24 + (2 - 4 / 24 * 0.2)):
-        failed.append("grid freezer, freezing food: aging resumes after the shutoff")
-    # shutoff in 0.1 day, before the food is frozen: it simply keeps aging
-    lua.execute("WORLD_HOURS = 24 * 13.9")
-    if not approx(days("gridFreezing", "3"), 0.1 + (2 - 0.1 * 0.2)):
-        failed.append("power cut before frozen: aging across the shutoff expected")
-    lua.execute("WORLD_HOURS = 24")
-    lua.execute("unpoweredFridge = makeFood{age=1, offAge=3, offAgeMax=5, container=makeContainer('fridge', false, false)}")
-    if ev("ErisFoodExpiry.powerCutDays(unpoweredFridge)") is not None:
-        failed.append("unpowered fridge: no power cut countdown")
+    if days("gridFreezing", "3") is not None:
+        failed.append("grid freezer: freezing food stops aging once frozen")
+    if ev("ErisFoodExpiry.powerCutDays") is not None:
+        failed.append("the shutoff day must stay hidden (no powerCutDays)")
+
     # thawing: 1.5 h from fully frozen, x2 in a powered fridge, /6 when warm
     lua.execute("thawing = makeFood{age=1, offAge=3, offAgeMax=5, frozen=true, freezingTime=50}")
     if not approx(ev("ErisFoodExpiry.thawDays(thawing)"), 0.75 / 24):
@@ -410,18 +384,14 @@ def lua_checks() -> list[str]:
                  "container=makeContainer('freezer', true, true)})")
         if out != "P:UI_EFE_Freshness=0.60|L:UI_EFE_Frozen":
             failed.append(f"frozen tooltip: {out}")
-        # C04: grid freezer, shutoff in 13 days
+        # grid freezer: no shutoff day, same lines as on a generator
         out = ev("runTooltip(makeFood{age=2, offAge=3, offAgeMax=5, frozen=true, packaged=true, "
                  "container=makeContainer('freezer', false, true)})")
-        expected = ("P:UI_EFE_Freshness=0.60|L:UI_EFE_Frozen|KV:UI_EFE_PowerCutIn=1 UI_EFE_Weeks 6 UI_EFE_Days"
-                    "|KV:UI_EFE_StaleIn=2 UI_EFE_Weeks 1 UI_EFE_Hours 30 UI_EFE_Minutes"
-                    "|KV:UI_EFE_RottenIn=2 UI_EFE_Weeks 2 UI_EFE_Days 1 UI_EFE_Hours")
-        if out != expected:
+        if out != "P:UI_EFE_Freshness=0.60|L:UI_EFE_Frozen":
             failed.append(f"grid freezer tooltip: {out}")
         out = ev("runTooltip(makeFood{age=1, offAge=3, offAgeMax=5, packaged=true, "
                  "container=makeContainer('fridge', false, true)})")
-        expected = ("P:UI_EFE_Freshness=0.80|KV:UI_EFE_PowerCutIn=1 UI_EFE_Weeks 6 UI_EFE_Days"
-                    "|KV:UI_EFE_StaleIn=1 UI_EFE_Weeks 3 UI_EFE_Days"
+        expected = ("P:UI_EFE_Freshness=0.80|KV:UI_EFE_StaleIn=1 UI_EFE_Weeks 3 UI_EFE_Days"
                     "|KV:UI_EFE_RottenIn=2 UI_EFE_Weeks 9 UI_EFE_Hours 36 UI_EFE_Minutes")
         if out != expected:
             failed.append(f"grid fridge tooltip: {out}")
