@@ -12,6 +12,8 @@ Hover any food item: the mod adds its lines at the bottom of the tooltip.
 | **Thawed in** | Frozen food outside a running freezer: time before it has thawed. See [Fridge and freezing](03-fridge-and-freezing.md). |
 | **Frozen: not spoiling** | Frozen food in a running freezer. |
 | **Frozen in** | Food just put in a running freezer: time before it is frozen (4 in-game hours at most). |
+| **Power cut in** | Fridge or freezer running on grid power: time before the electricity shutoff stops it. See [Fridge and freezing](03-fridge-and-freezing.md). |
+| **Cooking: times shown once cooked** | Food being cooked: cooking can change its times (rice and pasta pots start over), so they come back once it is cooked. |
 | **Turns into … in** | Food that becomes another item instead of rotting (ice cream melts, sugar beet syrup turns into sugar). |
 | **Fertilized: does not expire** | Fertilized egg: the game keeps it fresh. |
 | **Not spoiling here** | The food does not age where it is (powered fridge with the sandbox Refrigeration Effectiveness set to no decay). |
@@ -28,10 +30,10 @@ The time left is projected the way the game ages food: sandbox *Food Spoilage* s
 
 ## Rough state
 
-If the [option](04-options.md) "Exact times need Nutritionist" is on and your character cannot read the exact times, the bar stays and one line gives a rough state: **Very fresh**, **Fresh**, **Looks okay**, **Starting to rot**, **Almost rotten** or **Rotten**.
+If the [option](04-options.md) "Exact times need Nutritionist" is on and your character cannot read the exact times, the bar stays, rounded to a third, and one line gives a rough state: **Very fresh**, **Fresh**, **Looks okay**, **Starting to rot**, **Almost rotten** or **Rotten**. A second line, without a time, tells what happens to the food where it is: **Frozen: not spoiling**, **Thawing**, **Freezing**, **Cooking**, **Not spoiling here**, or **Will disappear** for rotten food the game will delete. The inventory strip then shows only the colour.
 
 ## Inventory strip
 
-Expand a stack in the inventory or in a container: each food that can spoil gets a thin strip at the bottom of its row, with the same colours as the freshness bar. The vanilla detail line stays visible.
+Expand a stack in the inventory or in a container: each food that can spoil gets a thin strip at the bottom of its row, with the same colours as the freshness bar, from the vanilla detail label to the end of the vanilla bar. The vanilla detail line stays visible.
 
 > Capture à faire : expanded food stack in the inventory with green, orange and red strips.

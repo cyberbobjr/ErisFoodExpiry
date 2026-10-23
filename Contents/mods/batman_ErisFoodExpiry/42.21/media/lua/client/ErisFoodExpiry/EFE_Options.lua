@@ -1,5 +1,5 @@
 -- ============================================================================
--- Eris Food Expiry (batman fork) — mod options
+-- Food Expiry — mod options
 -- Names and tooltips are translation keys: MainOptions translates them.
 -- ============================================================================
 

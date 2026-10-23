@@ -15,11 +15,22 @@ sys.path.insert(0, str(ROOT.parent / ".claude" / "tools"))
 
 # Minimal doubles of the Java API used by the mod (42.21 names and semantics).
 STUBS = r"""
-SANDBOX = { FoodRotSpeed = 3, FridgeFactor = 3, ElecShutModifier = 14, DaysForRottenFoodRemoval = -1 }
+-- Writing SANDBOX moves the millisecond clock, as an option change would
+-- happen in a later frame (the mod caches sandbox values per millisecond).
+STAMP = 0
+SANDBOX_VALUES = { FoodRotSpeed = 3, FridgeFactor = 3, ElecShutModifier = 14, DaysForRottenFoodRemoval = -1,
+                   TimeSinceApo = 1 }
+SANDBOX = setmetatable({}, {
+    __index = SANDBOX_VALUES,
+    __newindex = function(_, k, v) SANDBOX_VALUES[k] = v; STAMP = STAMP + 1 end,
+})
+function getTimestampMs() return STAMP end
+OPTION_READS = 0
 WORLD_HOURS = 24
 function getSandboxOptions()
     return {
         getOptionByName = function(_, name)
+            OPTION_READS = OPTION_READS + 1
             local v = SANDBOX[name]
             if v == nil then return nil end
             return { getValue = function() return v end }
@@ -27,7 +38,12 @@ function getSandboxOptions()
         getElecShutModifier = function() return SANDBOX.ElecShutModifier end,
     }
 end
-function getGameTime() return { getWorldAgeHours = function() return WORLD_HOURS end } end
+-- GameTime.getWorldAgeDaysSinceBegin counts (TimeSinceApo - 1) * 30 days more
+function getGameTime() return {
+    getWorldAgeHours = function() return WORLD_HOURS end,
+    getWorldAgeDaysSinceBegin = function() return WORLD_HOURS / 24 + (SANDBOX.TimeSinceApo - 1) * 30 end,
+} end
+function getTextManager() return { MeasureStringX = function(_, font, text) return #text * 7 end } end
 function getText(key, arg)
     if arg ~= nil then return key .. "(" .. tostring(arg) .. ")" end
     return key
@@ -100,6 +116,16 @@ function makeFood(t)
     function f:getModule() return t.module or "Base" end
     function f:getOutermostContainer() return t.container end
     function f:getModData() return t.modData or {} end
+    -- cooking (Food.update, ISInventoryPane.drawItemDetails)
+    function f:isIsCookable() return t.cookable == true end
+    function f:getHeat() return t.heat or 1.0 end
+    function f:isCooked() return t.cooked == true end
+    function f:isBurnt() return t.burnt == true end
+    function f:getCookingTime() return t.cookingTime or 0 end
+    function f:getMinutesToCook() return t.minutesToCook or 60 end
+    function f:getMinutesToBurn() return t.minutesToBurn or 120 end
+    function f:getMeltingTime() return 0 end
+    function f:getHungerChange() return t.hunger or 0 end
     return f
 end
 function makeChar(traits, dark)
@@ -181,9 +207,43 @@ def lua_checks() -> list[str]:
     lua.execute("SANDBOX.ElecShutModifier = 14")
 
     lua.execute("frozen = makeFood{age=1, offAge=3, offAgeMax=5, frozen=true, "
-                "container=makeContainer('freezer', false, true)}")
+                "container=makeContainer('freezer', true, true)}")
     if days("frozen", "3") is not None or ev("ErisFoodExpiry.thawDays(frozen)") is not None:
-        failed.append("frozen food in a powered freezer must not spoil nor thaw")
+        failed.append("frozen food in a generator freezer must not spoil nor thaw")
+    if ev("ErisFoodExpiry.powerCutDays(frozen)") is not None:
+        failed.append("generator freezer: no grid shutoff countdown")
+
+    # C04: freezer on grid power, world day 1, shutoff day 14: stays frozen 13 days,
+    # thaws 1.5 h in the unpowered freezer, then ages (aging clock past day 14: normal)
+    lua.execute("gridFrozen = makeFood{age=1, offAge=3, offAgeMax=5, frozen=true, "
+                "container=makeContainer('freezer', false, true)}")
+    if not approx(ev("ErisFoodExpiry.powerCutDays(gridFrozen)"), 13):
+        failed.append("grid freezer: power cut in 13 days expected")
+    if not approx(days("gridFrozen", "3"), 13 + 1.5 / 24 + 2):
+        failed.append("grid freezer: frozen until the shutoff, thaw, then normal speed expected")
+    # TimeSinceApo 2: real cut 30 days earlier than the aging clock (two engine clocks)
+    lua.execute("SANDBOX.TimeSinceApo = 2; SANDBOX.ElecShutModifier = 40")
+    if not approx(ev("ErisFoodExpiry.powerCutDays(gridFrozen)"), 9):
+        failed.append("TimeSinceApo 2: power cut counted from the start of the apocalypse")
+    if not approx(days("gridFrozen", "3"), 9 + 1.5 / 24 + 2 / 0.2):
+        failed.append("TimeSinceApo 2: aging keeps the fridge factor after the real cut")
+    lua.execute("SANDBOX.TimeSinceApo = 1; SANDBOX.ElecShutModifier = 2147483647")
+    if ev("ErisFoodExpiry.powerCutDays(gridFrozen)") is not None or days("gridFrozen", "3") is not None:
+        failed.append("shutoff disabled: no countdown, stays frozen")
+    lua.execute("SANDBOX.ElecShutModifier = 14")
+    # freezing on grid power: 4 h at the fridge factor, frozen until the shutoff, thaw, aging
+    lua.execute("gridFreezing = makeFood{age=1, offAge=3, offAgeMax=5, "
+                "container=makeContainer('freezer', false, true)}")
+    if not approx(days("gridFreezing", "3"), 13 + 1.5 / 24 + (2 - 4 / 24 * 0.2)):
+        failed.append("grid freezer, freezing food: aging resumes after the shutoff")
+    # shutoff in 0.1 day, before the food is frozen: it simply keeps aging
+    lua.execute("WORLD_HOURS = 24 * 13.9")
+    if not approx(days("gridFreezing", "3"), 0.1 + (2 - 0.1 * 0.2)):
+        failed.append("power cut before frozen: aging across the shutoff expected")
+    lua.execute("WORLD_HOURS = 24")
+    lua.execute("unpoweredFridge = makeFood{age=1, offAge=3, offAgeMax=5, container=makeContainer('fridge', false, false)}")
+    if ev("ErisFoodExpiry.powerCutDays(unpoweredFridge)") is not None:
+        failed.append("unpowered fridge: no power cut countdown")
     # thawing: 1.5 h from fully frozen, x2 in a powered fridge, /6 when warm
     lua.execute("thawing = makeFood{age=1, offAge=3, offAgeMax=5, frozen=true, freezingTime=50}")
     if not approx(ev("ErisFoodExpiry.thawDays(thawing)"), 0.75 / 24):
@@ -307,13 +367,80 @@ def lua_checks() -> list[str]:
         if out != "L:UI_EFE_NeverPerish":
             failed.append(f"never perish: {out}")
         lua.execute('ErisFoodExpiry.options:getOption("RequireTrait").value = true')
+        # C05: freshness rounded up to a third without the exact times
         out = ev("runTooltip(plain)")
-        if out != "P:UI_EFE_Freshness=0.80|L:UI_EFE_StateFresh":
+        if out != "P:UI_EFE_Freshness=1.00|L:UI_EFE_StateFresh":
             failed.append(f"rough state: {out}")
+        out = ev("runTooltip(makeFood{age=3, offAge=3, offAgeMax=5})")
+        if out != "P:UI_EFE_Freshness=0.67|L:UI_EFE_StateRotting":
+            failed.append(f"rough state, stale: {out}")
+        # C06 / C09: what happens to the food, without a time
+        rough_conditions = {
+            "makeFood{age=1, offAge=3, offAgeMax=5, frozen=true, container=makeContainer('freezer', true, true)}":
+                "L:UI_EFE_Frozen",
+            "makeFood{age=1, offAge=3, offAgeMax=5, frozen=true, freezingTime=50}": "L:UI_EFE_Thawing",
+            "makeFood{age=1, offAge=3, offAgeMax=5, container=makeContainer('freezer', true, true)}":
+                "L:UI_EFE_Freezing",
+            "makeFood{age=1, offAge=3, offAgeMax=5, cookable=true, heat=2.0}": "L:UI_EFE_Cooking",
+        }
+        for food, line in rough_conditions.items():
+            out = ev(f"runTooltip({food})")
+            if out != "P:UI_EFE_Freshness=1.00|L:UI_EFE_StateFresh|" + line:
+                failed.append(f"rough condition {line}: {out}")
+        lua.execute("SANDBOX.FridgeFactor = 6")
+        out = ev("runTooltip(makeFood{age=1, offAge=3, offAgeMax=5, container=makeContainer('fridge', true, true)})")
+        if out != "P:UI_EFE_Freshness=1.00|L:UI_EFE_StateFresh|L:UI_EFE_Paused":
+            failed.append(f"rough condition paused: {out}")
+        lua.execute("SANDBOX.FridgeFactor = 3")
+        # C12: unknown character (no tooltip character) cannot read the package
+        lua.execute(r"""
+        function runTooltipNoChar(item)
+            local lines = {}
+            local ctx = { item = item, tooltip = { getCharacter = function() return nil end } }
+            function ctx:addLabel(t) lines[#lines + 1] = "L:" .. t end
+            function ctx:addKeyValue(k, v) lines[#lines + 1] = "KV:" .. k .. "=" .. v end
+            function ctx:addProgress(l, f) lines[#lines + 1] = "P:" .. l .. "=" .. string.format("%.2f", f) end
+            PROVIDERS[1].callback(ctx)
+            return table.concat(lines, "|")
+        end""")
+        out = ev("runTooltipNoChar(pack)")
+        if out != "P:UI_EFE_Freshness=1.00|L:UI_EFE_StateFresh":
+            failed.append(f"unknown character: rough state expected, {out}")
         out = ev("runTooltip(makeFood{age=2, offAge=3, offAgeMax=5, frozen=true, packaged=true, "
-                 "container=makeContainer('freezer', false, true)})")
+                 "container=makeContainer('freezer', true, true)})")
         if out != "P:UI_EFE_Freshness=0.60|L:UI_EFE_Frozen":
             failed.append(f"frozen tooltip: {out}")
+        # C04: grid freezer, shutoff in 13 days
+        out = ev("runTooltip(makeFood{age=2, offAge=3, offAgeMax=5, frozen=true, packaged=true, "
+                 "container=makeContainer('freezer', false, true)})")
+        expected = ("P:UI_EFE_Freshness=0.60|L:UI_EFE_Frozen|KV:UI_EFE_PowerCutIn=1 UI_EFE_Weeks 6 UI_EFE_Days"
+                    "|KV:UI_EFE_StaleIn=2 UI_EFE_Weeks 1 UI_EFE_Hours 30 UI_EFE_Minutes"
+                    "|KV:UI_EFE_RottenIn=2 UI_EFE_Weeks 2 UI_EFE_Days 1 UI_EFE_Hours")
+        if out != expected:
+            failed.append(f"grid freezer tooltip: {out}")
+        out = ev("runTooltip(makeFood{age=1, offAge=3, offAgeMax=5, packaged=true, "
+                 "container=makeContainer('fridge', false, true)})")
+        expected = ("P:UI_EFE_Freshness=0.80|KV:UI_EFE_PowerCutIn=1 UI_EFE_Weeks 6 UI_EFE_Days"
+                    "|KV:UI_EFE_StaleIn=1 UI_EFE_Weeks 3 UI_EFE_Days"
+                    "|KV:UI_EFE_RottenIn=2 UI_EFE_Weeks 9 UI_EFE_Hours 36 UI_EFE_Minutes")
+        if out != expected:
+            failed.append(f"grid fridge tooltip: {out}")
+        # C09: cooking replaces the times
+        out = ev("runTooltip(makeFood{age=1, offAge=3, offAgeMax=5, packaged=true, cookable=true, heat=2.0})")
+        if out != "P:UI_EFE_Freshness=0.80|L:UI_EFE_Cooking":
+            failed.append(f"cooking tooltip: {out}")
+        out = ev("runTooltip(makeFood{age=1, offAge=3, offAgeMax=5, packaged=true, cookable=true, heat=2.0, "
+                 "cooked=true})")
+        if not out.startswith("P:UI_EFE_Freshness=0.80|KV:UI_EFE_StaleIn="):
+            failed.append(f"cooked food keeps its times: {out}")
+        # C11: one read per sandbox option in a tooltip drawn in the same millisecond
+        lua.execute("OPTION_READS = 0; STAMP = STAMP + 1")
+        ev("runTooltip(makeFood{age=6, offAge=3, offAgeMax=5, packaged=true, "
+           "container=makeContainer('fridge', false, true)})")
+        ev("runTooltip(makeFood{age=1, offAge=3, offAgeMax=5, packaged=true, "
+           "container=makeContainer('fridge', false, true)})")
+        if ev("OPTION_READS") > 4:
+            failed.append(f"sandbox options read {ev('OPTION_READS')} times in one millisecond")
         out = ev("runTooltip(makeFood{age=2, offAge=3, offAgeMax=5, frozen=true, packaged=true})")
         if out != ("P:UI_EFE_Freshness=0.60|KV:UI_EFE_ThawedIn=1 UI_EFE_Hours 30 UI_EFE_Minutes"
                    "|KV:UI_EFE_StaleIn=1 UI_EFE_Days 1 UI_EFE_Hours 30 UI_EFE_Minutes"
@@ -321,7 +448,7 @@ def lua_checks() -> list[str]:
             failed.append(f"thawing tooltip: {out}")
         lua.execute("SANDBOX.DaysForRottenFoodRemoval = 3")
         out = ev("runTooltip(makeFood{age=6, offAge=3, offAgeMax=5})")
-        if out != "P:UI_EFE_Freshness=0.00|L:UI_EFE_StateRotten|KV:UI_EFE_RemovedIn=2 UI_EFE_Days":
+        if out != "P:UI_EFE_Freshness=0.00|L:UI_EFE_StateRotten|L:UI_EFE_RemovedSoon":
             failed.append(f"rotten tooltip (rough state): {out}")
         lua.execute('ErisFoodExpiry.options:getOption("RequireTrait").value = false')
         out = ev("runTooltip(makeFood{age=6, offAge=3, offAgeMax=5})")
@@ -349,14 +476,28 @@ def lua_checks() -> list[str]:
 
     # Inventory strip keeps the vanilla line and draws two rectangles
     lua.execute(r"""
-        RECTS = 0
-        pane = { headerHgt = 16, itemHgt = 18, getProgressBarWidth = function() return 200 end,
-                 drawRect = function() RECTS = RECTS + 1 end }
+        RECTS = {}
+        pane = { headerHgt = 16, itemHgt = 18, player = 0, getProgressBarWidth = function() return 200 end,
+                 drawRect = function(_, x, y, w) RECTS[#RECTS + 1] = { x = x, w = w } end }
         ISInventoryPane.drawItemDetails(pane, plain, 0, 0, 0, false)
         ISInventoryPane.drawItemDetails(pane, { _class = "Clothing" }, 0, 0, 0, false)
         ISInventoryPane.drawItemDetails(pane, makeFood{age=1, offAge=3, offAgeMax=5, fertilized=true}, 0, 0, 0, false)""")
-    if ev("#DRAWN") != 3 or ev("RECTS") != 2:
+    if ev("#DRAWN") != 3 or ev("#RECTS") != 2:
         failed.append("inventory strip: vanilla line kept, strip on aging food only (not fertilized eggs)")
+    # C07: strip from the vanilla label to the end of the vanilla bar (label column >= 120,
+    # wider for a long label: here 24 characters x 7 px)
+    if ev("RECTS[1].x") != 70 or ev("RECTS[1].w + RECTS[2].w") != 120 - 30 + 200:
+        failed.append("inventory strip without a vanilla bar: default column expected")
+    lua.execute("RECTS = {}; ISInventoryPane.drawItemDetails(pane, makeFood{age=1, offAge=3, offAgeMax=5, "
+                "hunger=-0.2}, 0, 0, 0, false)")
+    if ev("RECTS[1].w + RECTS[2].w") != (30 + 24 * 7 + 20) - 30 + 200:
+        failed.append("inventory strip: must end with the vanilla Nutrition bar")
+    # C05: without the exact times, the strip shows only the colour of the state
+    lua.execute('ErisFoodExpiry.options:getOption("RequireTrait").value = true')
+    lua.execute("RECTS = {}; ISInventoryPane.drawItemDetails(pane, plain, 0, 0, 0, false)")
+    if ev("RECTS[1].w") != 290 or ev("RECTS[2].w") != 0:
+        failed.append("inventory strip (rough): full colour strip expected")
+    lua.execute('ErisFoodExpiry.options:getOption("RequireTrait").value = false')
     print("Lua checks done")
     return failed
 

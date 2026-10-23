@@ -1,4 +1,4 @@
-name=batman_Eris Food Expiry (TooltipLib fork)
+name=Food Expiry
 id=batman_ErisFoodExpiry
 description=Fork of eris food expiry (Workshop 3392259028 and 3629527156) for Build 42.21: food spoilage times in the item tooltip through TooltipLib, projected like the game ages food (sandbox rot speed, fridge factor, generator or grid power until shutoff, frozen food). Freshness strip in the expanded inventory list. Display only, safe in multiplayer. Do not enable with eris_food_expiry.
 poster=poster.png

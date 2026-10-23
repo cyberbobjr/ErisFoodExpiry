@@ -63,7 +63,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   - `ItemContainer.java:2218-2220`, `:2280-2281`.
 - **Risque** : information trompeuse juste avant la coupure, qui est justement le moment où le joueur en a besoin.
 - **Correction** : avec un courant du réseau seulement (pas de générateur, `doesPowerGridExist()` vrai), ajouter « Courant coupé dans X ». Calculer X depuis `ElecShutModifier - getWorldAgeDaysSinceBegin()`, la même formule que la coupure réelle, puis donner la durée de décongélation et le temps restant ensuite. Garder la formule de `Food.updateAge` pour la vitesse de vieillissement, et écrire dans un commentaire que le moteur utilise deux horloges différentes. Voir aussi I01.
-- **Statut** : écart des deux horloges confirmé statiquement ; affichage final à vérifier en jeu avec `TimeSinceApo = 2`.
+- **Statut : corrigé, à vérifier en jeu** (confirmé statiquement : ligne « Courant coupé dans » d'après `getWorldAgeDaysSinceBegin`, congélateur sur le réseau projeté jusqu'à la coupure puis 1,5 h de dégel, vieillissement sur l'horloge de `Food.updateAge`, deux horloges commentées dans `EFE_Core.lua` ; « Disabled » = `2147483647` sans ligne ; tests lupa avec `TimeSinceApo = 2`). Affichage à contrôler en jeu avec `TimeSinceApo = 2`. La ligne révèle le jour de coupure tiré au hasard, que la projection laissait déjà deviner.
 - **Priorité** : moyenne. **Effort** : M.
 
 ### C05 : le mode « durées exactes avec Nutritionniste » laisse passer des valeurs exactes
@@ -77,7 +77,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   - `tests/run_tests.py:256-259`.
 - **Risque** : incohérence de jeu. L'option perd une partie de son sens.
 - **Correction** : à décider par l'utilisateur. Une piste : en mode approximatif, arrondir la barre au tiers (1/3, 2/3, 1), qui correspond aux seuils de `stateKey`. Pour la bande de l'inventaire, n'afficher que la couleur. « Disparaît dans » pourrait devenir « Va bientôt disparaître ».
-- **Statut** : confirmé statiquement.
+- **Statut : corrigé, à vérifier en jeu** (options appliquées : barre arrondie au tiers supérieur, bande d'inventaire entièrement de la couleur du stade, « Va disparaître » sans durée ; tests lupa).
 - **Priorité** : basse (choix de conception). **Effort** : S.
 
 ### C06 : le mode approximatif masque l'état congelé, en pause ou en décongélation
@@ -85,7 +85,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Preuve** : `EFE_Tooltip.lua:44-48`, puis `:49-56` et `:64-66`, jamais atteintes dans ce mode.
 - **Risque** : information de jeu perdue. Le vanilla montre pourtant la barre de congélation à tout le monde.
 - **Correction** : afficher « Congelé », « Décongèle » ou « Ne s'abîme pas ici » avant de sortir, sans durée.
-- **Statut** : confirmé statiquement.
+- **Statut : corrigé, à vérifier en jeu** (`EFE.conditionKey` : « Congelé : ne s'abîme pas », « Décongélation en cours », « Congélation en cours », « Cuisson… », « Ne s'abîme pas ici » après l'état approximatif ; tests lupa).
 - **Priorité** : basse. **Effort** : S.
 
 ### C07 : la bande de l'inventaire se décale par rapport à la barre vanilla
@@ -93,7 +93,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Preuve** : `EFE_InventoryBar.lua:25-27` ; `ISInventoryPane.lua:2640-2643`, `:2615-2617`, `:2682-2688`.
 - **Risque** : défaut visuel qui dépend de la langue et de la police.
 - **Correction** : recalculer le décalage du libellé vanilla de la même branche. Plus simple et plus stable : tracer la bande sur une largeur fixe depuis `40 + 30 + xoff` jusqu'à `self.column3 - 8`, sans chercher à s'aligner sur la barre.
-- **Statut** : décalage confirmé statiquement ; rendu à vérifier en jeu en FR, DE et RU, police Large.
+- **Statut : corrigé, à vérifier en jeu** (libellé de la barre vanilla recalculé dans la même branche que `drawItemDetails`, bande jusqu'à la fin de la barre ; rendu à contrôler en FR, DE et RU, police Large).
 - **Priorité** : basse. **Effort** : S.
 
 ### C08 : `formatDays` peut associer des unités éloignées et donne une fausse précision
@@ -114,7 +114,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Preuve** : `Food.java:353-410`, notamment `:403-407` et `:375-397`.
 - **Risque** : faible, mais la durée affichée est trompeuse quelques minutes.
 - **Correction** : quand `isCookable() and getHeat() > 1.6 and not isCooked()`, remplacer les durées par « En cuisson » (voir I12 pour un compte à rebours).
-- **Statut** : confirmé statiquement.
+- **Statut : corrigé, à vérifier en jeu** (`EFE.isCooking` = test de la barre vanilla « Cuisson », ni cuit ni brûlé : « Cuisson : durées affichées une fois cuit » à la place des durées).
 - **Priorité** : basse. **Effort** : S.
 
 ### C10 : générateur vu par un client multijoueur
@@ -122,7 +122,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Preuve** : `EFE_Core.lua:51-55` ; `IsoGridSquare.java:8223-8228`.
 - **Risque** : MP, durée fausse dans un cas limite. Aucun risque pour l'autorité serveur, puisque le mod n'envoie rien.
 - **Correction** : aucune avant observation. Test proposé : client MP, frigo branché sur un générateur posé pendant la session, comparer l'infobulle avant et après reconnexion.
-- **Statut** : à vérifier en jeu.
+- **Statut : corrigé statiquement, à vérifier en jeu** (test unique `EFE.generatorPowered` = `haveElectricity`, seul courant local lu par `Food.updateAge` ; le client reçoit les positions de générateur à chaque synchronisation, `IsoGenerator.java:550-567`, et les mods comme Live Wire les inscrivent aussi chez les clients par `addGeneratorPos` ; un courant que le moteur ne voit pas ne ralentit pas non plus le vieillissement réel). Test MP proposé inchangé : générateur posé pendant la session, infobulle avant et après reconnexion.
 - **Priorité** : basse. **Effort** : S (test).
 
 ### C11 : calculs répétés à chaque passe de rendu
@@ -136,7 +136,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   - calculer `stage` une fois par appel ;
   - mémoriser les valeurs sandbox le temps d'un appel, sans cache durable : une option sandbox peut changer en cours de partie en MP (`load-warnings.md`) ;
   - en option, `cacheable = true, maxAge = 30` dans `registerProvider`, avec `cacheKey` = `getAge()` arrondi et l'identifiant du conteneur.
-- **Statut** : confirmé statiquement.
+- **Statut : corrigé** (options sandbox mémorisées le temps d'une milliseconde, `getTimestampMs`, sans cache durable ; `stage` calculé une fois par appel et passé à `stateKey` ; test lupa du nombre de lectures). Le cache TooltipLib (`cacheable`) n'est pas utilisé.
 - **Priorité** : basse. **Effort** : S.
 
 ### C12 : repli `getSpecificPlayer(0)` en écran partagé
@@ -144,7 +144,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Preuve** : `EFE_Tooltip.lua:43`.
 - **Risque** : faible, seulement en écran partagé.
 - **Correction** : si le personnage est inconnu, considérer que la durée n'est pas lisible (le même choix que `canReadExact(…, nil, true)`) plutôt que de supposer le joueur 0.
-- **Statut** : confirmé statiquement ; fréquence du cas `getCharacter() == nil` à vérifier en jeu.
+- **Statut : corrigé** (aucun repli `getSpecificPlayer(0)` : personnage inconnu = durées non lisibles si l'option est active ; test lupa).
 - **Priorité** : basse. **Effort** : S.
 
 ### C13 : version minimale de TooltipLib non contrôlée
@@ -176,7 +176,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
   - ajouter `globals = { "ErisFoodExpiry", "ISInventoryPane" }` ;
   - lister en `read_globals` les quelques API utilisées (`getText`, `getSandboxOptions`, `getGameTime`, `instanceof`, `getSpecificPlayer`, `CharacterTrait`, `PZAPI`, `TooltipLib`) ;
   - retirer la mention de MTIR.
-- **Statut** : confirmé statiquement.
+- **Statut : corrigé** (globales contrôlées : `globals` et `read_globals` du mod, contrôle désactivé pour `autotest/**` ; mention de MTIR et `source/**` retirées ; une globale inconnue est signalée `W113`).
 - **Priorité** : basse. **Effort** : S.
 
 ### C16 : noms affichés hétérogènes
@@ -188,7 +188,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Preuve** : `mod.info:1` ; `workshop.txt:3` ; `Translate/*/UI.json` (`UI_EFE_Title`).
 - **Risque** : le joueur cherche le mod sous plusieurs noms dans le menu Mods et dans Options > Mods.
 - **Correction** : choisir un seul nom (par exemple « Food Expiry ») pour `UI_EFE_Title` dans les dix langues et pour `name=`, en gardant `id` inchangé.
-- **Statut** : confirmé statiquement.
+- **Statut : corrigé** (`name=Food Expiry` et `UI_EFE_Title` = « Food Expiry » dans les dix langues ; `id` inchangé).
 - **Priorité** : basse. **Effort** : S.
 
 ### C17 : descriptions Workshop et langues manquantes
@@ -209,7 +209,7 @@ Légende du statut : **confirmé statiquement** (lecture du code du mod et du Ja
 - **Preuve** : arborescence du mod ; `README.steam:7`, `:30`, `:44-46`, `:58` ; `tests/run_tests.py:306-309`, qui détecte une image absente.
 - **Risque** : maintenance et publication.
 - **Correction** : créer `common/` vide (avec un `.gitkeep`, git ne suit pas les dossiers vides). Garder `docs/steam/` à ce chemin, ou mettre à jour toutes les descriptions et republier dans la même opération.
-- **Statut** : confirmé statiquement.
+- **Statut : corrigé** (`common/.gitkeep` créé ; `docs/steam/` conservé à son chemin).
 - **Priorité** : basse (`common`), moyenne (liens d'images pendant la réorganisation). **Effort** : S.
 
 ---

@@ -53,7 +53,8 @@ local function tooltipLines(item)
     local provider = TooltipLib and TooltipLib._providers and TooltipLib._providers[PROVIDER_ID]
     if not provider or type(provider.callback) ~= "function" then return nil end
     local out = {}
-    local ctx = { item = item }
+    -- the tooltip's character decides whether exact times are readable (no player 0 fallback)
+    local ctx = { item = item, tooltip = { getCharacter = function() return getPlayer() end } }
     function ctx.addLabel(_, text) out[#out + 1] = { label = tostring(text) } end
     function ctx.addKeyValue(_, key, value) out[#out + 1] = { key = tostring(key), value = tostring(value) } end
     function ctx.addProgress(_, label, fraction) out[#out + 1] = { key = tostring(label), fraction = fraction } end

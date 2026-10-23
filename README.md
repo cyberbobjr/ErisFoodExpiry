@@ -1,4 +1,4 @@
-# Eris Food Expiry (TooltipLib fork)
+# Food Expiry
 
 Project Zomboid Build 42.21 mod: food freshness and the exact time before it goes stale and rots, in the item tooltip (through [TooltipLib](https://steamcommunity.com/sharedfiles/filedetails/?id=3694097672)) and as a thin strip in the expanded inventory list.
 

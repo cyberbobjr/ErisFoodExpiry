@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased
+
+### Added
+- Fridges and freezers on grid power show "Power cut in", the time before the electricity shutoff stops them. In a freezer, frozen food then shows when it will go stale and rot after the shutoff and the thaw, instead of only "Frozen: not spoiling".
+- Food being cooked shows "Cooking: times shown once cooked": cooking can change its times (rice and pasta pots start over).
+
+### Changed
+- The mod is now called "Food Expiry" everywhere: mod list, mod options and Workshop page.
+- "Exact times need Nutritionist" option: without the exact times, the freshness bar is rounded to a third, the inventory strip shows only the colour, and rotten food shows "Will disappear" instead of an exact time.
+- Without the exact times, the tooltip still tells when food is frozen, thawing, freezing, cooking or not spoiling where it is.
+
+### Fixed
+- The inventory strip now ends with the vanilla bar, whatever the language and font size.
+- Split screen, "Exact times need Nutritionist" on: when the tooltip does not say which player reads it, the rough state is shown instead of exact times based on player 1's traits.
+
 ## 0.3.0 — 2026-10-21
 
 ### Fixed

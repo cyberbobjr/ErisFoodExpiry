@@ -1,6 +1,6 @@
 # Options
 
-The mod has one option, set by each player in **Options > Mods > Eris Food Expiry (batman fork)**. It adds no sandbox option of its own.
+The mod has one option, set by each player in **Options > Mods > Food Expiry**. It adds no sandbox option of its own.
 
 ## Exact times need Nutritionist
 

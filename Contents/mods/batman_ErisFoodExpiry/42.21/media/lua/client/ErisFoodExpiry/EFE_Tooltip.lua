@@ -1,5 +1,5 @@
 -- ============================================================================
--- Eris Food Expiry (batman fork) — tooltip lines through TooltipLib
+-- Food Expiry — tooltip lines through TooltipLib
 -- ============================================================================
 
 require "TooltipLib/Core"
@@ -25,6 +25,18 @@ local function addRemoval(ctx, item)
     end
 end
 
+-- Players who cannot read the exact times: rough state, what happens to the
+-- food where it is, and a removal warning, without any time.
+local function addRough(ctx, item, stage, color)
+    ctx:addProgress(getText("UI_EFE_Freshness"), EFE.roughFraction(EFE.freshFraction(item)), LABEL, color)
+    ctx:addLabel(getText(EFE.stateKey(item, stage)), color)
+    local condition = EFE.conditionKey(item)
+    if condition then ctx:addLabel(getText(condition), VALUE) end
+    if stage == "rotten" and EFE.removalDays(item) then
+        ctx:addLabel(getText("UI_EFE_RemovedSoon"), VALUE)
+    end
+end
+
 TooltipLib.registerProvider({
     id = "batman_ErisFoodExpiry",
     target = "item",
@@ -44,20 +56,25 @@ TooltipLib.registerProvider({
         end
         local stage = EFE.stage(item)
         local color = EFE.COLORS[stage]
-        ctx:addProgress(getText("UI_EFE_Freshness"), EFE.freshFraction(item), LABEL, color)
-        local character = ctx.tooltip and ctx.tooltip:getCharacter() or getSpecificPlayer(0)
+        local character = ctx.tooltip and ctx.tooltip:getCharacter() or nil
         if not EFE.canReadExact(item, character, EFE.requireTrait()) then
-            ctx:addLabel(getText(EFE.stateKey(item)), color)
-            if stage == "rotten" then addRemoval(ctx, item) end
+            addRough(ctx, item, stage, color)
             return
         end
+        ctx:addProgress(getText("UI_EFE_Freshness"), EFE.freshFraction(item), LABEL, color)
+        if EFE.isCooking(item) then
+            ctx:addLabel(getText("UI_EFE_Cooking"), VALUE)
+            return
+        end
+        local cut = EFE.powerCutDays(item)
         if item:isFrozen() then
             local thaw = EFE.thawDays(item)
             if thaw == nil then
                 ctx:addLabel(getText("UI_EFE_Frozen"), VALUE)
-                return
+                if not cut then return end
+            else
+                ctx:addKeyValue(getText("UI_EFE_ThawedIn"), EFE.formatDays(thaw), LABEL, VALUE)
             end
-            ctx:addKeyValue(getText("UI_EFE_ThawedIn"), EFE.formatDays(thaw), LABEL, VALUE)
         end
         local freeze = EFE.freezeDays(item)
         if freeze then
@@ -73,6 +90,9 @@ TooltipLib.registerProvider({
             ctx:addLabel(getText("UI_EFE_StateRotten"), color)
             addRemoval(ctx, item)
             return
+        end
+        if cut then
+            ctx:addKeyValue(getText("UI_EFE_PowerCutIn"), EFE.formatDays(cut), LABEL, VALUE)
         end
         local stale = stage == "fresh" and EFE.daysUntil(item, item:getOffAge()) or nil
         if stale then
