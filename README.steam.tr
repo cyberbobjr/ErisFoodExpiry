@@ -1,0 +1,87 @@
+[h1]Food Expiry[/h1]
+
+[b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3392259028]Eris Food Expiry[/url] modunun resmî olmayan çatalı · Build 42.21 · Tek oyunculu ve çok oyunculu[/b]
+
+Bu sütün bozulmasına ne kadar var? Herhangi bir yiyeceğin üstüne gel: ipucu tazeliğini ve bayatlayıp çürüyene kadar kalan tam süreyi gösterir. Envanterinde bir yığını aç, her eşyanın altında ince bir tazelik çizgisi görürsün.
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/screenshots/05-tooltip-fridge.png[/img]
+
+[h2]İki özgün mod, tek çatal[/h2]
+
+Bu mod iki Workshop öğesinin çalışmasını sürdürüyor. Yazarlarına teşekkürler.
+[list]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3392259028][B42] eris food expiry[/url]: eris'in food expiry modunun Build 42 uyarlaması, Diyetisyen seçeneğiyle.
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3629527156][B42.13] eris food expiry[/url]: 42.13 tek oyunculu güncellemesi; özellik olmadan tam süreler.
+[/list]
+İkisi de [i]eris_food_expiry[/i] mod kimliğini kullanır: bu çatal onunla uyumsuz işaretlidir. Yalnızca birini etkinleştir.
+
+[h2]Ne görürsün[/h2]
+
+[list]
+[*][b]Tazelik[/b] çubuğu: yiyecek yeniyken dolu, çürümüşken boş.
+[*][b]Bayatlamaya[/b] ve [b]Çürümeye kalan[/b]: kalan süre, en büyük birimden başlayarak (yıl, ay, hafta, gün, saat, dakika).
+[*]Donmuş yiyecek: çalışan bir dondurucuda "Donmuş: bozulmuyor"; başka yerde [b]Çözülmeye kalan[/b], çözüldükten sonra süreler. Konserve ve kuru gıda: "Son kullanma yok".
+[*]Çürümüş yiyecek: sandbox [i]Çürük Yiyecek Kaldırma[/i] seçeneği açıksa [b]Kaybolmaya kalan[/b] (kompost kutusu tutar).
+[*]Seçenek (Seçenekler > Modlar): tam süreler için Diyetisyen özelliğini iste. Okunabilir bir paket her zaman süreleri gösterir, tıpkı vanilla besin bilgisi gibi. Aksi halde kaba bir durum görürsün: çok taze, taze, hâlâ iyi, bozulmaya başlıyor, neredeyse çürümüş, çürümüş.
+[/list]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/02-fridge.jpg[/img]
+
+[h2]Oyunu takip eden süreler[/h2]
+
+Kalan süre, oyunun yiyecekleri yaşlandırma biçimine göre hesaplanır:
+[list]
+[*]sandbox [i]Gıda Bozulması[/i] hızı ve [i]Dondurma Etkisi[/i];
+[*]bir buzdolabı veya dondurucu, güç varken bozulmayı yavaşlatır: bir jeneratör ya da kesinti gününe kadar şebeke; o günden sonra yiyecek yeniden normal hızda bozulur;
+[*]donmuş yiyecek, çözülene kadar bozulmaz;
+[*]her eşyanın kendi bayatlama ve çürüme süreleri (pişmiş yiyecek çiğ olandan farklıdır).
+[/list]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/03-frozen.jpg[/img]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/screenshots/06-tooltip-thawing.png[/img]
+
+[h2]Orijinallerden farklar[/h2]
+
+[list]
+[*]Tooltip satırları [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3694097672]TooltipLib[/url] üzerinden: ipucunun altına kutu çizilmez, ipucu zıplamaz, diğer ipucu modlarıyla çalışır.
+[*]Güçsüz buzdolabı, donmuş yiyecek ve pişmiş yiyecek doğru süreleri verir.
+[*]Zaman birimleri her zaman doğru sırada: orijinaller "5m 2d 1w" gösterebiliyor ya da yılları atlayabiliyordu.
+[*]"Çürümüş" durumu yeniden görünüyor; seçenek metinleri ve çeviriler 42.21'de JSON olarak yükleniyor.
+[*]Envanter çizgisi artık beslenme veya pişirme satırıyla çakışmıyor.
+[/list]
+
+[img]https://raw.githubusercontent.com/cyberbobjr/ErisFoodExpiry/main/docs/images/art/04-read-the-label.jpg[/img]
+
+[h2]Çok oyunculu[/h2]
+
+Yalnızca görüntüleme: sunucuya hiçbir şey gönderilmez, hiçbir şey kaydedilmez. İstemcilerin indirmesi için sunucuya kur; her oyuncu seçeneği kendisi ayarlar. Mevcut bir dünyaya eklemesi veya çıkarması güvenlidir.
+
+[h2]Gereksinimler[/h2]
+
+[list]
+[*]Build 42.21 veya üstü.
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3694097672]TooltipLib[/url].
+[/list]
+
+[h2]Diller[/h2]
+
+İngilizce, Fransızca, Almanca, İspanyolca, İtalyanca, Lehçe, Portekizce, Brezilya Portekizcesi, Rusça, Basitleştirilmiş Çince.
+
+[h2]Discord[/h2]
+
+Soru, hata bildirimi ya da fikrin mi var? Discord'a katıl:
+[url=https://discord.gg/QEsBya7hUA]https://discord.gg/QEsBya7hUA[/url]
+
+[h2]Yapay zekâ hakkında bir not[/h2]
+
+Yıllardır geliştiriciyim ve kodlama ajanları ortaya çıkmadan çok önce mod yapıyordum; bu da çoğu zaman ailemle geçirdiğim zamandan çalıyordu. Claude Code ve Codex'i açıkça kullanıyorum: her özellik hâlâ tartışılıyor, tasarlanıyor ve planlanıyor; körü körüne "vibe coding" yapılmıyor. Yapay zekâ kalıcı; direnmek yerine uyum sağlamayı seçtim. Kişisel saldırılara karşı duran herkese teşekkür ederim.
+
+[h2]Projeyi destekle[/h2]
+
+Modu beğendin mi? Bir kahve yeni özellikler ve çevirilere kaynak sağlamaya yardımcı olur.
+[url=https://ko-fi.com/Z8Z8QJV31][img]https://storage.ko-fi.com/cdn/kofi6.png?v=6[/img][/url]
+
+[h2]Emeği geçenler[/h2]
+
+Özgün fikir ve mod: eris. Build 42 uyarlamaları: yukarıdaki iki öğenin yazarları. Çatal: batman, kod yeniden yazıldı. Orijinal yazarlarla bağlantısı yoktur. Kaynak kodu (MIT) [url=https://github.com/cyberbobjr/ErisFoodExpiry]GitHub[/url] üzerinde.
