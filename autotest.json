@@ -1,8 +1,8 @@
-// pz-autotest configuration of Food Expiry (.claude/tools/pz-autotest/README.md), commands in
+// pzdev configuration of Food Expiry (PZDevKit/docs/wiki/fr/01-tests-automatiques.md), commands in
 // docs/annexes/tests/autotest.md:
-//   python .claude/tools/pz-autotest/pz_autotest.py check ErisFoodExpiry
-//   python .claude/tools/pz-autotest/pz_autotest.py sp    ErisFoodExpiry --wait-idle 3600
-//   python .claude/tools/pz-autotest/pz_autotest.py mp    ErisFoodExpiry --wait-idle 3600
+//   python PZDevKit/pzdev.py check ErisFoodExpiry
+//   python PZDevKit/pzdev.py sp    ErisFoodExpiry --wait-idle 3600
+//   python PZDevKit/pzdev.py mp    ErisFoodExpiry --wait-idle 3600
 {
   "name": "ErisFoodExpiry",
   "gameVersion": "42.21",

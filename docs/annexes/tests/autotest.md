@@ -1,7 +1,7 @@
-# Tests en jeu automatiques (pz-autotest)
+# Tests en jeu automatiques (pzdev)
 
-Le mod se teste en vrai jeu, sans personne devant le PC, par le lanceur générique `pz-autotest`
-(`.claude/tools/pz-autotest/README.md` du dossier `C:\Users\cyber\Zomboid\Workshop`).
+Le mod se teste en vrai jeu, sans personne devant le PC, par le lanceur générique `pzdev`
+(`PZDevKit/docs/wiki/fr/01-tests-automatiques.md` du dossier `C:\Users\cyber\Zomboid\Workshop`).
 
 | Fichier | Rôle |
 | --- | --- |
@@ -13,10 +13,10 @@ Le mod se teste en vrai jeu, sans personne devant le PC, par le lanceur généri
 Depuis `C:\Users\cyber\Zomboid\Workshop` (un seul jeu à la fois : `--wait-idle` attend qu'aucun jeu ne tourne) :
 
 ```powershell
-python .claude/tools/pz-autotest/pz_autotest.py check ErisFoodExpiry                    # configuration, mods, hooks
-python .claude/tools/pz-autotest/pz_autotest.py sp    ErisFoodExpiry --wait-idle 3600   # client solo
-python .claude/tools/pz-autotest/pz_autotest.py mp    ErisFoodExpiry --wait-idle 3600   # serveur dédié + 1 client (le client teste)
-python .claude/tools/pz-autotest/pz_autotest.py sp    ErisFoodExpiry --dry-run --keep-cache   # préparation seule
+python PZDevKit/pzdev.py check ErisFoodExpiry                    # configuration, mods, hooks
+python PZDevKit/pzdev.py sp    ErisFoodExpiry --wait-idle 3600   # client solo
+python PZDevKit/pzdev.py mp    ErisFoodExpiry --wait-idle 3600   # serveur dédié + 1 client (le client teste)
+python PZDevKit/pzdev.py sp    ErisFoodExpiry --dry-run --keep-cache   # préparation seule
 luacheck autotest/efe_hooks.lua --config .luacheckrc                                     # depuis ErisFoodExpiry
 ```
 

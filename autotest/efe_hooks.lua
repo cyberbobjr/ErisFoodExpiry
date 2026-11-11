@@ -1,4 +1,4 @@
--- Food Expiry in-game test (pz-autotest): nominal path on a single player client and on
+-- Food Expiry in-game test (pzdev): nominal path on a single player client and on
 -- a multiplayer client (client hooks only, the mod is display only).
 -- For fresh food in the player's inventory, chilled food in a fridge and frozen food:
 --   1. the mod's stage matches the engine (Food.isFresh / isRotten) at several ages;
